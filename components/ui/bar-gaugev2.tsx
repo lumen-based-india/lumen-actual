@@ -17,7 +17,7 @@ export default function BarGauge({ companyData = null }: BarGaugeProps) {
   const best_performer = (companyData?.best_performer ?? 0) * 10;
 
   const getMarkerPosition = (value: number) => {
-    const minValue = 10;
+    const minValue = 0;
     const maxValue = 100;
     const adjustedValue = (value - minValue) / (maxValue - minValue);
     return (1 - adjustedValue) * height;
@@ -111,14 +111,14 @@ export default function BarGauge({ companyData = null }: BarGaugeProps) {
         </text>
 
         {/* Axis Labels */}
-        {["100", "10"].map((label, index) => {
+        {["100", "0"].map((label, index) => {
           const y = index === 0 ? 0 : height;
           return (
             <text
               key={index}
-              x={width + 10}
+              x={-20}
               y={y}
-              textAnchor="start"
+              textAnchor="end"
               alignmentBaseline="middle"
               className="text-xs font-medium"
             >
