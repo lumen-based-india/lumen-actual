@@ -55,9 +55,9 @@ const CircularDiagram = () => {
 };
 
 const InstructionModal = ({ title, instructions }: any) => (
-  <Dialog >
+  <Dialog>
     <DialogTrigger asChild>
-      <Button variant="outline" size="sm">
+      <Button variant="outline" size="sm" className="rounded-xl">
         Instructions
       </Button>
     </DialogTrigger>
@@ -135,7 +135,7 @@ const RecycleSection = () => (
           <span>{item.name}</span>
           <div className="flex items-center">
             <span className="mr-2 font-semibold">{item.reward}</span>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="rounded-xl">
               Sell
             </Button>
           </div>
