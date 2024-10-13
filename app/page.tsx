@@ -45,7 +45,7 @@ export default function Index() {
               Key Features
             </h3>
             <div className="grid md:grid-cols-2 gap-8">
-              <Card className="border-yellow-200 shadow-yellow-100">
+              <Card className="border-yellow-200 shadow-yellow-100 rounded-xl">
                 <CardHeader>
                   <CardTitle className="flex items-center text-green-700">
                     <Globe className="mr-2 text-yellow-500" />

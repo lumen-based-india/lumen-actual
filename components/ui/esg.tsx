@@ -10,18 +10,16 @@ type ESGProps = {
 };
 
 export default function ESG(
-  { eScore, sScore, gScore }: ESGProps = { eScore: 0, sScore: 0, gScore: 0 },
+  { eScore, sScore, gScore }: ESGProps = { eScore: 0, sScore: 0, gScore: 0 }
 ) {
   const companyData = fetchCompanyById("10001");
-  console.log({companyData});
+  console.log({ companyData });
   return (
     <div className="flex flex-col items-center space-y-4">
-      <Card className="w-full">
+      <Card className="rounded-xl w-full">
         <CardHeader className="flex flex-row items-center space-x-4">
           <Leaf className="h-8 w-8 text-green-500" />
-          <CardTitle className="text-sm font-medium">
-            Environmental
-          </CardTitle>
+          <CardTitle className="text-sm font-medium">Environmental</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-row items-center space-x-4">
           <Progress value={eScore} className="h-4 w-full" />
@@ -29,7 +27,7 @@ export default function ESG(
         </CardContent>
       </Card>
 
-      <Card className="w-full">
+      <Card className="rounded-xl w-full">
         <CardHeader className="flex flex-row items-center space-x-4">
           <Users className="h-8 w-8 text-blue-500" />
           <CardTitle className="text-sm font-medium">Social</CardTitle>
@@ -40,7 +38,7 @@ export default function ESG(
         </CardContent>
       </Card>
 
-      <Card className="w-full">
+      <Card className="rounded-xl w-full">
         <CardHeader className="flex flex-row items-center space-x-4">
           <Building2 className="h-8 w-8 text-yellow-500" />
           <CardTitle className="text-sm font-medium">Governance</CardTitle>

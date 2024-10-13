@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Select,
@@ -101,7 +100,7 @@ export default function EcoMarketPlace() {
   return (
     <div className="container mx-auto p-4 space-y-6">
       <div className="grid md:grid-cols-2 gap-6">
-        <Card>
+        <Card className="rounded-xl">
           <CardHeader>
             <CardTitle>Enter Supply Requirements</CardTitle>
           </CardHeader>
@@ -136,7 +135,7 @@ export default function EcoMarketPlace() {
             <Button>View Options</Button>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="rounded-xl">
           <CardHeader>
             <CardTitle>Available Suppliers</CardTitle>
           </CardHeader>
@@ -145,7 +144,7 @@ export default function EcoMarketPlace() {
           </CardContent>
         </Card>
       </div>
-      <Card>
+      <Card className="rounded-xl">
         <CardHeader>
           <CardTitle>Supplier Action</CardTitle>
         </CardHeader>

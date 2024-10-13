@@ -58,7 +58,9 @@ export default function DashboardLayout({
           } flex flex-col`}
         >
           <div className="flex items-center justify-between p-4">
-            <Link href={"/"} passHref
+            <Link
+              href={"/"}
+              passHref
               className={`font-bold text-xl ${isSidebarOpen ? "" : "hidden"}`}
             >
               Lumen
@@ -80,7 +82,7 @@ export default function DashboardLayout({
                 <li key={item.name}>
                   <Link href={item.href} passHref>
                     <span
-                      className={`flex items-center space-x-2 p-2 rounded-lg hover:bg-white-200 transition-colors duration-200 ${
+                      className={`flex items-center space-x-2 p-2 rounded-xl hover:bg-white-200 transition-colors duration-200 ${
                         pathname === item.href ? "bg-secondary text-black" : ""
                       }`}
                     >
@@ -96,7 +98,11 @@ export default function DashboardLayout({
         <div className="flex-1 overflow-y-auto text-primary bg-transparent">
           <div className="flex items-center justify-between p-4 bg-primary text-white">
             <div className="flex items-center space-x-4">
-              <img src="https://levi.in/cdn/shop/files/logo_his_res.png?v=1697785388&width=160" alt="Logo" className="h-8 w-auto object-contain" />
+              <img
+                src="https://levi.in/cdn/shop/files/logo_his_res.png?v=1697785388&width=160"
+                alt="Logo"
+                className="h-8 w-auto object-contain"
+              />
               <span className="font-bold text-xl">Levis</span>
             </div>
           </div>
