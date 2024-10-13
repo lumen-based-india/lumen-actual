@@ -3,7 +3,6 @@
 import { CompanyData } from "@/providers/CompanyProvider";
 
 interface BarGaugeProps {
-  value: number;
   companyData: CompanyData | null | undefined;
 }
 
