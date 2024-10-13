@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Leaf } from "lucide-react";
 import BarGauge from "@/components/ui/bar-gauge";
+import ProductMovementNetwork from "@/components/dppNetworkGraph";
 
 const EnvMeter = () => (
   <Card className="mb-6 shadow-lg rounded-xl">
@@ -44,35 +45,10 @@ const CircularDiagram = () => {
   return (
     <Card className="mb-6 shadow-lg rounded-xl">
       <CardHeader>
-        <CardTitle className="text-lg">Circular Economy</CardTitle>
+        <CardTitle className="text-lg">DPP Trace</CardTitle>
       </CardHeader>
       <CardContent>
-        {/* @ts-ignore */}
-        <ChartContainer config={{}} className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={80}
-                fill="#8884d8"
-                paddingAngle={5}
-                dataKey="value"
-              >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} />
-                ))}
-              </Pie>
-              <ChartTooltip content={<ChartTooltipContent />} />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="mt-4">
-            <ChartLegend content={<ChartLegendContent nameKey="name" />} />
-          </div>
-        </ChartContainer>
-        <div className="text-center mt-4 text-3xl font-bold">7/10</div>
+        <ProductMovementNetwork />
       </CardContent>
     </Card>
   );
