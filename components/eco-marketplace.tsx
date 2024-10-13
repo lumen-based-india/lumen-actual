@@ -29,7 +29,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { FetchSuppliersByID } from "@/utils/databaseQueries/suppliers";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -37,9 +36,6 @@ export function EcoMarketplace() {
   const [productType, setProductType] = useState("");
   const [product, setProduct] = useState("");
   const [quantity, setQuantity] = useState("");
-
-  const suppliData = FetchSuppliersByID("10001");
-  console.log(suppliData);
 
   const supplierData = [
     {
