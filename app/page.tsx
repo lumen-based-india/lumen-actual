@@ -3,6 +3,7 @@
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLumenToken } from "@/hooks/useLumenToken";
 import {
   ArrowRight,
   BarChart2,
@@ -14,6 +15,9 @@ import {
 import Link from "next/link";
 
 export default function Index() {
+  const { tokenName, nameError, nameLoading } = useLumenToken();
+
+  console.log(tokenName, nameError, nameLoading);
   return (
     <>
       <div className="min-h-screen bg-gradient-to-b from-yellow-50 via-green-50 to-blue-50">
