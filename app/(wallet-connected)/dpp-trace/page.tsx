@@ -2,12 +2,7 @@
 
 import EsgTrace from "@/components/esgTrace";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ProductMovementNetwork from "@/components/dppNetworkGraph";
 import {
   Select,
@@ -41,7 +36,7 @@ export default function DPPTrace() {
             <div className="flex gap-2">
               <Button
                 onClick={() => {}}
-                className="bg-white border border-gray-300 text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 font-bold py-2 px-4 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105"
+                className="bg-white border border-gray-300 text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 font-bold py-2 px-4 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105"
               >
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-blue-500">
                   Submit Additional Data
@@ -49,7 +44,7 @@ export default function DPPTrace() {
               </Button>
               <Button
                 onClick={() => {}}
-                className="bg-white border border-gray-300 text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 font-bold py-2 px-4 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105"
+                className="bg-white border border-gray-300 text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 font-bold py-2 px-4 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105"
               >
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-blue-500">
                   Request zk re-verification

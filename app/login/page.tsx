@@ -41,15 +41,15 @@ export default function LoginOrSignup() {
   }, [address]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+    <div className="min-h-screen flex items-center justify-center bg-white">
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Card className="w-[350px]">
+        <Card className="w-[350px] bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-xl">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">
+            <CardTitle className="text-2xl font-bold text-center text-white">
               {connectionFailed
                 ? addressDetails && Object.keys(addressDetails).length === 0
                   ? "Sign Up"
@@ -74,15 +74,15 @@ export default function LoginOrSignup() {
                 className="space-y-4"
               >
                 <div className="space-y-2">
-                  <Label htmlFor="name">Name</Label>
+                  <Label htmlFor="name" className="text-white">Name</Label>
                   <Input id="name" required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email" className="text-white">Email</Label>
                   <Input id="email" type="email" required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="role">Role</Label>
+                  <Label htmlFor="role" className="text-white">Role</Label>
                   <Input id="role" required />
                 </div>
                 <Button type="submit" className="w-full">
@@ -90,7 +90,7 @@ export default function LoginOrSignup() {
                 </Button>
               </motion.form>
             ) : (
-              <p className="text-center">You are already registered!</p>
+              <p className="text-center text-white">You are already registered!</p>
             )}
           </CardContent>
         </Card>

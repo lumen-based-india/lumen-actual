@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import BarGauge from "@/components/ui/bar-gaugev2";
+import BarGauge from "@/components/bar-gaugev2";
 import ESG from "@/components/ui/esg";
 import { Button } from "@/components/ui/button"; // Assuming there's a Button component
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,7 +31,7 @@ export default function ImpactOverview() {
               <ESG companyData={currentCompanyData} />
             </div>
             <div>
-              <BarGauge companyData={currentCompanyData}/>
+              <BarGauge companyData={currentCompanyData} />
             </div>
           </div>
         </CardContent>
@@ -95,13 +95,14 @@ export default function ImpactOverview() {
           <CardHeader>
             <CardTitle>Data Completeness</CardTitle>
           </CardHeader>
-          <CardContent></CardContent>
+          <CardContent>
+          </CardContent>
         </Card>
       </div>
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-1/3">
+          <div className="bg-white p-8 rounded-xl shadow-lg w-1/3 flex flex-col gap-4">
             <h2 className="text-xl font-bold mb-4">Upload Compliance Report</h2>
             <input
               type="file"
@@ -110,13 +111,13 @@ export default function ImpactOverview() {
             <div className="flex justify-between">
               <Button
                 onClick={handleCloseModal}
-                className="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600"
+                className="bg-red-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-red-600"
               >
                 Close
               </Button>
               <Button
                 onClick={handleCloseModal}
-                className="bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600"
+                className="bg-green-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-green-600"
               >
                 Submit for Verification
               </Button>

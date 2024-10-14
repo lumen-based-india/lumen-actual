@@ -44,7 +44,7 @@ export default function BarGauge({ companyData = null }: BarGaugeProps) {
             <stop offset="100%" stopColor="#2ecc71" />
           </linearGradient>
         </defs>
-        <rect x={0} y={0} width={width} height={height} fill="url(#barGradient)" />
+        <rect x={0} y={0} width={width} height={height} fill="url(#barGradient)" rx={10} ry={10}/>
 
         {/* Company Rating Marker */}
         <polygon

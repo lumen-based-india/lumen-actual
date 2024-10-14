@@ -4,14 +4,6 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -19,19 +11,23 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Leaf } from "lucide-react";
-import BarGauge from "@/components/ui/bar-gauge";
+import BarGauge from "@/components/bar-gaugev2";
 import ProductMovementNetwork from "@/components/dppNetworkGraph";
+import { useCompanyContext } from "@/providers/CompanyProvider";
 
-const EnvMeter = () => (
-  <Card className="mb-6 shadow-lg rounded-xl">
-    <CardHeader>
-      <CardTitle className="text-lg">Environmental Meter</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <BarGauge value={60} />
-    </CardContent>
-  </Card>
-);
+const EnvMeter = () => {
+  const { currentCompanyData } = useCompanyContext();
+  return (
+    <Card className="mb-6 shadow-lg rounded-xl">
+      <CardHeader>
+        <CardTitle className="text-lg">Environmental Meter</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <BarGauge companyData={currentCompanyData} />
+      </CardContent>
+    </Card>
+  );
+};
 
 const CircularDiagram = () => {
   const data = [

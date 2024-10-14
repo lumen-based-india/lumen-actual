@@ -1,8 +1,16 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 export default function TradeCarbon() {
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h1 className="text-2xl font-bold mb-4">Trade Carbon</h1>
-      <p>Trade Carbon</p>
+    <div className="shadow p-6">
+      <Card className="rounded-xl">
+        <CardHeader>
+          <CardTitle>Trade Carbon</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>Trade Carbon</p>
+        </CardContent>
+      </Card>
     </div>
   );
 }

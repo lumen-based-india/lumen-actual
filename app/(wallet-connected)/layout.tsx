@@ -13,7 +13,7 @@ import {
   Users,
 } from "lucide-react";
 import { useAccount } from "wagmi";
-import { ProvideCompany} from "@/providers/CompanyProvider";
+import { ProvideCompany } from "@/providers/CompanyProvider";
 import CompanyHeader from "@/components/companyHeader";
 
 const sidebarItems = [
@@ -29,7 +29,6 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   const { push } = useRouter();
   const { address } = useAccount();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -85,8 +84,10 @@ export default function DashboardLayout({
                   <li key={item.name}>
                     <Link href={item.href} passHref>
                       <span
-                        className={`flex items-center space-x-2 p-2 rounded-lg hover:bg-white-200 transition-colors duration-200 ${
-                          pathname === item.href ? "bg-secondary text-black" : ""
+                        className={`flex items-center space-x-2 p-2 rounded-xl hover:bg-white-200 transition-colors duration-200 ${
+                          pathname === item.href
+                            ? "bg-secondary text-black"
+                            : ""
                         }`}
                       >
                         <item.icon size={24} />
@@ -100,7 +101,7 @@ export default function DashboardLayout({
           </aside>
 
           <div className="flex-1 overflow-y-auto text-primary bg-transparent">
-            <CompanyHeader/>
+            <CompanyHeader />
             {children}
           </div>
         </div>

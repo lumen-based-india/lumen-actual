@@ -4,7 +4,6 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  ArrowRight,
   BarChart2,
   Globe,
   ShieldCheck,
@@ -16,39 +15,36 @@ import Link from "next/link";
 export default function Index() {
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-yellow-50 via-green-50 to-blue-50">
+      <div className="min-h-screen">
         <header className="container mx-auto px-4 py-8">
           <nav className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-green-700">LUMEN</h1>
+            <h1 className="text-2xl font-bold">LUMEN</h1>
             <ThemeSwitcher />
           </nav>
         </header>
         <main className="container mx-auto px-4 py-16 space-y-24">
           <section className="text-center space-y-6">
-            <h2 className="text-4xl font-bold text-green-800">
+            <h2 className="text-4xl font-bold">
               Leveraging Unified Marketplace for Environmental Net-zero
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl max-w-2xl mx-auto">
               LUMEN is revolutionizing eco-conscious marketplaces with
               blockchain technology, bringing transparency and efficiency to ESG
               reporting and sustainable supply chains.
             </p>
-            <Button
-              size="lg"
-              className="bg-green-600 hover:bg-green-700 shadow-lg shadow-yellow-200/50"
-            >
+            <Button size="lg" className="rounded-xl">
               <Link href="/login">Get Started</Link>
             </Button>
           </section>
           <section>
-            <h3 className="text-3xl font-semibold text-center mb-12 text-green-800">
+            <h3 className="text-3xl font-semibold text-center mb-12">
               Key Features
             </h3>
             <div className="grid md:grid-cols-2 gap-8">
-              <Card className="border-yellow-200 shadow-yellow-100 rounded-xl">
+              <Card className="rounded-xl">
                 <CardHeader>
-                  <CardTitle className="flex items-center text-green-700">
-                    <Globe className="mr-2 text-yellow-500" />
+                  <CardTitle className="flex items-center">
+                    <Globe className="mr-2" />
                     On-chain Eco Marketplace
                   </CardTitle>
                 </CardHeader>
@@ -58,10 +54,10 @@ export default function Index() {
                   supply chain.
                 </CardContent>
               </Card>
-              <Card className="border-yellow-200 shadow-yellow-100">
+              <Card className="rounded-xl">
                 <CardHeader>
-                  <CardTitle className="flex items-center text-green-700">
-                    <Zap className="mr-2 text-yellow-500" />
+                  <CardTitle className="flex items-center">
+                    <Zap className="mr-2" />
                     Insets Tokenization
                   </CardTitle>
                 </CardHeader>
@@ -75,14 +71,14 @@ export default function Index() {
           </section>
 
           {/* Why LUMEN */}
-          <section className="bg-white rounded-lg shadow-xl p-8 border border-yellow-100">
-            <h3 className="text-3xl font-semibold text-center mb-8 text-green-800">
+          <section className="bg-white rounded-xl shadow-xl p-8">
+            <h3 className="text-3xl font-semibold text-center mb-8">
               Why LUMEN?
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="flex flex-col items-center text-center">
-                <BarChart2 className="w-12 h-12 text-yellow-500 mb-4" />
-                <h4 className="text-xl font-semibold mb-2 text-green-700">
+                <BarChart2 className="w-12 h-12 mb-4" />
+                <h4 className="text-xl font-semibold mb-2">
                   Transparent ESG Reporting
                 </h4>
                 <p>
@@ -90,8 +86,8 @@ export default function Index() {
                 </p>
               </div>
               <div className="flex flex-col items-center text-center">
-                <ShieldCheck className="w-12 h-12 text-yellow-500 mb-4" />
-                <h4 className="text-xl font-semibold mb-2 text-green-700">
+                <ShieldCheck className="w-12 h-12 mb-4" />
+                <h4 className="text-xl font-semibold mb-2">
                   Combat Greenwashing
                 </h4>
                 <p>
@@ -100,8 +96,8 @@ export default function Index() {
                 </p>
               </div>
               <div className="flex flex-col items-center text-center">
-                <Lock className="w-12 h-12 text-yellow-500 mb-4" />
-                <h4 className="text-xl font-semibold mb-2 text-green-700">
+                <Lock className="w-12 h-12 mb-4" />
+                <h4 className="text-xl font-semibold mb-2">
                   Secure Smart Contracts
                 </h4>
                 <p>
@@ -113,15 +109,13 @@ export default function Index() {
 
           {/* Benefits */}
           <section>
-            <h3 className="text-3xl font-semibold text-center mb-12 text-green-800">
+            <h3 className="text-3xl font-semibold text-center mb-12">
               Benefits for Stakeholders
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <Card className="border-yellow-200 shadow-yellow-100">
+              <Card className="rounded-xl">
                 <CardHeader>
-                  <CardTitle className="text-green-700">
-                    For Suppliers
-                  </CardTitle>
+                  <CardTitle>For Suppliers</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="list-disc pl-5 space-y-2">
@@ -131,11 +125,9 @@ export default function Index() {
                   </ul>
                 </CardContent>
               </Card>
-              <Card className="border-yellow-200 shadow-yellow-100">
+              <Card className="rounded-xl">
                 <CardHeader>
-                  <CardTitle className="text-green-700">
-                    For Businesses
-                  </CardTitle>
+                  <CardTitle>For Businesses</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="list-disc pl-5 space-y-2">
@@ -145,11 +137,9 @@ export default function Index() {
                   </ul>
                 </CardContent>
               </Card>
-              <Card className="border-yellow-200 shadow-yellow-100">
+              <Card className="rounded-xl">
                 <CardHeader>
-                  <CardTitle className="text-green-700">
-                    For Consumers
-                  </CardTitle>
+                  <CardTitle>For Consumers</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="list-disc pl-5 space-y-2">
@@ -162,7 +152,7 @@ export default function Index() {
             </div>
           </section>
 
-          <section className="text-center bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg p-12 shadow-lg shadow-yellow-200/30">
+          <section className="text-center rounded-lg p-12">
             <h3 className="text-3xl font-bold mb-4">
               Join the Sustainable Revolution
             </h3>
