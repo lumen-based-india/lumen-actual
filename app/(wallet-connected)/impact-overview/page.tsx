@@ -4,8 +4,15 @@ import { useState } from "react";
 import BarGauge from "@/components/bar-gaugev2";
 import ESG from "@/components/ui/esg";
 import { Button } from "@/components/ui/button"; // Assuming there's a Button component
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useCompanyContext } from "@/providers/CompanyProvider";
+import CSRComponent from "@/components/csr-component";
 
 export default function ImpactOverview() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,7 +25,60 @@ export default function ImpactOverview() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
+  const dataCompletenessMap = [
+    {
+      title: "Environmental protection",
+      subTitle:
+        "Key performance indicators cover electricity consumption, water usage and air emissions.",
+      value: 80,
+    },
+    {
+      title: "Human rights",
+      subTitle: "Focus on human rights violations and minimum and fair wages.",
+      value: 75,
+    },
+    {
+      title: "Integrity",
+      subTitle:
+        "Performance indicators include anti-corruption, anti-bribery and conflicts of interest policies.",
+      value: 70,
+    },
+    {
+      title: "Employee well-being",
+      subTitle:
+        "Metrics focused on parental benefits, employee accessibility and the percentage of unionized workers.",
+      value: 85,
+    },
+    {
+      title: "Inclusive growth",
+      subTitle: "Policies favoring vulnerable and marginalized groups.",
+      value: 65,
+    },
+    {
+      title: "Sustainable goods and services",
+      subTitle:
+        "Information on investments in social and environmental impacts.",
+      value: 90,
+    },
+    {
+      title: "Responsible consumer engagement",
+      subTitle:
+        "KPIs encompass handling consumer complaints and feedback, product recall procedures and cybersecurity and data privacy policies.",
+      value: 78,
+    },
+    {
+      title: "Stakeholder responsiveness",
+      subTitle:
+        "Describing engagement with vulnerable and marginalized groups.",
+      value: 82,
+    },
+    {
+      title: "Responsible public policy engagement",
+      subTitle:
+        "Listing trade and industry affiliations and detailing issues relating to anticompetitive conduct.",
+      value: 88,
+    },
+  ];
   return (
     <div className="p-8 flex flex-col w-full gap-4">
       <Card className="rounded-xl">
@@ -37,13 +97,13 @@ export default function ImpactOverview() {
         </CardContent>
       </Card>
 
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4">
         <Card className="rounded-xl flex-1">
           <CardHeader>
             <CardTitle>Compliance Reports</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col gap-4">
+            <div className="flex gap-16">
               <div>
                 <div className="text-lg font-bold mb-2">EU</div>
                 <Button
@@ -90,14 +150,23 @@ export default function ImpactOverview() {
             </div>
           </CardContent>
         </Card>
-
-        <Card className="rounded-xl flex-1">
+        <CSRComponent />
+        {/* <Card className="rounded-xl flex-1">
           <CardHeader>
             <CardTitle>Data Completeness</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="grid grid-cols-3 gap-4">
+            {dataCompletenessMap.map((item, index) => (
+              <Card className="w-full h-52">
+                <CardHeader>
+                  <CardTitle>{item.title}</CardTitle>
+                  <CardDescription>{item.subTitle}</CardDescription>
+                </CardHeader>
+                <CardContent></CardContent>
+              </Card>
+            ))}
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
 
       {isModalOpen && (
