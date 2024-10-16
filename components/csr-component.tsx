@@ -70,21 +70,6 @@ const CSRData = [
   },
 ];
 
-const CustomTooltip = ({ active, payload }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-background p-2 rounded-lg shadow-lg border border-border">
-        <p className="font-bold">{payload[0].payload.name}</p>
-        <p className="text-sm text-muted-foreground">
-          {payload[0].payload.description}
-        </p>
-        <p className="font-semibold mt-1">Score: {payload[0].value}</p>
-      </div>
-    );
-  }
-  return null;
-};
-
 const GaugeChart = ({ data }: { data: (typeof CSRData)[0] }) => {
   const maxValue = 10;
   const angle = (data.value / maxValue) * 180;
@@ -103,13 +88,13 @@ const GaugeChart = ({ data }: { data: (typeof CSRData)[0] }) => {
   }
 
   return (
-    <ResponsiveContainer width="100%" height={200}>
+    <ResponsiveContainer height={100} width={100}>
       <RadialBarChart
         innerRadius="60%"
-        outerRadius="100%"
+        outerRadius="90%"
         data={[data]}
         dataKey={"value"}
-        cy={"85%"}
+        cy={"80%"}
         startAngle={180}
         endAngle={180 - angle}
       >
@@ -119,7 +104,6 @@ const GaugeChart = ({ data }: { data: (typeof CSRData)[0] }) => {
           cornerRadius={30}
           fill={`url(#${data.name.replace(/\s+/g, "")})`}
         />
-        <Tooltip content={<CustomTooltip />} />
         <defs>
           <linearGradient
             id={data.name.replace(/\s+/g, "")}
@@ -136,26 +120,37 @@ const GaugeChart = ({ data }: { data: (typeof CSRData)[0] }) => {
     </ResponsiveContainer>
   );
 };
-
+const CSRMetricCard = ({ data }: { data: (typeof CSRData)[0] }) => {
+  return (
+    <Card className="flex justify-between items-center">
+      <CardHeader>
+        <CardTitle className="text-lg">{data.name}</CardTitle>
+        <CardDescription className="text-xs">{data.description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col">
+          <GaugeChart data={data} />
+          <p className="text-center text-sm text-muted-foreground">
+            {data.value}/10
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 const CSRComponent = () => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Corporate Social Responsibility Metrics</CardTitle>
+        <CardTitle>Data Completeness</CardTitle>
         <CardDescription>
-          Performance indicators across 9 key areas
+          Click on any tile add more data.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 gap-4">
           {CSRData.map((item) => (
-            <div key={item.name} className="flex flex-col items-center">
-              <GaugeChart data={item} />
-              <h3 className="text-center font-semibold">{item.name}</h3>
-              <p className="text-center text-sm text-muted-foreground">
-                {item.value}/10
-              </p>
-            </div>
+            <CSRMetricCard data={item} />
           ))}
         </div>
       </CardContent>
