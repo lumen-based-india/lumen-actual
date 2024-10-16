@@ -30,11 +30,12 @@ import {
   Legend,
 } from "chart.js";
 import { useCompanyContext } from "@/providers/CompanyProvider";
+import { getCompany } from "@/utils/databaseQueries/companies";
+import { get } from "http";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 export function EcoMarketplace() {
-  const [productType, setProductType] = useState("");
   const [product, setProduct] = useState("");
   const [quantity, setQuantity] = useState("");
   const { supplierData: supplier_data } = useCompanyContext();
@@ -42,7 +43,9 @@ export function EcoMarketplace() {
   const productTypes = Object.keys(supplier_data?.data?.productMap ?? {});
   const [currentProductType, setCurrentProductType] = useState("");
   const [currentProducts, setCurrentProducts] = useState<string[]>([]);
-  const [currentProduct, setCurrentProduct] = useState({});
+  const [currentProduct, setCurrentProduct] = useState("");
+  const [supplierLoading, setSupplierLoading] = useState(false);
+  const [supplierNewData, setSupplierNewData] = useState<any[]>([]);
   
   useEffect(() => {
     if(productCategoryMap[currentProductType] === undefined) {
@@ -53,8 +56,25 @@ export function EcoMarketplace() {
   }, [currentProductType]);
 
   useEffect(() => {
-    console.log(currentProducts);
-  }, [currentProducts])
+    const companies = productCategoryMap[currentProductType]?.[currentProduct];
+    if (!companies) {
+      return;
+    }
+    setSupplierLoading(true);
+    setSupplierNewData([]);
+    const promises = companies.map((company: any) => getCompany(company.company_id));
+    Promise.all(promises)
+    .then((results) => {
+      companies.forEach((data: any) => {
+        getCompany(data.company_id).then((result) => {
+          setSupplierNewData((prevData) => [...prevData, result.data]);
+        });
+      });
+    })
+    .finally(() => {
+      setSupplierLoading(false);
+    });
+  }, [currentProduct])
   
   const handleProductType = (selectedType: string) => {
     setCurrentProductType(selectedType);
@@ -140,7 +160,7 @@ export function EcoMarketplace() {
                 ))}
               </SelectContent>
             </Select>
-            <Select onValueChange={setProduct}>
+            <Select onValueChange={setCurrentProduct}>
               <SelectTrigger>
                 <SelectValue placeholder="Product" />
               </SelectTrigger>
@@ -148,7 +168,6 @@ export function EcoMarketplace() {
               {
                 currentProducts && currentProducts.length > 0 ? (
                   currentProducts.map((product, index) => {
-                    console.log(product);
                   return (
                     <SelectItem value={product} key={index}>
                       {product}
@@ -186,47 +205,39 @@ export function EcoMarketplace() {
           <CardTitle>Supplier Action</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Supplier</TableHead>
-                <TableHead>ENV</TableHead>
-                <TableHead>Social</TableHead>
-                <TableHead>Governance</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {supplierData.map((supplier) => (
-                <TableRow key={supplier.name}>
-                  <TableCell>{supplier.name}</TableCell>
-                  <TableCell>
-                    {supplier.env === "4/5" ? <Star className="inline" /> : ""}{" "}
-                    {supplier.env}
-                  </TableCell>
-                  <TableCell>
-                    {supplier.social === "4/5" ? (
-                      <Star className="inline" />
-                    ) : (
-                      ""
-                    )}{" "}
-                    {supplier.social}
-                  </TableCell>
-                  <TableCell>
-                    {supplier.governance === "5/5" ? (
-                      <Star className="inline" />
-                    ) : (
-                      ""
-                    )}{" "}
-                    {supplier.governance}
-                  </TableCell>
-                  <TableCell>
-                    <Button variant="outline">Enter Contract</Button>
-                  </TableCell>
+          {supplierLoading ? (
+            // Display loading message when suppliers are being fetched
+            <p>Loading supplier data...</p>
+          ) : supplierNewData.length > 0 ? (
+            // If data is found, render the table
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Supplier</TableHead>
+                  <TableHead>Environmental</TableHead>
+                  <TableHead>Social</TableHead>
+                  <TableHead>Governance</TableHead>
+                  <TableHead>Action</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {supplierNewData.map((supplier) => (
+                  <TableRow key={supplier.company_name}>
+                    <TableCell>{supplier.company_name}</TableCell>
+                    <TableCell>{supplier.environmental_score}</TableCell>
+                    <TableCell>{supplier.social_score}</TableCell>
+                    <TableCell>{supplier.governance_score}</TableCell>
+                    <TableCell>
+                      <Button variant="outline">Enter Contract</Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            // If no data is found, display this message
+            <p>No suppliers found.</p>
+          )}
         </CardContent>
       </Card>
     </div>
