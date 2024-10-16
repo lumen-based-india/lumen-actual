@@ -19,14 +19,9 @@ export type CompanyData = {
   supply_chain_loop: number;
 };
 
-interface SupplierData {
-  supplier_id: string;
-  supplier_name: string;
-}
-
 interface ICompanyContext {
   currentCompanyData: CompanyData | null;
-  supplierData: UseQueryResult<SupplierData[] | null, Error>;
+  supplierData: UseQueryResult<any | null, Error>;
   productsData: UseQueryResult<any[] | null, Error>;
   allCompaniesData: UseQueryResult<any[] | null, Error>;
   currentCompanyID: string;
@@ -55,8 +50,6 @@ const useCompany = () => {
     },
     enabled: !!currentCompanyID,
   });
-
-
   const supplierData = useQuery({
     queryKey: ["suppliers", currentCompanyID],
     queryFn: async () => {
@@ -69,6 +62,10 @@ const useCompany = () => {
     queryKey: ["products", currentCompanyID],
     queryFn: async () => {
       const data = await fetchProductsByCompanyID(currentCompanyID);
+      // add unique ids to each product
+      data.forEach((product: any, index: number) => {
+        product.id = index;
+      });
       return data
     },
     enabled: !!currentCompanyID,

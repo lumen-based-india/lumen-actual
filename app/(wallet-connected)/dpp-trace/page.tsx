@@ -56,7 +56,7 @@ export default function DPPTrace() {
       </div>
       <div className="flex gap-4">
         <div>
-          <ProductMovementNetwork />
+          <ProductMovementNetwork/>
         </div>
         <div>
           <EsgTrace />

@@ -1,71 +1,70 @@
 import { supabase } from "./companies";
 
 // Function to extract prior product IDs from the dpp_trace string
-function getIdsArrayBeforeProduct(dpp_trace: string, product_id: string) {
+function extractPriorProductIds(dpp_trace: string, product_id: any) {
   const ids = dpp_trace.split("-");
   const productIndex = ids.indexOf(String(product_id));
-  if (productIndex !== -1) {
-    return ids.slice(0, productIndex);
-  }
-  return [];
+  return productIndex !== -1 ? ids.slice(0, productIndex) : [];
 }
 
 // Function to get supplier information for a given company ID
-export const getSuppliersForCompanyID = async (id: string) => {
-  const suppliers: any[] = [];
-  const companies: any[] = [];
-  const companyIds = new Set<string>(); // Use a Set to ensure unique company IDs
-  // Fetch products data for the given company ID
-  const { data, error } = await supabase
+export const getSuppliersForCompanyID = async (companyId: string) => {
+  const supplierProducts: any[] = [];
+  const companyIds = new Set();
+
+  const { data: productsData, error: productsError } = await supabase
     .from("products")
     .select("product_id, dpp_trace")
-    .eq("company_id", id);
+    .eq("company_id", companyId);
 
-  if (error) {
-    return { data: null, error };
+  if (productsError) {
+    return { data: null, error: productsError };
   }
-  // Loop through the products and get prior product IDs
-  for (let i = 0; i < (data?.length ?? 0); i++) {
-    const priorProductsData = getIdsArrayBeforeProduct(
-      data![i].dpp_trace,
-      data![i].product_id,
-    );
 
-    // Fetch supplier data for each prior product ID
-    for (let j = 0; j < priorProductsData.length; j++) {
-      const { data: supplierData, error: supplierError } = await supabase
+  const fetchSupplierData = async (product: { dpp_trace: any; product_id: any; }) => {
+    const priorProductIds = extractPriorProductIds(product.dpp_trace, product.product_id);
+    const supplierPromises = priorProductIds.map(async (priorProductId: any) => {
+      const { data: supplierProduct, error: supplierError } = await supabase
         .from("products")
-        .select("*")
-        .eq("product_id", priorProductsData[j])
+        .select("*, companies(*)")
+        .eq("product_id", priorProductId)
         .single();
 
       if (supplierError) {
-        return { data: null, error: supplierError };
+        throw new Error(supplierError.message); // Throw error for individual supplier fetch
       }
+      supplierProducts.push(supplierProduct);
+      companyIds.add(supplierProduct.company_id); // Collect unique company IDs
+    });
 
-      suppliers.push(supplierData); // Add supplier data to suppliers array
-      companyIds.add(supplierData.company_id); // Add company ID to Set
+    await Promise.all(supplierPromises);
+  };
+
+  await Promise.all(productsData.map(fetchSupplierData));
+
+  var productMap: {
+    [category: string]: {[productName: string]: any[]};
+  } = {};
+  Object.entries(supplierProducts).map(([key, value], index) => {
+    if (!productMap[value.product_category]) {
+      productMap[value.product_category] = {
+        [value.product_name]: [
+          value.companies
+        ],
+      };
     }
-  }
-  // Fetch company data for all unique company IDs in parallel using Promise.all
-  const companyDataPromises = Array.from(companyIds).map(async (companyId) => {
-    const { data: companyData, error: companyError } = await supabase
-      .from("esg_facts")
-      .select(
-        `
-        *,
-        companies(*)
-    `,
-      )
-      .eq("company_id", companyId)
-      .single();
-    if (companyError) {
-      return { data: null, error: companyError };
+    else {
+      if (!productMap[value.product_category][value.product_name]) {
+        productMap[value.product_category][value.product_name] = [
+          value.companies
+        ];
+      }
+      else {
+        productMap[value.product_category][value.product_name].push(value.companies);
+      }
     }
-    companies.push(companyData);
   });
+  console.log(":d", productMap);
 
-  const companyData = await Promise.all(companyDataPromises);
-
-  return { suppliers, companies: companies, error: null };
+  return { supplierProducts, productMap: productMap, error: null };
 };

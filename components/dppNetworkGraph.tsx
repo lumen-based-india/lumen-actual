@@ -3,7 +3,7 @@ import Graph from "react-graph-vis";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const ProductMovementNetwork: React.FC = () => {
-  const graph = {
+  const graph123 = {
     nodes: [
       { id: 0, label: "Entry Point", color: "#D3D3D3" },
       { id: 1, label: "Manufacturer", color: "#FFB3BA" },
@@ -48,7 +48,7 @@ const ProductMovementNetwork: React.FC = () => {
         <CardTitle>Product Movement Network</CardTitle>
       </CardHeader>
       <CardContent>
-        <Graph graph={graph} options={options} />
+        <Graph graph={graph123} options={options} />
       </CardContent>
     </Card>
   );

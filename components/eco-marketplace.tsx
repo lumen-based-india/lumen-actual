@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -29,6 +29,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useCompanyContext } from "@/providers/CompanyProvider";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -36,6 +37,28 @@ export function EcoMarketplace() {
   const [productType, setProductType] = useState("");
   const [product, setProduct] = useState("");
   const [quantity, setQuantity] = useState("");
+  const { supplierData: supplier_data } = useCompanyContext();
+  const productCategoryMap = supplier_data?.data?.productMap ?? {};
+  const productTypes = Object.keys(supplier_data?.data?.productMap ?? {});
+  const [currentProductType, setCurrentProductType] = useState("");
+  const [currentProducts, setCurrentProducts] = useState<string[]>([]);
+  const [currentProduct, setCurrentProduct] = useState({});
+  
+  useEffect(() => {
+    if(productCategoryMap[currentProductType] === undefined) {
+      return;
+    }
+    const products = Object.keys(productCategoryMap[currentProductType]);
+    setCurrentProducts(products);
+  }, [currentProductType]);
+
+  useEffect(() => {
+    console.log(currentProducts);
+  }, [currentProducts])
+  
+  const handleProductType = (selectedType: string) => {
+    setCurrentProductType(selectedType);
+  }
 
   const supplierData = [
     {
@@ -107,13 +130,14 @@ export function EcoMarketplace() {
             <CardTitle>Enter Supply Requirements</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Select onValueChange={setProductType}>
+            <Select onValueChange={handleProductType}>
               <SelectTrigger>
                 <SelectValue placeholder="Product Type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="type1">Product Type 1</SelectItem>
-                <SelectItem value="type2">Product Type 2</SelectItem>
+                {productTypes.map((productType, index) => (
+                  <SelectItem value={productType} key={index}>{productType}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
             <Select onValueChange={setProduct}>
@@ -121,8 +145,19 @@ export function EcoMarketplace() {
                 <SelectValue placeholder="Product" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="product1">Product 1</SelectItem>
-                <SelectItem value="product2">Product 2</SelectItem>
+              {
+                currentProducts && currentProducts.length > 0 ? (
+                  currentProducts.map((product, index) => {
+                    console.log(product);
+                  return (
+                    <SelectItem value={product} key={index}>
+                      {product}
+                    </SelectItem>
+                  )})
+                ) : (
+                  <SelectItem disabled value={"empty"}>No products available</SelectItem>
+                )
+              }
               </SelectContent>
             </Select>
             <div className="flex items-center space-x-2">
