@@ -122,7 +122,7 @@ const GaugeChart = ({ data }: { data: (typeof CSRData)[0] }) => {
 };
 const CSRMetricCard = ({ data }: { data: (typeof CSRData)[0] }) => {
   return (
-    <Card className="flex justify-between items-center">
+    <Card className="flex justify-between items-center transform transition-transform duration-300 hover:scale-105">
       <CardHeader>
         <CardTitle className="text-lg">{data.name}</CardTitle>
         <CardDescription className="text-xs">{data.description}</CardDescription>
