@@ -19,11 +19,9 @@ export default function ESG(
       : "Unknown Company";
 
   return (
-    <div className="flex flex-col items-center space-y-4">
-      <h2 className="text-xl font-bold">{companyName}</h2>
-
+    <div className="flex flex-row items-center space-x-4">
       {/* Environmental Card */}
-      <Card className="w-full rounded-xl">
+      <Card className="w-44 rounded-xl">
         <CardHeader className="flex flex-row items-center space-x-4">
           <Leaf className="h-8 w-8 text-green-500" />
           <CardTitle className="text-sm font-medium">Environmental</CardTitle>
@@ -35,7 +33,7 @@ export default function ESG(
       </Card>
 
       {/* Social Card */}
-      <Card className="w-full rounded-xl">
+      <Card className="w-44 rounded-xl">
         <CardHeader className="flex flex-row items-center space-x-4">
           <Users className="h-8 w-8 text-blue-500" />
           <CardTitle className="text-sm font-medium">Social</CardTitle>
@@ -47,7 +45,7 @@ export default function ESG(
       </Card>
 
       {/* Governance Card */}
-      <Card className="w-full rounded-xl">
+      <Card className="w-44 rounded-xl">
         <CardHeader className="flex flex-row items-center space-x-4">
           <Building2 className="h-8 w-8 text-yellow-500" />
           <CardTitle className="text-sm font-medium">Governance</CardTitle>

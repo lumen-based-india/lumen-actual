@@ -8,7 +8,7 @@ interface BarGaugeProps {
 
 export default function BarGauge({ companyData = null }: BarGaugeProps) {
   const width = 60;
-  const height = 450;
+  const height = 350;
   const markerWidth = 5;
 
   const esg_rating = (companyData?.esg_rating ?? 0) * 10;

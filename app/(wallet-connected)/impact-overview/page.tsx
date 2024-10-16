@@ -74,45 +74,51 @@ export default function ImpactOverview() {
   const { currentCompanyData } = useCompanyContext();
   return (
     <div className="p-8 flex flex-col w-full gap-4">
-      <Card className="rounded-xl">
-        <CardHeader>
-          <CardTitle>Impact Overview</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-row justify-evenly gap-4 w-full">
-            <div>
+      <div className="flex gap-4">
+        <div className="flex flex-col gap-4">
+          <Card className="rounded-xl w-full h-1/2">
+            <CardHeader>
+              <CardTitle>ESG Overview</CardTitle>
+            </CardHeader>
+            <CardContent
+              style={{ display: "flex", alignItems: "center" }}
+            >
               <ESG companyData={currentCompanyData} />
-            </div>
-            <div>
-              <BarGauge companyData={currentCompanyData} />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex flex-col gap-4">
-        <Card className="rounded-xl flex-1">
-          <CardHeader>
-            <CardTitle className="flex gap-8 items-center">
-              <div>Compliance Reports</div>
-              <Select onValueChange={setRegion} value={region}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select a Region" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Europe">Europe</SelectItem>
-                  <SelectItem value="India">India</SelectItem>
-                  <SelectItem value="Middle East">Middle East</SelectItem>
-                </SelectContent>
-              </Select>
-            </CardTitle>
+            </CardContent>
+          </Card>
+          <Card className="rounded-xl flex-1">
+            <CardHeader>
+              <CardTitle className="flex gap-8 items-center">
+                <div>Compliance Reports</div>
+                <Select onValueChange={setRegion} value={region}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select a Region" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Europe">Europe</SelectItem>
+                    <SelectItem value="India">India</SelectItem>
+                    <SelectItem value="Middle East">Middle East</SelectItem>
+                  </SelectContent>
+                </Select>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ComplianceComponent region={region} />
+            </CardContent>
+          </Card>
+        </div>
+        <Card className="rounded-xl w-full">
+          <CardHeader className="mb-4">
+            <CardTitle>Bar Gauge Overview</CardTitle>
           </CardHeader>
           <CardContent>
-            <ComplianceComponent region={region} />
+            <div className="flex justify-center">
+              <BarGauge companyData={currentCompanyData} />
+            </div>
           </CardContent>
         </Card>
-        <CSRComponent />
       </div>
+      <CSRComponent />
     </div>
   );
 }
