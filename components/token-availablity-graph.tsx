@@ -1,19 +1,15 @@
 "use client";
 
 import React from "react";
+import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+  ChartContainer,
+  ChartLegend,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
-type Props = {};
 const data = [
   {
     date: "Oct 2021",
@@ -72,38 +68,85 @@ const data = [
     series5: 0.2,
   },
 ];
-const TokenAvailablityGraph = (props: Props) => {
+
+export default function TokenAvailabilityGraph() {
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
-        <CardTitle>Inset Token Availablity</CardTitle>
+        <CardTitle className="text-lg font-semibold">
+          Inset Token Availability
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={200}>
-          <LineChart
-            data={data}
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis domain={[0, 16]} />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="series1"
-              stroke="#8884d8"
-              activeDot={{ r: 8 }}
-            />
-            <Line type="monotone" dataKey="series2" stroke="#82ca9d" />
-            <Line type="monotone" dataKey="series3" stroke="#ffc658" />
-            <Line type="monotone" dataKey="series4" stroke="#ff7300" />
-            <Line type="monotone" dataKey="series5" stroke="#00C49F" />
-          </LineChart>
-        </ResponsiveContainer>
+        <ChartContainer
+          config={{
+            series1: { label: "Series 1", color: "#8884d8" },
+            series2: { label: "Series 2", color: "#82ca9d" },
+            series3: { label: "Series 3", color: "#ffc658" },
+            series4: { label: "Series 4", color: "#ff7300" },
+            series5: { label: "Series 5", color: "#00C49F" },
+          }}
+        >
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={data}
+              margin={{ top: 5, right: 10, left: 10, bottom: 0 }}
+            >
+              <XAxis
+                dataKey="date"
+                stroke="#64748b"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                stroke="#64748b"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(value) => `${value}%`}
+              />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Line
+                type="monotone"
+                dataKey="series1"
+                strokeWidth={2}
+                dot={false}
+                stroke="#8884d8"
+              />
+              <Line
+                type="monotone"
+                dataKey="series2"
+                strokeWidth={2}
+                dot={false}
+                stroke="#82ca9d"
+              />
+              <Line
+                type="monotone"
+                dataKey="series3"
+                strokeWidth={2}
+                dot={false}
+                stroke="#ffc658"
+              />
+              <Line
+                type="monotone"
+                dataKey="series4"
+                strokeWidth={2}
+                dot={false}
+                stroke="#ff7300"
+              />
+              <Line
+                type="monotone"
+                dataKey="series5"
+                strokeWidth={2}
+                dot={false}
+                stroke="#00C49F"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+        <ChartLegend className="mt-4" />
       </CardContent>
     </Card>
   );
-};
-
-export default TokenAvailablityGraph;
+}

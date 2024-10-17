@@ -19,7 +19,7 @@ import CompanyHeader from "@/components/companyHeader";
 const sidebarItems = [
   { name: "Impact Overview", icon: BarChart2, href: "/impact-overview" },
   { name: "DPP Trace", icon: GitBranch, href: "/dpp-trace" },
-  { name: "Suppliers", icon: Truck, href: "/suppliers" },
+  { name: "MarketPlace", icon: Truck, href: "/marketplace" },
   { name: "Trade Carbon", icon: Leaf, href: "/trade-carbon" },
   { name: "Consumers", icon: Users, href: "/consumers" },
 ];

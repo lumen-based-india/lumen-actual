@@ -35,8 +35,7 @@ import { get } from "http";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-export function EcoMarketplace() {
-  const [product, setProduct] = useState("");
+export default function MarketPlace() {
   const [quantity, setQuantity] = useState("");
   const { supplierData: supplier_data } = useCompanyContext();
   const productCategoryMap = supplier_data?.data?.productMap ?? {};
@@ -46,9 +45,9 @@ export function EcoMarketplace() {
   const [currentProduct, setCurrentProduct] = useState("");
   const [supplierLoading, setSupplierLoading] = useState(false);
   const [supplierNewData, setSupplierNewData] = useState<any[]>([]);
-  
+
   useEffect(() => {
-    if(productCategoryMap[currentProductType] === undefined) {
+    if (productCategoryMap[currentProductType] === undefined) {
       return;
     }
     const products = Object.keys(productCategoryMap[currentProductType]);
@@ -62,23 +61,25 @@ export function EcoMarketplace() {
     }
     setSupplierLoading(true);
     setSupplierNewData([]);
-    const promises = companies.map((company: any) => getCompany(company.company_id));
+    const promises = companies.map((company: any) =>
+      getCompany(company.company_id)
+    );
     Promise.all(promises)
-    .then((results) => {
-      companies.forEach((data: any) => {
-        getCompany(data.company_id).then((result) => {
-          setSupplierNewData((prevData) => [...prevData, result.data]);
+      .then((results) => {
+        companies.forEach((data: any) => {
+          getCompany(data.company_id).then((result) => {
+            setSupplierNewData((prevData) => [...prevData, result.data]);
+          });
         });
+      })
+      .finally(() => {
+        setSupplierLoading(false);
       });
-    })
-    .finally(() => {
-      setSupplierLoading(false);
-    });
-  }, [currentProduct])
-  
+  }, [currentProduct]);
+
   const handleProductType = (selectedType: string) => {
     setCurrentProductType(selectedType);
-  }
+  };
 
   const supplierData = [
     {
@@ -156,7 +157,9 @@ export function EcoMarketplace() {
               </SelectTrigger>
               <SelectContent>
                 {productTypes.map((productType, index) => (
-                  <SelectItem value={productType} key={index}>{productType}</SelectItem>
+                  <SelectItem value={productType} key={index}>
+                    {productType}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -165,18 +168,19 @@ export function EcoMarketplace() {
                 <SelectValue placeholder="Product" />
               </SelectTrigger>
               <SelectContent>
-              {
-                currentProducts && currentProducts.length > 0 ? (
+                {currentProducts && currentProducts.length > 0 ? (
                   currentProducts.map((product, index) => {
-                  return (
-                    <SelectItem value={product} key={index}>
-                      {product}
-                    </SelectItem>
-                  )})
+                    return (
+                      <SelectItem value={product} key={index}>
+                        {product}
+                      </SelectItem>
+                    );
+                  })
                 ) : (
-                  <SelectItem disabled value={"empty"}>No products available</SelectItem>
-                )
-              }
+                  <SelectItem disabled value={"empty"}>
+                    No products available
+                  </SelectItem>
+                )}
               </SelectContent>
             </Select>
             <div className="flex items-center space-x-2">
