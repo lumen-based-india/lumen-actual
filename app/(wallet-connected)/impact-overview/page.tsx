@@ -73,7 +73,7 @@ export default function ImpactOverview() {
   const [region, setRegion] = useState("India");
   const { currentCompanyData } = useCompanyContext();
   return (
-    <div className="p-8 flex flex-col w-full gap-4">
+    <div className="p-4 flex flex-col w-full gap-4">
       <div className="flex gap-4">
         <div className="flex flex-col gap-4">
           <Card className="rounded-xl w-full h-1/2">

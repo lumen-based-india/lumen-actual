@@ -11,9 +11,9 @@ import {
 export default function TradeCarbon() {
   return (
     <div className="flex flex-col gap-4 p-4">
-      <div className="flex gap-4">
-        <div className="flex flex-col gap-4 h-full w-1/5">
-          <Card>
+      <div className="flex gap-4 h-[200px]">
+        <div className="flex flex-col gap-4 w-1/5 h-full">
+          <Card className="rounded-xl h-full">
             <CardHeader>
               <CardDescription>Excess Emissions</CardDescription>
             </CardHeader>
@@ -24,7 +24,7 @@ export default function TradeCarbon() {
               </div>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="rounded-xl h-full">
             <CardHeader>
               <CardDescription>
                 Possible Environment Tax Implication
@@ -44,9 +44,7 @@ export default function TradeCarbon() {
           <TokenAvailablityGraph />
         </div>
       </div>
-      <div className="flex gap-4">
-        
-      </div>
+      <div className="flex gap-4"></div>
     </div>
   );
 }
