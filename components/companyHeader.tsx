@@ -23,7 +23,7 @@ export default function CompanyHeader() {
   const { currentCompanyData } = useCompanyContext();
 
   return (
-    <div className="flex items-center justify-between p-4 bg-primary text-white">
+    <div className="flex items-center justify-between p-4 bg-card-foreground text-secondary">
       <div className="flex items-center space-x-4">
         <img
           src={selectedCompany.logo}

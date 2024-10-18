@@ -144,9 +144,6 @@ const RecycleSection = () => (
 export default function Component() {
   return (
     <div className="w-full p-3 min-h-screen">
-      <h1 className="text-4xl font-bold text-center mb-6">
-        Total Environmental Footprint
-      </h1>
       <div className="grid md:grid-cols-2 gap-6">
         <EnvMeter />
         <CircularDiagram />

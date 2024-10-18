@@ -71,39 +71,51 @@ export default function Index() {
           </section>
 
           {/* Why LUMEN */}
-          <section className="bg-white rounded-xl shadow-xl p-8">
+          <section className="rounded-xl p-8">
             <h3 className="text-3xl font-semibold text-center mb-8">
               Why LUMEN?
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="flex flex-col items-center text-center">
-                <BarChart2 className="w-12 h-12 mb-4" />
-                <h4 className="text-xl font-semibold mb-2">
-                  Transparent ESG Reporting
-                </h4>
-                <p>
-                  Simplify and democratize ESG data construction and reporting.
-                </p>
-              </div>
-              <div className="flex flex-col items-center text-center">
-                <ShieldCheck className="w-12 h-12 mb-4" />
-                <h4 className="text-xl font-semibold mb-2">
-                  Combat Greenwashing
-                </h4>
-                <p>
-                  Build trust and ensure compliance with transparent, verifiable
-                  data.
-                </p>
-              </div>
-              <div className="flex flex-col items-center text-center">
-                <Lock className="w-12 h-12 mb-4" />
-                <h4 className="text-xl font-semibold mb-2">
-                  Secure Smart Contracts
-                </h4>
-                <p>
-                  Ensure timely payments and meet ESG criteria automatically.
-                </p>
-              </div>
+              <Card className="flex flex-col items-center text-center rounded-xl p-6">
+                <CardContent>
+                  <div className="flex justify-center">
+                    <BarChart2 className="w-12 h-12 mb-4" />
+                  </div>
+                  <h4 className="text-xl font-semibold mb-2">
+                    Transparent ESG Reporting
+                  </h4>
+                  <p>
+                    Simplify and democratize ESG data construction and reporting.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="flex flex-col items-center text-center rounded-xl p-6">
+                <CardContent>
+                  <div className="flex justify-center">
+                    <ShieldCheck className="w-12 h-12 mb-4" />
+                  </div>
+                  <h4 className="text-xl font-semibold mb-2">
+                    Combat Greenwashing
+                  </h4>
+                  <p>
+                    Build trust and ensure compliance with transparent, verifiable
+                    data.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="flex flex-col items-center text-center rounded-xl p-6">
+                <CardContent>
+                  <div className="flex justify-center">
+                    <Lock className="w-12 h-12 mb-4" />
+                  </div>
+                  <h4 className="text-xl font-semibold mb-2">
+                    Secure Smart Contracts
+                  </h4>
+                  <p>
+                    Ensure timely payments and meet ESG criteria automatically.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </section>
 

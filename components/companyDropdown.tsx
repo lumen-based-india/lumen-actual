@@ -16,7 +16,7 @@ export default function CompanyDropdown() {
       <select
         value={currentCompanyID}
         onChange={handleCompanyChange}
-        className="p-2 bg-secondary text-black rounded-lg font-medium"
+        className="p-2 bg-secondary text-primary rounded-lg font-medium"
       >
         {companies.map((company) => (
           <option key={company.company_id} value={company.company_id}>

@@ -55,7 +55,7 @@ export default function DashboardLayout({
       <div className="bg-background">
         <div className="flex h-screen text-secondary">
           <aside
-            className={`bg-primary transition-all duration-300 ease-in-out ${
+            className={`bg-card-foreground transition-all duration-300 ease-in-out ${
               isSidebarOpen ? "w-64" : "w-20"
             } flex flex-col`}
           >
@@ -69,7 +69,7 @@ export default function DashboardLayout({
               </Link>
               <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="p-2 rounded-full hover:bg-gray-200 transition-colors duration-200"
+                className="p-2 rounded-full hover:bg-secondary hover:text-primary transition-colors duration-200 text-secondary"
               >
                 {isSidebarOpen ? (
                   <ChevronLeft size={24} />
@@ -86,7 +86,7 @@ export default function DashboardLayout({
                       <span
                         className={`flex items-center space-x-2 p-2 rounded-xl hover:bg-white-200 transition-colors duration-200 ${
                           pathname === item.href
-                            ? "bg-secondary text-black"
+                            ? "bg-secondary text-primary"
                             : ""
                         }`}
                       >
@@ -100,7 +100,7 @@ export default function DashboardLayout({
             </div>
           </aside>
 
-          <div className="flex-1 overflow-y-auto text-primary bg-transparent">
+          <div className="flex-1 overflow-y-auto text-secondary bg-secondary">
             <CompanyHeader />
             {children}
           </div>
