@@ -81,6 +81,13 @@ const SupplierProjects = (props: Props) => {
                       props.selectedProject === project.id
                         ? "#f0f0f0"
                         : "transparent",
+                    transition: "background-color 0.3s ease, transform 0.3s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "scale(1.02)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "scale(1)";
                   }}
                 >
                   <TableCell>{project.supplier}</TableCell>

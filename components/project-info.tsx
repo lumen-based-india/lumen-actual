@@ -57,6 +57,11 @@ const ProjectInfo = (props: Props) => {
                       type="number"
                       value={qty}
                       onChange={(e) => setQty(Number(e.target.value))}
+                      onFocus={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+                      onBlur={(e) => e.currentTarget.style.transform = "scale(1)"}
+                      onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+                      onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+                      style={{ transition: "transform 0.3s ease" }}
                     />
                   </div>
                 </CardContent>
@@ -72,7 +77,11 @@ const ProjectInfo = (props: Props) => {
                 </CardContent>
               </Card>
               <div className="col-span-1 flex items-center justify-center h-full">
-                <Button className="w-full h-full">Acquire Carbon Insets</Button>
+                <Button 
+                  className="w-full h-full transition-transform transform hover:scale-95"
+                >
+                  Acquire Carbon Insets
+                </Button>
               </div>
             </div>
           </div>

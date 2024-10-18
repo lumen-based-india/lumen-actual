@@ -192,7 +192,6 @@ export default function MarketPlace() {
                 className="w-20"
               />
             </div>
-            <Button>View Options</Button>
           </CardContent>
         </Card>
         <Card className="rounded-xl">
@@ -232,7 +231,7 @@ export default function MarketPlace() {
                     <TableCell>{supplier.social_score}</TableCell>
                     <TableCell>{supplier.governance_score}</TableCell>
                     <TableCell>
-                      <Button variant="outline">Enter Contract</Button>
+                      <Button variant="outline" className="transition-transform transform hover:scale-105">Enter Contract</Button>
                     </TableCell>
                   </TableRow>
                 ))}
