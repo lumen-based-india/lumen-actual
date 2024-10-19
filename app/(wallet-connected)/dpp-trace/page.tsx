@@ -15,6 +15,7 @@ import {
 import { Calendar, DollarSign, Leaf, MapPin, Shirt, Star } from "lucide-react";
 // @ishaan change accordingly
 type ProductInfo = {
+  image: string;
   name: string;
   material: string;
   manufacturingDate: string;
@@ -25,6 +26,7 @@ type ProductInfo = {
 
 const productsInfo: Record<string, ProductInfo> = {
   whiteJeans: {
+    image: "https://via.placeholder.com/150",
     name: "White Jeans",
     material: "100% Cotton",
     manufacturingDate: "March 15, 2023",
@@ -33,6 +35,7 @@ const productsInfo: Record<string, ProductInfo> = {
     price: "$49.99",
   },
   blackJeans: {
+    image: "https://via.placeholder.com/150",
     name: "Black Jeans",
     material: "98% Cotton, 2% Elastane",
     manufacturingDate: "April 10, 2023",
@@ -41,6 +44,7 @@ const productsInfo: Record<string, ProductInfo> = {
     price: "$54.99",
   },
   blueJeans: {
+    image: "https://via.placeholder.com/150",
     name: "Blue Jeans",
     material: "100% Denim",
     manufacturingDate: "February 20, 2023",
@@ -113,21 +117,32 @@ export default function DPPTrace() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="flex gap-4 w-full">
               {productDetails && (
                 <>
-                  {Object.entries(productDetails).map(([key, value]) => (
-                    <div key={key} className="flex items-center space-x-3">
-                      <div>
-                        <p className="text-sm text-gray-500">
-                          {key
-                            .replace(/([A-Z])/g, " $1")
-                            .replace(/^./, (str) => str.toUpperCase())}
-                        </p>
-                        <p className="font-medium">{value}</p>
-                      </div>
-                    </div>
-                  ))}
+                  <div className="flex-shrink-0">
+                    <img
+                      src={productDetails.image}
+                      alt={productDetails.name}
+                      className="w-32 h-32 object-cover rounded-lg"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-grow">
+                    {Object.entries(productDetails)
+                      .filter(([key]) => key !== "image")
+                      .map(([key, value]) => (
+                        <div key={key} className="flex items-center space-x-3">
+                          <div>
+                            <p className="text-sm text-gray-500">
+                              {key
+                                .replace(/([A-Z])/g, " $1")
+                                .replace(/^./, (str) => str.toUpperCase())}
+                            </p>
+                            <p className="font-medium">{value}</p>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
                 </>
               )}
             </div>
@@ -136,7 +151,7 @@ export default function DPPTrace() {
       )}
 
       <div className="flex gap-4">
-        {/* <ProductMovementNetwork /> @bhavya throwing some error pls fix*/} 
+        {/* <ProductMovementNetwork /> @bhavya throwing some error pls fix*/}
         <EsgTrace />
       </div>
     </div>
