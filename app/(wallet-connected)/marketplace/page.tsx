@@ -30,6 +30,7 @@ import {
 } from "chart.js";
 import { useCompanyContext } from "@/providers/CompanyProvider";
 import { getCompany } from "@/utils/databaseQueries/companies";
+import SupplierProgram from "@/components/supplier-program";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -43,7 +44,9 @@ export default function MarketPlace() {
   const [currentProduct, setCurrentProduct] = useState("");
   const [supplierLoading, setSupplierLoading] = useState(false);
   const [supplierNewData, setSupplierNewData] = useState<any[]>([]);
-  const [companySustainabilityMap, setCompanySustainabilityMap] = useState<any[]>([]);
+  const [companySustainabilityMap, setCompanySustainabilityMap] = useState<
+    any[]
+  >([]);
 
   useEffect(() => {
     if (productCategoryMap[currentProductType] === undefined) {
@@ -67,10 +70,12 @@ export default function MarketPlace() {
           {
             company_id: company.company_id,
             company_name: company.company_name,
-            sustainability: parseFloat(company.sustainability.company_sustainability).toFixed(2),
+            sustainability: parseFloat(
+              company.sustainability.company_sustainability
+            ).toFixed(2),
             money: parseFloat(company.sustainability.company_price).toFixed(2),
           },
-        ]
+        ];
       });
     }
     setSupplierLoading(true);
@@ -89,7 +94,7 @@ export default function MarketPlace() {
       .finally(() => {
         setSupplierLoading(false);
       });
-    }, [currentProduct]);
+  }, [currentProduct]);
 
   const handleProductType = (selectedType: string) => {
     setCurrentProductType(selectedType);
@@ -102,7 +107,7 @@ export default function MarketPlace() {
         label: "Suppliers",
         data: companySustainabilityMap.map((company) => ({
           x: company.sustainability, // X-axis: Sustainability (ESG rating)
-          y: company.money,          // Y-axis: Price (Company Price)
+          y: company.money, // Y-axis: Price (Company Price)
           label: company.company_name, // Label for each point
           company_id: company.company_id,
           company_name: company.company_name,
@@ -114,13 +119,13 @@ export default function MarketPlace() {
       },
     ],
   };
-  
+
   // Options to display tooltips and labels
   const chartOptions = {
     plugins: {
       tooltip: {
         callbacks: {
-          label: function (context:any) {
+          label: function (context: any) {
             // Return company name and value as the tooltip label
             const companyName = context.raw.label;
             const price = context.raw.y;
@@ -134,13 +139,13 @@ export default function MarketPlace() {
       x: {
         title: {
           display: true,
-          text: 'Sustainability (ESG Rating)',
+          text: "Sustainability (ESG Rating)",
         },
       },
       y: {
         title: {
           display: true,
-          text: 'Price ($)',
+          text: "Price ($)",
         },
       },
     },
@@ -186,15 +191,6 @@ export default function MarketPlace() {
                 )}
               </SelectContent>
             </Select>
-            <div className="flex items-center space-x-2">
-              <span>Enter QTY</span>
-              <Input
-                type="number"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
-                className="w-20"
-              />
-            </div>
           </CardContent>
         </Card>
         <Card className="rounded-xl">
@@ -234,7 +230,12 @@ export default function MarketPlace() {
                     <TableCell>{supplier.social_score}</TableCell>
                     <TableCell>{supplier.governance_score}</TableCell>
                     <TableCell>
-                      <Button variant="outline" className="transition-transform transform hover:scale-105">Enter Contract</Button>
+                      <Button
+                        variant="outline"
+                        className="transition-transform transform hover:scale-105"
+                      >
+                        Enter Contract
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -244,6 +245,25 @@ export default function MarketPlace() {
             // If no data is found, display this message
             <p>No suppliers found.</p>
           )}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Inset Programs Running</CardTitle>
+        </CardHeader>
+        <CardContent className="flex overflow-x-auto gap-4">
+          <div>
+            <SupplierProgram />
+          </div>
+          <div>
+            <SupplierProgram />
+          </div>
+          <div>
+            <SupplierProgram />
+          </div>
+          <div>
+            <SupplierProgram />
+          </div>
         </CardContent>
       </Card>
     </div>
