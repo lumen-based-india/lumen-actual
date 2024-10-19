@@ -120,7 +120,7 @@ export default function MarketPlace() {
     plugins: {
       tooltip: {
         callbacks: {
-          label: function (context) {
+          label: function (context:any) {
             // Return company name and value as the tooltip label
             const companyName = context.raw.label;
             const price = context.raw.y;
