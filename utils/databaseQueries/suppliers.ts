@@ -42,10 +42,20 @@ export const getSuppliersForCompanyID = async (companyId: string) => {
 
   await Promise.all(productsData.map(fetchSupplierData));
 
+  // iterate through companyIds and fetch company data
+  const companyMap = new Map();
+
+  const companyPromises = Array.from(companyIds).map(async (companyId: any) => {
+    const extraData = await calculateCompanyData(companyId);
+    companyMap.set(companyId, extraData);
+    return extraData;
+  });
+  const data = await Promise.all(companyPromises);
   var productMap: {
     [category: string]: {[productName: string]: any[]};
   } = {};
-  Object.entries(supplierProducts).map(([key, value], index) => {
+  Object.entries(supplierProducts).map(async ([key, value], index) => {
+    value.companies.sustainability = companyMap.get(value.companies.company_id);
     if (!productMap[value.product_category]) {
       productMap[value.product_category] = {
         [value.product_name]: [
@@ -64,7 +74,19 @@ export const getSuppliersForCompanyID = async (companyId: string) => {
       }
     }
   });
-  console.log(":d", productMap);
+
 
   return { supplierProducts, productMap: productMap, error: null };
 };
+
+
+export const calculateCompanyData= async (companyId: any) => {
+  const { data, error } = await supabase
+    .rpc('calculate_company_data', { company_id: companyId })
+    .single()
+  if (error) {
+    console.error('Error calculating company data:', error)
+    return
+  }
+  return data
+}

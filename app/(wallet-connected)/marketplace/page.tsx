@@ -19,7 +19,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Star } from "lucide-react";
 import { Scatter } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -31,6 +30,7 @@ import {
 } from "chart.js";
 import { useCompanyContext } from "@/providers/CompanyProvider";
 import { getCompany } from "@/utils/databaseQueries/companies";
+
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 export default function MarketPlace() {
@@ -43,6 +43,8 @@ export default function MarketPlace() {
   const [currentProduct, setCurrentProduct] = useState("");
   const [supplierLoading, setSupplierLoading] = useState(false);
   const [supplierNewData, setSupplierNewData] = useState<any[]>([]);
+  const [companySustainabilityMap, setCompanySustainabilityMap] = useState<any[]>([]);
+  console.log(companySustainabilityMap);
 
   useEffect(() => {
     if (productCategoryMap[currentProductType] === undefined) {
@@ -53,9 +55,24 @@ export default function MarketPlace() {
   }, [currentProductType]);
 
   useEffect(() => {
+    setCompanySustainabilityMap([]);
     const companies = productCategoryMap[currentProductType]?.[currentProduct];
+    // make sustainability score map for each company
     if (!companies) {
       return;
+    }
+    for (let company of companies) {
+      setCompanySustainabilityMap((prevData) => {
+        return [
+          ...prevData,
+          {
+            company_id: company.company_id,
+            company_name: company.company_name,
+            sustainability: company.sustainability.company_sustainability,
+            money: company.sustainability.company_price,
+          },
+        ]
+      });
     }
     setSupplierLoading(true);
     setSupplierNewData([]);
@@ -73,69 +90,58 @@ export default function MarketPlace() {
       .finally(() => {
         setSupplierLoading(false);
       });
-  }, [currentProduct]);
+    }, [currentProduct]);
 
   const handleProductType = (selectedType: string) => {
     setCurrentProductType(selectedType);
   };
 
-  const supplierData = [
-    {
-      name: "Bambrew",
-      env: "4/5",
-      social: "3/5",
-      governance: "3/5",
-      price: 80,
-      sustainability: 70,
-    },
-    {
-      name: "Zerocircle",
-      env: "3/5",
-      social: "3/5",
-      governance: "3/5",
-      price: 90,
-      sustainability: 85,
-    },
-    {
-      name: "Zomato Hyperpure",
-      env: "1.5/5",
-      social: "3/5",
-      governance: "5/5",
-      price: 70,
-      sustainability: 60,
-    },
-  ];
-
+  //make chart with company sustainability and price
   const chartData = {
     datasets: [
       {
         label: "Suppliers",
-        data: supplierData.map((supplier) => ({
-          x: supplier.sustainability,
-          y: supplier.price,
-          label: supplier.name,
+        data: companySustainabilityMap.map((company) => ({
+          x: company.sustainability, // X-axis: Sustainability (ESG rating)
+          y: company.money,          // Y-axis: Price (Company Price)
+          label: company.company_name, // Label for each point
+          company_id: company.company_id,
+          company_name: company.company_name,
         })),
-        backgroundColor: ["purple", "green", "red"],
+        backgroundColor: "rgba(75, 192, 192, 0.2)", // Data point fill color
+        borderColor: "rgba(75, 192, 192, 1)", // Data point border color
+        borderWidth: 1,
+        pointRadius: 5, // Radius of each point
       },
     ],
   };
-
+  
+  // Options to display tooltips and labels
   const chartOptions = {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            // Return company name and value as the tooltip label
+            const companyName = context.raw.label;
+            const price = context.raw.y;
+            const sustainability = context.raw.x;
+            return `${companyName}: Price $${price}, Sustainability ${sustainability}`;
+          },
+        },
+      },
+    },
     scales: {
       x: {
-        type: "linear" as const,
-        position: "bottom" as const,
         title: {
           display: true,
-          text: "Sustainability",
+          text: 'Sustainability (ESG Rating)',
         },
       },
       y: {
-        type: "linear" as const,
-        position: "left" as const,
         title: {
           display: true,
-          text: "Price",
+          text: 'Price ($)',
         },
       },
     },
