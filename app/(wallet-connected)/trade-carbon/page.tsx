@@ -9,38 +9,35 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
+import { useCompanyContext } from "@/providers/CompanyProvider";
 import { useState } from "react";
 
 export default function TradeCarbon() {
   const [selectedProject, setSelectedProject] = useState(null);
+  const { insetProgramsData } = useCompanyContext();
+  if (insetProgramsData?.isPending) {
+    return <div>Loading...</div>;
+  }
 
-  const mockProjects = [
-    {
-      id: 1,
-      supplier: "Mock Supplier 1",
-      project: "Project A",
-      address: "123 Main St",
-      date: "2023-10-01",
-      lumens: 100,
-      insetTonnes: 3500,
-      image: "https://placehold.co/600x400",
-    },
-    {
-      id: 2,
-      supplier: "Mock Supplier 2",
-      project: "Project B",
-      address: "456 Elm St",
-      date: "2023-10-02",
-      lumens: 200,
-      insetTonnes: 4500,
-      image: "https://placehold.co/600x400",
-    },
-  ];
-
-  const selectedProjectData = mockProjects.find(
-    (project) => project.id === selectedProject
+  if (insetProgramsData?.error) {
+    return <div>Error loading inset programs. Please try again later.</div>;
+  }
+  if (!insetProgramsData?.data) {
+    return <div>No inset programs found.</div>;
+  }
+  const projects = insetProgramsData.data?.data.map((program: any) => ({
+    id: program.program_id,
+    supplier: program.companies.company_name,
+    project: program.program_name,
+    address: program.google_maps_link,
+    date: program.project_completion,
+    lumens: program.lumens_value,
+    insetTonnes: program.carbon_reduction,
+    image: program.verifier_url,
+  }));
+  const selectedProjectData = projects?.find(
+    (project: any) => project.id === selectedProject,
   );
 
   return (
@@ -80,7 +77,7 @@ export default function TradeCarbon() {
       </div>
       <div className="flex flex-col gap-4">
         <SupplierProjects
-          projects={mockProjects}
+          projects={projects as any[]}
           selectedProject={selectedProject}
           setSelectedProject={setSelectedProject}
         />

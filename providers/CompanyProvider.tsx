@@ -1,6 +1,19 @@
-import { PropsWithChildren, createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { fetchCompanyById, fetchProductsByCompanyID, FetchSuppliersByID, GetAllCompanies} from "@/utils/databaseQueries/companies";
+import {
+  fetchCompanyById,
+  fetchProductsByCompanyID,
+  FetchSuppliersByID,
+  GetAllCompanies,
+} from "@/utils/databaseQueries/companies";
+import { getAllInsetPrograms } from "@/utils/databaseQueries/insetPrograms";
 
 
 export type CompanyData = {
@@ -30,19 +43,21 @@ interface ICompanyContext {
   allCompaniesData: UseQueryResult<any[] | null, Error>;
   currentCompanyID: string;
   setCurrentCompanyID: (id: string) => void;
+  insetProgramsData: UseQueryResult<any | null, Error>;
 }
 
 const CompanyContext = createContext<ICompanyContext | null>(null);
 
 const useCompany = () => {
   const [currentCompanyID, setCurrentCompanyID] = useState("10001");
-  const [currentCompanyData, setCurrentCompanyData] = useState<CompanyData | null>(null);
+  const [currentCompanyData, setCurrentCompanyData] =
+    useState<CompanyData | null>(null);
 
   const allCompaniesData = useQuery({
     queryKey: ["companies"],
     queryFn: async () => {
       const response = await GetAllCompanies();
-      return response
+      return response;
     },
   });
   const currentCompany = useQuery({
@@ -70,11 +85,20 @@ const useCompany = () => {
       data.forEach((product: any, index: number) => {
         product.id = index;
       });
-      return data
+      return data;
     },
     enabled: !!currentCompanyID,
   });
-  
+
+  const insetProgramsData = useQuery({
+    queryKey: ["insetPrograms"],
+    queryFn: async () => {
+      const response = await getAllInsetPrograms();
+      console.log(response);
+      return response;
+    },
+  });
+
   useEffect(() => {
     if (currentCompany.data) {
       setCurrentCompanyData(currentCompany.data);
@@ -88,20 +112,26 @@ const useCompany = () => {
     currentCompanyData,
     supplierData,
     productsData,
+    insetProgramsData,
   };
 };
 
 export function ProvideCompany({ children }: PropsWithChildren<any>) {
   const value = useCompany();
   return (
-    <CompanyContext.Provider value={{ ...value }}>{children}</CompanyContext.Provider>
-  )
+    // @ts-ignore
+    <CompanyContext.Provider value={{ ...value }}>
+      {children}
+    </CompanyContext.Provider>
+  );
 }
 
 export const useCompanyContext = () => {
   const context = useContext(CompanyContext);
   if (!context) {
-    throw new Error("Ensure that the component is wrapped inside ProvideCompany");
+    throw new Error(
+      "Ensure that the component is wrapped inside ProvideCompany",
+    );
   }
   return context;
 };

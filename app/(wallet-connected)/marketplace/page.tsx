@@ -31,8 +31,6 @@ import {
 } from "chart.js";
 import { useCompanyContext } from "@/providers/CompanyProvider";
 import { getCompany } from "@/utils/databaseQueries/companies";
-import { get } from "http";
-
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
 export default function MarketPlace() {
