@@ -44,7 +44,6 @@ export default function MarketPlace() {
   const [supplierLoading, setSupplierLoading] = useState(false);
   const [supplierNewData, setSupplierNewData] = useState<any[]>([]);
   const [companySustainabilityMap, setCompanySustainabilityMap] = useState<any[]>([]);
-  console.log(companySustainabilityMap);
 
   useEffect(() => {
     if (productCategoryMap[currentProductType] === undefined) {
@@ -68,8 +67,8 @@ export default function MarketPlace() {
           {
             company_id: company.company_id,
             company_name: company.company_name,
-            sustainability: company.sustainability.company_sustainability,
-            money: company.sustainability.company_price,
+            sustainability: parseFloat(company.sustainability.company_sustainability).toFixed(2),
+            money: parseFloat(company.sustainability.company_price).toFixed(2),
           },
         ]
       });
