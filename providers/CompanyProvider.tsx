@@ -2,6 +2,7 @@ import { PropsWithChildren, createContext, useContext, useEffect, useMemo, useSt
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { fetchCompanyById, fetchProductsByCompanyID, FetchSuppliersByID, GetAllCompanies} from "@/utils/databaseQueries/companies";
 
+
 export type CompanyData = {
   best_performer: number;
   company_id: string;
@@ -17,6 +18,9 @@ export type CompanyData = {
   skus: number;
   social_score: number;
   supply_chain_loop: number;
+  intensity_best: number;
+  intensity_company: number;
+  intensity_target: number;
 };
 
 interface ICompanyContext {
