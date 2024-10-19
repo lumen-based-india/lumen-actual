@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -30,6 +30,11 @@ import {
 } from "chart.js";
 import { useCompanyContext } from "@/providers/CompanyProvider";
 import { getCompany } from "@/utils/databaseQueries/companies";
+import SupplierProjects from "@/components/supplier-projects";
+import ProjectInfo from "@/components/project-info";
+import { useQuery } from "@tanstack/react-query";
+import { getInsetProgramsByCompanyID } from "@/utils/databaseQueries/insetPrograms";
+import { SupplierPrograms } from "@/components/supplier-programs";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -43,8 +48,11 @@ export default function MarketPlace() {
   const [currentProduct, setCurrentProduct] = useState("");
   const [supplierLoading, setSupplierLoading] = useState(false);
   const [supplierNewData, setSupplierNewData] = useState<any[]>([]);
-  const [companySustainabilityMap, setCompanySustainabilityMap] = useState<any[]>([]);
-
+  const [companySustainabilityMap, setCompanySustainabilityMap] = useState<
+    any[]
+  >([]);
+  const [currentSupplier, setCurrentSupplier] = useState<string>("");
+  const [selectedProject, setSelectedProject] = useState<string>("");
   useEffect(() => {
     if (productCategoryMap[currentProductType] === undefined) {
       return;
@@ -56,7 +64,6 @@ export default function MarketPlace() {
   useEffect(() => {
     setCompanySustainabilityMap([]);
     const companies = productCategoryMap[currentProductType]?.[currentProduct];
-    // make sustainability score map for each company
     if (!companies) {
       return;
     }
@@ -67,16 +74,18 @@ export default function MarketPlace() {
           {
             company_id: company.company_id,
             company_name: company.company_name,
-            sustainability: parseFloat(company.sustainability.company_sustainability).toFixed(2),
+            sustainability: parseFloat(
+              company.sustainability.company_sustainability,
+            ).toFixed(2),
             money: parseFloat(company.sustainability.company_price).toFixed(2),
           },
-        ]
+        ];
       });
     }
     setSupplierLoading(true);
     setSupplierNewData([]);
     const promises = companies.map((company: any) =>
-      getCompany(company.company_id)
+      getCompany(company.company_id),
     );
     Promise.all(promises)
       .then((results) => {
@@ -89,11 +98,41 @@ export default function MarketPlace() {
       .finally(() => {
         setSupplierLoading(false);
       });
-    }, [currentProduct]);
+  }, [currentProduct]);
 
   const handleProductType = (selectedType: string) => {
     setCurrentProductType(selectedType);
   };
+  const projectsData = useQuery({
+    queryKey: ["projects"],
+    queryFn: async () => {
+      const response = await getInsetProgramsByCompanyID(currentSupplier);
+      return response;
+    },
+  });
+  if (projectsData?.isPending) {
+    return <div>Loading...</div>;
+  }
+
+  if (projectsData?.error) {
+    return <div>Error loading inset programs. Please try again later.</div>;
+  }
+  if (!projectsData?.data) {
+    return <div>No inset programs found.</div>;
+  }
+  const projects = projectsData?.data?.data?.map((program: any) => ({
+    id: program.program_id,
+    supplier: program.companies.company_name,
+    project: program.program_name,
+    address: program.google_maps_link,
+    date: program.project_completion,
+    lumens: program.lumens_value,
+    insetTonnes: program.carbon_reduction,
+    image: program.verifier_url,
+  }));
+  const selectedProjectData = projects?.find(
+    (project: any) => project.id === selectedProject,
+  );
 
   //make chart with company sustainability and price
   const chartData = {
@@ -102,7 +141,7 @@ export default function MarketPlace() {
         label: "Suppliers",
         data: companySustainabilityMap.map((company) => ({
           x: company.sustainability, // X-axis: Sustainability (ESG rating)
-          y: company.money,          // Y-axis: Price (Company Price)
+          y: company.money, // Y-axis: Price (Company Price)
           label: company.company_name, // Label for each point
           company_id: company.company_id,
           company_name: company.company_name,
@@ -114,13 +153,13 @@ export default function MarketPlace() {
       },
     ],
   };
-  
+
   // Options to display tooltips and labels
   const chartOptions = {
     plugins: {
       tooltip: {
         callbacks: {
-          label: function (context:any) {
+          label: function(context: any) {
             // Return company name and value as the tooltip label
             const companyName = context.raw.label;
             const price = context.raw.y;
@@ -134,13 +173,13 @@ export default function MarketPlace() {
       x: {
         title: {
           display: true,
-          text: 'Sustainability (ESG Rating)',
+          text: "Sustainability (ESG Rating)",
         },
       },
       y: {
         title: {
           display: true,
-          text: 'Price ($)',
+          text: "Price ($)",
         },
       },
     },
@@ -216,36 +255,54 @@ export default function MarketPlace() {
             <p>Loading supplier data...</p>
           ) : supplierNewData.length > 0 ? (
             // If data is found, render the table
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Supplier</TableHead>
-                  <TableHead>Environmental</TableHead>
-                  <TableHead>Social</TableHead>
-                  <TableHead>Governance</TableHead>
-                  <TableHead>Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {supplierNewData.map((supplier) => (
-                  <TableRow key={supplier.company_name}>
-                    <TableCell>{supplier.company_name}</TableCell>
-                    <TableCell>{supplier.environmental_score}</TableCell>
-                    <TableCell>{supplier.social_score}</TableCell>
-                    <TableCell>{supplier.governance_score}</TableCell>
-                    <TableCell>
-                      <Button variant="outline" className="transition-transform transform hover:scale-105">Enter Contract</Button>
-                    </TableCell>
+            <>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Supplier</TableHead>
+                    <TableHead>Environmental</TableHead>
+                    <TableHead>Social</TableHead>
+                    <TableHead>Governance</TableHead>
+                    <TableHead>Action</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {supplierNewData.map((supplier) => (
+                    <TableRow
+                      key={supplier.company_name}
+                      onClick={() => {
+                        setCurrentSupplier(supplier.company_id);
+                      }}
+                    >
+                      <TableCell>{supplier.company_name}</TableCell>
+                      <TableCell>{supplier.environmental_score}</TableCell>
+                      <TableCell>{supplier.social_score}</TableCell>
+                      <TableCell>{supplier.governance_score}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outline"
+                          className="transition-transform transform hover:scale-105"
+                        >
+                          Enter Contract
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
           ) : (
-            // If no data is found, display this message
             <p>No suppliers found.</p>
           )}
         </CardContent>
       </Card>
+      <SupplierPrograms
+        currentSupplier={currentSupplier}
+        projects={projects as any}
+        selectedProject={selectedProject}
+        setSelectedProject={setSelectedProject as any}
+        selectedProjectData={selectedProjectData}
+      />
     </div>
   );
 }

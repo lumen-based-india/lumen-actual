@@ -39,7 +39,7 @@ const SupplierProjects = (props: Props) => {
             {!isOpen && props.selectedProject && (
               <span className="text-sm text-gray-400 font-normal">
                 {
-                  props.projects.find(
+                  props?.projects?.find(
                     (project) => project.id === props.selectedProject
                   )?.project
                 }
@@ -72,7 +72,7 @@ const SupplierProjects = (props: Props) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {props.projects.map((project) => (
+              {props?.projects?.map((project) => (
                 <TableRow
                   key={project.id}
                   onClick={() => handleRowClick(project.id)}
