@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "./ui/button";
 
 type Props = {
@@ -6,14 +6,31 @@ type Props = {
 };
 
 const Europe = () => {
-  return <div>Europe</div>;
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-16 items-center">
+        <div className="text-lg font-bold">EUDR</div>
+        <div className="flex gap-4">
+          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+            Export PDF
+          </Button>
+          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+            Submit ZK Proof
+          </Button>
+          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+            Submit for Audit
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const India = () => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-16 items-center">
-        <div className="text-lg font-bold">BSRS</div>
+        <div className="text-lg font-bold">BRSR</div>
         <div className="flex gap-4">
           <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Export PDF
@@ -45,7 +62,24 @@ const India = () => {
 };
 
 const MiddleEast = () => {
-  return <div>Middle East</div>;
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-16 items-center">
+        <div className="text-lg font-bold">ADX</div>
+        <div className="flex gap-4">
+          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+            Export PDF
+          </Button>
+          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+            Submit ZK Proof
+          </Button>
+          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+            Submit for Audit
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const ComplainceComponent = (props: Props) => {

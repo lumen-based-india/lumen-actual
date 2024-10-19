@@ -19,28 +19,44 @@ const accordionData = [
   {
     value: "sourcing-harvesting",
     title: "Sourcing and Harvesting",
-    content: "Details about sourcing and harvesting processes."
+    content: [
+      "Deforestation impact (Last 10 years) - Yes",
+      "Cotton Quantity Sourced — 10 tons",
+      "Date of sourcing — 4th May 2020",
+      "Ethical sourcing and Producer Remuneration Rating — 3.5/5",
+    ],
   },
   {
     value: "manufacturing",
     title: "Manufacturing",
-    content: "Information on manufacturing practices and standards."
+    content: [
+      "Energy Efficiency rating — 3.5/5",
+      "Synthetic Chemicals Usage — Yes",
+      "Sustainable Waste management — Yes",
+      "Recycled/Upcycled material Usage — 2%",
+    ],
   },
   {
     value: "transportation",
     title: "Transportation",
-    content: "Insights into the transportation methods and their impact."
+    content: ["Energy Efficiency rating — 3/5"],
   },
   {
     value: "retailing",
     title: "Retailing",
-    content: "Retailing strategies and their ESG implications."
+    content: [
+      "Energy Efficiency rating — 2.5/5",
+      "Sustainable packaging used - Yes",
+    ],
   },
   {
     value: "recycling",
     title: "Recycling",
-    content: "Recycling processes and sustainability measures."
-  }
+    content: [
+      "Energy Efficiency rating — 4/5",
+      "Recycled/Upcycled material Usage — 80%",
+    ],
+  },
 ];
 
 const EsgTrace = (props: Props) => {
@@ -58,7 +74,13 @@ const EsgTrace = (props: Props) => {
           {accordionData.map((item) => (
             <AccordionItem key={item.value} value={item.value}>
               <AccordionTrigger>{item.title}</AccordionTrigger>
-              <AccordionContent>{item.content}</AccordionContent>
+              <AccordionContent>
+                <ul className="list-disc pl-5">
+                  {item.content.map((line, index) => (
+                    <li key={index}>{line}</li>
+                  ))}
+                </ul>
+              </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>

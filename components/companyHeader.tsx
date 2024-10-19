@@ -24,15 +24,8 @@ export default function CompanyHeader() {
 
   return (
     <div className="flex items-center justify-between p-4 bg-card-foreground text-secondary">
-      <div className="flex items-center space-x-4">
-        <img
-          src={selectedCompany.logo}
-          alt="Logo"
-          className="h-8 w-auto object-contain"
-        />
         <span className="font-bold text-xl">{currentCompanyData?.company_name || "Loading..."}</span>
-      </div>
-      <CompanyDropdown/>
+      {/* <CompanyDropdown/> */}
     </div>
   );
 }
