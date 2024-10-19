@@ -14,3 +14,11 @@ export const getCurrentInsetProgram = async (id: string) => {
     .eq("id", id);
   return { data, error };
 };
+
+export const getInsetProgramsByCompanyID = async (id: string) => {
+  const { data, error } = await supabase
+    .from("insetprogram")
+    .select(`*, companies(*)`)
+    .eq("company_id", id);
+  return { data, error };
+};
