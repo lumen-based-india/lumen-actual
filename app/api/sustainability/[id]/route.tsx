@@ -1,4 +1,4 @@
-import { calculateCompanyData, getSuppliersForCompanyID } from "@/utils/databaseQueries/suppliers";
+import { calculateCompanyData } from "@/utils/databaseQueries/suppliers";
 import { NextRequest, NextResponse } from "next/server";
 
 // API route handler to retrieve suppliers for a specific company ID
@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: { id: string } },
 ) {
   const company_id = params.id;
-  const data = await calculateCompanyData(company_id);
+  const data:any = await calculateCompanyData(company_id);
 
   if (data.error) {
     console.log(data.error);
