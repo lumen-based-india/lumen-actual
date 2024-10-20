@@ -88,7 +88,7 @@ export default function LoginOrSignup() {
       if (!balanceInNumber || Number(balanceInNumber) === 0) {
         await distributeTokensAndSendEthSeparately(
           address as `0x{string}`,
-          "4000",
+          "4000"
         );
       }
     }
@@ -151,10 +151,7 @@ export default function LoginOrSignup() {
                   <Label htmlFor="company" className="">
                     Company
                   </Label>
-                  <Select
-                    defaultValue={companyId}
-                    onValueChange={(value) => setCompanyId(value)}
-                  >
+                  <Select value={companyId} onValueChange={setCompanyId}>
                     <SelectTrigger className="w-full rounded-xl">
                       <SelectValue placeholder="Select a company" />
                     </SelectTrigger>
