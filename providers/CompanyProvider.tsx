@@ -12,6 +12,8 @@ import {
   fetchProductsByCompanyID,
   FetchSuppliersByID,
   GetAllCompanies,
+  GetAllProducts,
+  GetAllProductsAPI,
 } from "@/utils/databaseQueries/companies";
 import { getAllInsetPrograms } from "@/utils/databaseQueries/insetPrograms";
 
@@ -44,6 +46,7 @@ interface ICompanyContext {
   currentCompanyID: string;
   setCurrentCompanyID: (id: string) => void;
   insetProgramsData: UseQueryResult<any | null, Error>;
+  allProductsData: UseQueryResult<any | null, Error>;
 }
 
 const CompanyContext = createContext<ICompanyContext | null>(null);
@@ -99,6 +102,14 @@ const useCompany = () => {
     },
   });
 
+  const allProductsData = useQuery({
+    queryKey: ["products", currentCompanyID],
+    queryFn: async () => {
+      const response = await GetAllProductsAPI(currentCompanyID);
+      return response;
+    },
+  });
+
   useEffect(() => {
     if (currentCompany.data) {
       setCurrentCompanyData(currentCompany.data);
@@ -113,6 +124,7 @@ const useCompany = () => {
     supplierData,
     productsData,
     insetProgramsData,
+    allProductsData,
   };
 };
 

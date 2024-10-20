@@ -39,3 +39,13 @@ export const GetAllCompanies = async () => {
   const data = await response.json();
   return data;
 };
+
+export const GetAllProducts = async (company_id: string) => {
+  const {data, error} = await supabase.from("products").select(`*`).eq("company_id", company_id);
+  return {data, error};
+}
+export const GetAllProductsAPI = async (company_id: string) => {
+  const response = await fetch(`/api/product/company`);
+  const data = await response.json();
+  return data;
+}
