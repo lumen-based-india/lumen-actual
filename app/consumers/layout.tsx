@@ -1,5 +1,6 @@
 "use client";
-import lumenFull from "../../app/lumen-full.png";
+
+import lumenFull from "../../app/lumen-transparent.png";
 import Image from "next/image";
 export default function RootLayout({
   children,
@@ -11,7 +12,7 @@ export default function RootLayout({
       <Image
         src={lumenFull}
         alt="Lumen Logo"
-        className="w-24"
+        className="w-36"
         onClick={() => {
           window.history.back();
         }}

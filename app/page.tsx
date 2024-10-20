@@ -131,8 +131,8 @@ function SectionHero() {
               className="w-96 mt-[-8rem]"
             />
           </div>
-          <div className="text-xl mt-[-4rem]">
-            Illuminating Sustainable Commerce
+          <div className="text-xl mt-[-4rem] text-[#5A5A5A]">
+            Leveraged Unified Marketplace for Environmental Net-Zero
           </div>
           <div className="flex gap-4 pt-4">
             <Button
@@ -149,7 +149,7 @@ function SectionHero() {
                 handleSectionRedirect("consumers");
               }}
             >
-              For Customers
+              For Consumers
             </Button>
           </div>
         </div>
@@ -163,7 +163,7 @@ function SectionMatters() {
   return (
     <section
       about="matters"
-      className="h-screen flex flex-col justify-center items-center gap-8"
+      className="h-screen flex flex-col justify-center items-center gap-12"
     >
       <div className="flex items-center">
         <Image src={lumenFull} alt="Lumen Logo" className="w-36" />
@@ -182,7 +182,7 @@ function SectionMatters() {
                 {matter.title}
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-[24px]">
               <p>{matter.content}</p>
             </CardContent>
           </Card>
