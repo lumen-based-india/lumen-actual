@@ -11,9 +11,11 @@ import {
   Truck,
   Leaf,
 } from "lucide-react";
+import Image from "next/image";
 import { useAccount } from "wagmi";
 import { ProvideCompany } from "@/providers/CompanyProvider";
 import CompanyHeader from "@/components/companyHeader";
+import lumenFull from "../../app/lumen-full.jpg";
 
 const sidebarItems = [
   { name: "Impact Overview", icon: BarChart2, href: "/impact-overview" },
@@ -50,22 +52,27 @@ export default function DashboardLayout({
   return (
     <ProvideCompany>
       <div className="bg-background">
-        <div className="flex h-screen text-secondary">
+        <div className="flex h-screen">
           <aside
-            className={`bg-card-foreground transition-all duration-300 ease-in-out ${isSidebarOpen ? "w-64" : "w-20"
-              } flex flex-col`}
+            className={`bg-card transition-all duration-300 ease-in-out ${
+              isSidebarOpen ? "w-64" : "w-20"
+            } flex flex-col`}
           >
             <div className="flex items-center justify-between p-4">
               <Link
                 href={"/"}
                 passHref
-                className={`font-bold text-xl ${isSidebarOpen ? "" : "hidden"}`}
+                className={` ${isSidebarOpen ? "" : "hidden"}`}
               >
-                Lumen
+                <Image
+                  src={lumenFull}
+                  alt="Lumen logo"
+                  className="w-24 mb-[-2rem] mt-[-2rem]"
+                />
               </Link>
               <button
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="p-2 rounded-full hover:bg-secondary hover:text-primary transition-colors duration-200 text-secondary"
+                className="p-2 rounded-full hover:bg-primary hover:text-background transition-colors duration-200 text-primary"
               >
                 {isSidebarOpen ? (
                   <ChevronLeft size={24} />
@@ -80,10 +87,11 @@ export default function DashboardLayout({
                   <li key={item.name}>
                     <Link href={item.href} passHref>
                       <span
-                        className={`flex items-center space-x-2 p-2 rounded-xl hover:bg-white-200 transition-colors duration-200 ${pathname === item.href
-                            ? "bg-secondary text-primary"
+                        className={`flex items-center space-x-2 p-2 rounded-xl hover:bg-white-200 transition-colors duration-200 ${
+                          pathname === item.href
+                            ? "bg-primary text-background"
                             : ""
-                          }`}
+                        }`}
                       >
                         <item.icon size={24} />
                         {isSidebarOpen && <span>{item.name}</span>}
@@ -95,7 +103,7 @@ export default function DashboardLayout({
             </div>
           </aside>
 
-          <div className="flex-1 overflow-y-auto text-secondary bg-secondary">
+          <div className="flex-1 overflow-y-auto">
             <CompanyHeader />
             {children}
           </div>

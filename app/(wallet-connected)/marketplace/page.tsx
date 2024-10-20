@@ -76,11 +76,11 @@ export default function MarketPlace() {
     if (!companies) return;
 
     // Populate the sustainability map
-    const updatedMap = companies.map((company:any) => ({
+    const updatedMap = companies.map((company: any) => ({
       company_id: company.company_id,
       company_name: company.company_name,
       sustainability: parseFloat(
-        company.sustainability.company_sustainability,
+        company.sustainability.company_sustainability
       ).toFixed(2),
       money: parseFloat(company.sustainability.company_price).toFixed(2),
     }));
@@ -90,7 +90,7 @@ export default function MarketPlace() {
     setSupplierLoading(true);
     setSupplierNewData([]);
     const promises = companies.map((company: any) =>
-      getCompany(company.company_id),
+      getCompany(company.company_id)
     );
     Promise.all(promises)
       .then((results) => {
@@ -126,7 +126,7 @@ export default function MarketPlace() {
   }));
 
   const selectedProgramData = program?.find(
-    (program: any) => program.id === selectedProgram,
+    (program: any) => program.id === selectedProgram
   );
 
   // Chart data preparation
@@ -154,7 +154,7 @@ export default function MarketPlace() {
     plugins: {
       tooltip: {
         callbacks: {
-          label: function(context: any) {
+          label: function (context: any) {
             const companyName = context.raw.label;
             const price = context.raw.y;
             const sustainability = context.raw.x;
@@ -192,26 +192,34 @@ export default function MarketPlace() {
                 setCurrentProductType(e);
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger className="rounded-xl">
                 <SelectValue placeholder="Product Type" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="rounded-xl">
                 {productTypes.map((productType, index) => (
-                  <SelectItem value={productType} key={index}>
+                  <SelectItem
+                    value={productType}
+                    key={index}
+                    className="rounded-xl"
+                  >
                     {productType}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
             <Select onValueChange={setCurrentProduct}>
-              <SelectTrigger>
+              <SelectTrigger className="rounded-xl">
                 <SelectValue placeholder="Product" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="rounded-xl">
                 {currentProducts && currentProducts.length > 0 ? (
                   currentProducts.map((product, index) => {
                     return (
-                      <SelectItem value={product} key={index}>
+                      <SelectItem
+                        value={product}
+                        key={index}
+                        className="rounded-xl"
+                      >
                         {product}
                       </SelectItem>
                     );

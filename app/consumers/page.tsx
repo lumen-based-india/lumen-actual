@@ -128,13 +128,19 @@ const ProductSelector = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         <Select onValueChange={setSelectedProduct}>
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full rounded-xl">
             <SelectValue placeholder="Select a product" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="product1">Product 1</SelectItem>
-            <SelectItem value="product2">Product 2</SelectItem>
-            <SelectItem value="product3">Product 3</SelectItem>
+          <SelectContent className="rounded-xl">
+            <SelectItem value="product1" className="rounded-xl">
+              Product 1
+            </SelectItem>
+            <SelectItem value="product2" className="rounded-xl">
+              Product 2
+            </SelectItem>
+            <SelectItem value="product3" className="rounded-xl">
+              Product 3
+            </SelectItem>
           </SelectContent>
         </Select>
         <div className="text-center">or</div>

@@ -11,13 +11,13 @@ const Europe = () => {
       <div className="flex gap-16 items-center">
         <div className="text-lg font-bold">EUDR</div>
         <div className="flex gap-4">
-          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+          <Button className="bg-white border border-gray-300 text-foreground py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Export PDF
           </Button>
-          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+          <Button className="bg-white border border-gray-300 py-2 px-4 text-foreground rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Submit ZK Proof
           </Button>
-          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+          <Button className="bg-white border border-gray-300 py-2 px-4 text-foreground rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Submit for Audit
           </Button>
         </div>
@@ -32,13 +32,13 @@ const India = () => {
       <div className="flex gap-16 items-center">
         <div className="text-lg font-bold">BRSR</div>
         <div className="flex gap-4">
-          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+          <Button className="bg-white border border-gray-300 text-foreground py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Export PDF
           </Button>
-          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+          <Button className="bg-white border border-gray-300 text-foreground py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Submit ZK Proof
           </Button>
-          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+          <Button className="bg-white border border-gray-300 text-foreground py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Submit for Audit
           </Button>
         </div>
@@ -46,13 +46,13 @@ const India = () => {
       <div className="flex gap-16 items-center">
         <div className="text-lg font-bold">CCTS</div>
         <div className="flex gap-4">
-          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+          <Button className="bg-white border border-gray-300 text-foreground py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Export PDF
           </Button>
-          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+          <Button className="bg-white border border-gray-300 text-foreground py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Submit ZK Proof
           </Button>
-          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+          <Button className="bg-white border border-gray-300 text-foreground py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Submit for Audit
           </Button>
         </div>
@@ -67,13 +67,13 @@ const MiddleEast = () => {
       <div className="flex gap-16 items-center">
         <div className="text-lg font-bold">ADX</div>
         <div className="flex gap-4">
-          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+          <Button className="bg-white border border-gray-300 text-foreground py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Export PDF
           </Button>
-          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+          <Button className="bg-white border border-gray-300 text-foreground py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Submit ZK Proof
           </Button>
-          <Button className="bg-white border border-gray-300 text-black py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
+          <Button className="bg-white border border-gray-300 text-foreground py-2 px-4 rounded-xl hover:bg-gray-100 transition-transform transform hover:scale-105">
             Submit for Audit
           </Button>
         </div>

@@ -1,5 +1,4 @@
 import { GeistSans } from "geist/font/sans";
-import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { LumenAppWithProviders } from "@/components/LumenAppWithProviders";
 const defaultUrl = process.env.VERCEL_URL
@@ -21,14 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={GeistSans.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
           <LumenAppWithProviders>{children}</LumenAppWithProviders>
-        </ThemeProvider>
       </body>
     </html>
   );

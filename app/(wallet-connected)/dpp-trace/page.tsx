@@ -80,16 +80,17 @@ export default function DPPTrace() {
         <CardContent className="w-full flex justify-between items-center">
           <div>
             <Select onValueChange={setSelectedProduct}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] rounded-xl">
                 <SelectValue placeholder="Select a Product" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="rounded-xl">
                 {productList &&
                   Object.keys(productList)?.map((productKey) =>
                     productList[productKey] ? ( // Null check for each product
                       <SelectItem
                         key={productList[productKey].product_id}
                         value={productList[productKey].product_id}
+                        className="rounded-xl"
                       >
                         {productList[productKey].product_name}
                       </SelectItem>
@@ -101,17 +102,15 @@ export default function DPPTrace() {
           <div className="flex gap-2">
             <Button
               onClick={() => {}}
-              className="bg-white border border-gray-300 text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 font-bold py-2 px-4 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105"
+              className="bg-white border border-gray-300 font-bold py-2 px-4 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105"
             >
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-blue-500">
-                Submit Additional Data
-              </span>
+              <span className="text-foreground">Submit Additional Data</span>
             </Button>
             <Button
               onClick={() => {}}
-              className="bg-white border border-gray-300 text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 font-bold py-2 px-4 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105"
+              className="bg-white border border-gray-300 font-bold py-2 px-4 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105"
             >
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-blue-500">
+              <span className="text-foreground">
                 Request zk re-verification
               </span>
             </Button>

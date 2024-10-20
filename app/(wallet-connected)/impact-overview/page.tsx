@@ -72,7 +72,7 @@ export default function ImpactOverview() {
   const [region, setRegion] = useState("India");
   const { currentCompanyData } = useCompanyContext();
 
-  if(!currentCompanyData) return null;
+  if (!currentCompanyData) return null;
   return (
     <div className="p-4 flex flex-col w-full gap-4">
       <div className="flex gap-4">
@@ -81,9 +81,7 @@ export default function ImpactOverview() {
             <CardHeader>
               <CardTitle>ESG Overview</CardTitle>
             </CardHeader>
-            <CardContent
-              style={{ display: "flex", alignItems: "center" }}
-            >
+            <CardContent style={{ display: "flex", alignItems: "center" }}>
               <ESG companyData={currentCompanyData.esg_facts} />
             </CardContent>
           </Card>
@@ -92,13 +90,19 @@ export default function ImpactOverview() {
               <CardTitle className="flex gap-8 items-center">
                 <div>Compliance Reports</div>
                 <Select onValueChange={setRegion} value={region}>
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-[180px] rounded-xl">
                     <SelectValue placeholder="Select a Region" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Europe">Europe</SelectItem>
-                    <SelectItem value="India">India</SelectItem>
-                    <SelectItem value="Middle East">Middle East</SelectItem>
+                  <SelectContent className="rounded-xl">
+                    <SelectItem value="Europe" className="rounded-xl">
+                      Europe
+                    </SelectItem>
+                    <SelectItem value="India" className="rounded-xl">
+                      India
+                    </SelectItem>
+                    <SelectItem value="Middle East" className="rounded-xl">
+                      Middle East
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </CardTitle>

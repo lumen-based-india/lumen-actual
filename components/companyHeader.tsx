@@ -14,11 +14,11 @@ export default function CompanyHeader() {
     push("/");
   };
   return (
-    <div className="flex items-center justify-between p-4 bg-card-foreground text-secondary">
+    <div className="flex items-center justify-between p-4 bg-primary text-background">
       <span className="font-bold text-xl">
         {currentCompanyData?.company_name || "Loading..."}
       </span>
-      <Button className="rounded-md" variant="destructive" onClick={handleLogout}>
+      <Button className="rounded-xl" variant="destructive" onClick={handleLogout}>
         Logout
       </Button>
     </div>

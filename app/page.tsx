@@ -65,7 +65,7 @@ const handleSectionRedirect = (sectionName: string) => {
 };
 export default function Index() {
   return (
-    <div className="w-full flex flex-col snap-y snap-mandatory overflow-y-scroll">
+    <div className="w-full flex flex-col snap-y snap-mandatory overflow-y-scroll bg-white">
       <SectionHero />
       <SectionMatters />
       <SectionWhyLumen />
@@ -132,7 +132,7 @@ function SectionMatters() {
         {matters.map((matter, index) => (
           <Card
             key={index}
-            className="rounded-xl w-96 flex flex-col justify-between"
+            className="rounded-xl w-96 flex flex-col justify-between bg-background"
           >
             <CardHeader>
               <CardTitle className="leading-normal text-center">
@@ -174,7 +174,7 @@ function SectionWhyLumen() {
         {whyLumen.map((item, index) => (
           <Card
             key={index}
-            className="rounded-xl w-96 flex flex-col justify-between h-96"
+            className="rounded-xl w-96 flex flex-col justify-between h-96 bg-background"
           >
             <CardHeader>
               <CardTitle className="leading-normal text-center">
@@ -201,7 +201,7 @@ function SectionForBusiness() {
       about="business"
       className="flex flex-col justify-center items-center relative p-16 gap-24 h-screen snap-start"
     >
-      <Card className="rounded-xl w-full">
+      <Card className="rounded-xl w-full bg-background">
         <CardHeader>
           <CardTitle className="text-3xl font-bold">For Business</CardTitle>
         </CardHeader>
@@ -241,7 +241,7 @@ function SectionForConsumers() {
       about="consumers"
       className="flex flex-col justify-center items-center relative p-16 gap-24 snap-start"
     >
-      <Card className="rounded-xl w-full">
+      <Card className="rounded-xl w-full bg-background">
         <CardHeader>
           <CardTitle className="text-3xl font-bold">For Consumers</CardTitle>
         </CardHeader>
