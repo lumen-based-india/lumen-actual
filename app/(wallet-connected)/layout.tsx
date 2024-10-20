@@ -10,19 +10,16 @@ import {
   GitBranch,
   Truck,
   Leaf,
-  Users,
 } from "lucide-react";
 import { useAccount } from "wagmi";
 import { ProvideCompany } from "@/providers/CompanyProvider";
 import CompanyHeader from "@/components/companyHeader";
-import { Button } from "@/components/ui/button";
 
 const sidebarItems = [
   { name: "Impact Overview", icon: BarChart2, href: "/impact-overview" },
   { name: "DPP Trace", icon: GitBranch, href: "/dpp-trace" },
   { name: "Market Place", icon: Truck, href: "/marketplace" },
   { name: "Trade Carbon", icon: Leaf, href: "/trade-carbon" },
-  { name: "Consumers", icon: Users, href: "/consumers" },
 ];
 
 export default function DashboardLayout({
