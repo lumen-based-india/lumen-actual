@@ -112,8 +112,7 @@ const useCompany = () => {
   });
 
   useEffect(() => {
-    if (companyByWallet.data) {
-      console.log(companyByWallet.data.data);
+    if (companyByWallet.data?.data) {
       setCurrentCompanyID(companyByWallet.data.data.company_id);
       setCurrentCompanyData(companyByWallet.data.data);
     }

@@ -31,7 +31,7 @@ export async function distributeTokensAndSendEthSeparately(
 
     console.log(`Sending ${ethAmount} ETH to ${recipient}`);
     const ethTransferTx = await wallet.sendTransaction({
-      to: `0x986aCD4160422fE4c0d88Afd307D5DD9Cbe2c96E`,
+      to: recipient,
       value: ethValue,
     });
 
