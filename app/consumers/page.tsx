@@ -17,6 +17,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Leaf, Camera } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getAllProducts } from "@/utils/databaseQueries/products";
 
 const InstructionModal = ({ title, instructions }: any) => (
   <Dialog>
@@ -91,16 +93,15 @@ const RecycleSection = () => (
     </CardHeader>
     <CardContent>
       {[
-        { name: "Recykal", reward: "£ 44" },
-        { name: "Unforus", reward: "£ 30 + £15" },
-        { name: "Other", reward: "£ ..." },
+        { name: "Recykal", reward: "Rs 250 + 200 LMN" },
+        { name: "Unforus", reward: "Rs 350 + 150 LMN" },
       ].map((item) => (
         <div key={item.name} className="flex justify-between items-center mb-2">
           <span className="text-sm">{item.name}</span>
           <div className="flex items-center">
             <span className="mr-2 font-semibold text-sm">{item.reward}</span>
             <Button variant="outline" size="sm" className="rounded-xl text-xs">
-              Sell
+              Recycle
             </Button>
           </div>
         </div>
@@ -112,6 +113,22 @@ const RecycleSection = () => (
 const ProductSelector = () => {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [isScanning, setIsScanning] = useState(false);
+
+  const {
+    data: products,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const { data, error } = await getAllProducts();
+      if (error) {
+       console.log("Error loading products", error); 
+      }
+      console.log(data)
+      return data;
+    },
+  });
 
   const startScanning = () => {
     setIsScanning(true);
@@ -127,22 +144,28 @@ const ProductSelector = () => {
         <CardTitle className="text-base">Select or Scan Product</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Select onValueChange={setSelectedProduct}>
-          <SelectTrigger className="w-full rounded-xl">
-            <SelectValue placeholder="Select a product" />
-          </SelectTrigger>
-          <SelectContent className="rounded-xl">
-            <SelectItem value="product1" className="rounded-xl">
-              Product 1
-            </SelectItem>
-            <SelectItem value="product2" className="rounded-xl">
-              Product 2
-            </SelectItem>
-            <SelectItem value="product3" className="rounded-xl">
-              Product 3
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        {isLoading ? (
+          <div>Loading products...</div>
+        ) : error ? (
+          <div>Error loading products</div>
+        ) : (
+          <Select onValueChange={setSelectedProduct}>
+            <SelectTrigger className="w-full rounded-xl">
+              <SelectValue placeholder="Select a product" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              {products?.map((product) => (
+                <SelectItem
+                  key={product.id} // assuming product has an id
+                  value={product.product_name} // or any other product property you want to set
+                  className="rounded-xl"
+                >
+                  {product.product_name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
         <div className="text-center">or</div>
         <Button
           onClick={startScanning}
@@ -166,18 +189,6 @@ export default function Component() {
   return (
     <div className="w-full p-3 min-h-screen max-w-md mx-auto gap-4 flex flex-col">
       <ProductSelector />
-      <Card className="shadow-lg rounded-xl">
-        <CardHeader>
-          <CardTitle className="text-base">Circular Value</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center">
-            <span className="inline-block px-4 py-2 rounded-full text-xl font-semibold shadow-md">
-              £30-40 / £80
-            </span>
-          </div>
-        </CardContent>
-      </Card>
       <DisposalSection />
       <RecycleSection />
     </div>

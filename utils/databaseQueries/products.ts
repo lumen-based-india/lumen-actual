@@ -15,3 +15,8 @@ export const getProductById = async (id: string) => {
     .eq("product_id", id).single();
   return { data, error };
 };
+
+export const getAllProducts = async () => {
+  const { data, error } = await supabase.from("products").select(`*, companies(*)`);
+  return { data, error };
+}
