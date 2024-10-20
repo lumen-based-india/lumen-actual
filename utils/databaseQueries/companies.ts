@@ -41,11 +41,31 @@ export const GetAllCompanies = async () => {
 };
 
 export const GetAllProducts = async (company_id: string) => {
-  const {data, error} = await supabase.from("products").select(`*`).eq("company_id", company_id);
-  return {data, error};
-}
+  const { data, error } = await supabase
+    .from("products")
+    .select(`*`)
+    .eq("company_id", company_id);
+  return { data, error };
+};
 export const GetAllProductsAPI = async (company_id: string) => {
   const response = await fetch(`/api/product/company`);
   const data = await response.json();
   return data;
-}
+};
+
+export const getCompanyUsingWallet = async (wallet: string) => {
+  const { data, error } = await supabase
+    .from("companies")
+    .select(`*`)
+    .eq("wallet_address", wallet)
+    .single();
+  return { data, error };
+};
+
+export const updateCompanyWallet = async (id: string, wallet: string) => {
+  const { data, error } = await supabase
+    .from("companies")
+    .update({ wallet_address: wallet })
+    .eq("company_id", id);
+  return { data, error };
+};
