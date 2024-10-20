@@ -9,7 +9,7 @@ const initialGraph = {
 };
 
 // Function to generate random bright colors
-const getRandomBrightColor = () => {
+const getRandomBrightColor = ():any => {
   const letters = "0123456789ABCDEF";
   let color = "#";
   for (let i = 0; i < 6; i++) {
