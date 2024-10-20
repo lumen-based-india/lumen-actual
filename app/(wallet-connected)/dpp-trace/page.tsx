@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DollarSign, Leaf, MapPin, Shirt, Star } from "lucide-react";
+import { DollarSign, IndianRupeeIcon, Leaf, MapPin, Shirt, Star } from "lucide-react";
 import { useCompanyContext } from "@/providers/CompanyProvider";
 interface ProductInfo {
   id: number;
@@ -128,13 +128,6 @@ export default function DPPTrace() {
             <div className="flex gap-4 w-full">
               {productDetails && (
                 <>
-                  <div className="flex-shrink-0">
-                    <img
-                      src="https://via.placeholder.com/150"
-                      alt={productDetails.product_name}
-                      className="w-32 h-32 object-cover rounded-lg"
-                    />
-                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-grow">
                     {Object.entries(productDetails)
                       .filter(([key]) =>
@@ -152,7 +145,7 @@ export default function DPPTrace() {
                             {key === "product_name" && <Shirt size={24} />}
                             {key === "product_category" && <Star size={24} />}
                             {key === "business_sector" && <MapPin size={24} />}
-                            {key === "price" && <DollarSign size={24} />}
+                            {key === "price" && <IndianRupeeIcon size={24} />}
                             {key === "product_esg_rating" && <Leaf size={24} />}
                             <div className="flex flex-col">
                               <span className="font-semibold">

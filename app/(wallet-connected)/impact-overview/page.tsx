@@ -114,7 +114,7 @@ export default function ImpactOverview() {
         </div>
         <Card className="rounded-xl w-full">
           <CardHeader className="mb-4">
-            <CardTitle>Bar Gauge Overview</CardTitle>
+            <CardTitle>Performance Benchmark</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex justify-center">
