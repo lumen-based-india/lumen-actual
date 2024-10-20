@@ -57,8 +57,7 @@ export const getCompanyUsingWallet = async (wallet: string) => {
   const { data, error } = await supabase
     .from("companies")
     .select(`*`)
-    .eq("wallet_address", wallet)
-    .single();
+    .eq("wallet_address", wallet);
   return { data, error };
 };
 

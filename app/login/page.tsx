@@ -56,8 +56,8 @@ export default function LoginOrSignup() {
     e.preventDefault();
     console.log({ address, companyId });
     const updatedCompany = await updateCompanyWallet(
-      address as `0x{string}`,
       companyId,
+      address as `0x{string}`,
     );
     if (updatedCompany.error) {
       console.log(updatedCompany.error);
