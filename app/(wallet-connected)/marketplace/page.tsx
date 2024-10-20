@@ -293,18 +293,24 @@ export default function MarketPlace() {
           )}
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Inset Programs Running</CardTitle>
-        </CardHeader>
-        <CardContent className="flex overflow-x-auto gap-4">
-          {program?.map((program: any) => (
-            <div key={program.program_id} className="w-1/4">
-              <SupplierProgram program={program} />
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      {currentSupplier && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Inset Programs Running</CardTitle>
+          </CardHeader>
+          <CardContent className="flex overflow-x-auto gap-4">
+            {program && program?.length > 0 ? (
+              program.map((program: any) => (
+                <div key={program.program_id} className="w-1/4">
+                  <SupplierProgram program={program} />
+                </div>
+              ))
+            ) : (
+              <p>No Inset Programs found.</p>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

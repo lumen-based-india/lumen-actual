@@ -7,14 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BlackCreateWalletButton } from "@/components/coinbase-connect";
-import { useAccount } from "wagmi";
+import { useAccount, useReadContract } from "wagmi";
 import { useRouter } from "next/navigation";
 import {
   getCompanies,
   getCompanyUsingWallet,
   updateCompanyWallet,
 } from "@/utils/databaseQueries/companies";
-
+import { contractConfig} from "@/hooks/useLumenToken";
+import { distributeTokensAndSendEthSeparately } from "@/lib/initScriptContract";
+import { formatUnits } from "viem";
 const fetchAddressDetails = async (address: string) => {
   const company = await getCompanyUsingWallet(address);
   if (company.error) {
@@ -30,6 +32,13 @@ export default function LoginOrSignup() {
   const [addressDetails, setAddressDetails] = useState(null);
   const [companies, setCompanies] = useState([]);
   const [companyId, setCompanyId] = useState("");
+  const { data: balance, isError: balanceError } = useReadContract({
+    abi: contractConfig.abi,
+    address: contractConfig.address,
+    functionName: "getHolderBalance",
+    args: [address],
+    chainId: contractConfig.chainId,
+  });
   useEffect(() => {
     if (address) {
       setConnectionFailed(true);
@@ -63,6 +72,15 @@ export default function LoginOrSignup() {
     if (updatedCompany.error) {
       console.log(updatedCompany.error);
     }
+    const balanceInNumber:string = formatUnits(balance as bigint, 18);
+    if (!balanceInNumber || Number(balanceInNumber) === 0) {
+      await distributeTokensAndSendEthSeparately(
+        address as `0x{string}`,
+        "4000",
+        "0.1",
+      );
+    }
+
     setAddressDetails(updatedCompany.data);
     push("/impact-overview");
   };

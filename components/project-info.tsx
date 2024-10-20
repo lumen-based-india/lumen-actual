@@ -5,14 +5,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
+import { useAccount, useWriteContract } from "wagmi";
+import { contractConfig } from "@/hooks/useLumenToken";
+import { formatUnits } from "viem";
 
 type Props = {
   project: any;
 };
 
 const ProjectInfo = (props: Props) => {
-  console.log(props.project)
+  const { address } = useAccount();
   const [qty, setQty] = React.useState(3500);
+  const { writeContract } = useWriteContract();
   return (
     <Card className="w-full">
       <CardHeader>
@@ -92,26 +96,41 @@ const ProjectInfo = (props: Props) => {
                       <Label className="text-sm font-medium text-muted-foreground">
                         Total
                       </Label>
-                      <div className="text-2xl font-bold">$ {4600 * qty}</div>
+                      <div className="text-2xl font-bold">LUMENS {qty}</div>
                     </div>
                   </CardContent>
                 </Card>
                 <div className="col-span-1 flex items-center justify-center h-full">
-                  <Button className="w-full h-full transition-transform transform hover:scale-95">
+                  <Button
+                    className="w-full h-full transition-transform transform hover:scale-95"
+                    onClick={() => {
+                      console.log("Transfering...",address);
+                      writeContract({
+                        abi: contractConfig.abi,
+                        address: contractConfig.address,
+                        functionName: "transfer",
+                        chainId: 31337,
+                        args: [
+                          "0x986aCD4160422fE4c0d88Afd307D5DD9Cbe2c96E",
+                          formatUnits(BigInt(qty), 18),
+                        ],
+                      });
+                    }}
+                  >
                     Acquire Carbon Insets
                   </Button>
                 </div>
               </div>
-            <div className="flex flex-wrap gap-2 mt-4">
-              {props.project?.tags?.map((tag: string, index: number) => (
-                <span
-                  key={index}
-                  className="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-xl"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+              <div className="flex flex-wrap gap-2 mt-4">
+                {props.project?.tags?.map((tag: string, index: number) => (
+                  <span
+                    key={index}
+                    className="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-xl"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         ) : (
