@@ -111,7 +111,7 @@ const ProjectInfo = (props: Props) => {
                         functionName: "transfer",
                         chainId: 31337,
                         args: [
-                          "0x986aCD4160422fE4c0d88Afd307D5DD9Cbe2c96E",
+                          props.project.wallet_address as `0x${string}`,
                           parseUnits(qty.toString(), 18),
                         ],
                       });
