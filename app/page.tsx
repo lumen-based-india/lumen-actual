@@ -1,6 +1,5 @@
 "use client";
 
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Instagram, Facebook, Linkedin, Twitter } from "lucide-react";
@@ -9,10 +8,9 @@ import Image from "next/image";
 import lumenVerbose from "./lumen-verbose.png";
 import lumenFull from "./lumen-full.png";
 import screenshot from "./impact-ss.png";
-import phoness from "./phone-ss.png";
+import phoness from "./phone-ss.jpeg";
 import landingVec from "./landing-vector.jpeg";
 import aboutUsVec from "./aboutus-vector.jpeg";
-import { useLumenToken } from "@/hooks/useLumenToken";
 
 const matters = [
   {
@@ -48,6 +46,16 @@ const whyLumen = [
       "75% of Consumers do not trust accuracy on food labels (certification standards, conformity in supply chain)",
       "73% want more traceability for better purchasing decisions",
     ],
+    sources: [
+      {
+        text: "IBM Retail Report 2020",
+        link: "https://newsroom.ibm.com/2020-01-10-IBM-Study-Purpose-and-Provenance-Drive-Bigger-Profits-for-Consumer-Goods-In-2020",
+      },
+      {
+        text: "Green Retail Report, CII 2020",
+        link: "https://ciiblog.in/green-retail/",
+      },
+    ],
   },
   {
     title:
@@ -55,6 +63,12 @@ const whyLumen = [
     content: [
       "Circularity breaks at post-consumption, denting government Extended Producer Responsibility (EPR) regulations",
       "Green regulation is at an all-time high, with EUDR and EU CBAM potentially denting Indian GDP by 0.05% due to non-compliance",
+    ],
+    sources: [
+      {
+        text: "CBAM Impact on India, CSE 2024",
+        link: "https://www.deccanherald.com/business/economy/india-to-lose-005-of-gdp-due-to-cbam-should-impose-historical-polluter-tax-on-eu-report-3109866",
+      },
     ],
   },
 ];
@@ -83,15 +97,15 @@ function SectionHero() {
       about="main"
       className="flex justify-center items-center h-screen relative snap-start"
     >
-      <Image
-        src={lumenVerbose}
-        alt="Lumen Verbose"
-        className="w-48 absolute top-4 left-4 mt-[-4rem]"
-      />
-      <div className="flex items-center text-justify gap-8 justify-center mr-[-4rem]">
+      <div className="flex items-center text-justify gap-8 justify-center">
         <div className="flex flex-col gap-2  items-start">
-          <div className="text-4xl font-semibold tracking-wider">LUMEN</div>
-          <div className="text-xl">Illuminating Sustainable Commerce</div>
+          <div className="">
+            {" "}
+            <Image src={lumenVerbose} alt="Lumen Verbose" className="w-48" />
+          </div>
+          <div className="text-xl mt-[-3rem]">
+            Illuminating Sustainable Commerce
+          </div>
           <div className="flex gap-4 pt-4">
             <Button
               className="rounded-xl"
@@ -125,7 +139,7 @@ function SectionMatters() {
     >
       <div className="flex items-center">
         <Image src={lumenFull} alt="Lumen Logo" className="w-36" />
-        <div className="text-3xl font-bold mt-[8px]">
+        <div className="text-3xl font-bold mt-[8px] ml-[-12px]">
           ate what matters and Unlock value
         </div>
       </div>
@@ -182,12 +196,33 @@ function SectionWhyLumen() {
                 {item.title}
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col justify-between">
               <ul className="list-disc pl-5 flex flex-col gap-4">
                 {item.content.map((point, idx) => (
                   <li key={idx}>{point}</li>
                 ))}
               </ul>
+              {item.sources && (
+                <div className="text-xs text-center mt-4">
+                  Source:{" "}
+                  {item.sources.map((source, idx) => (
+                    <span key={idx}>
+                      <a
+                        href={source.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.open(source.link, "_blank");
+                        }}
+                      >
+                        {source.text}
+                      </a>
+                      {idx < item.sources.length - 1 && ", "}
+                    </span>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         ))}
@@ -204,9 +239,9 @@ function SectionForBusiness() {
     >
       <Card className="rounded-xl w-full bg-background">
         <CardHeader>
-          <CardTitle className="text-3xl font-bold">For Business</CardTitle>
+          <CardTitle className="text-6xl font-bold">For Business</CardTitle>
         </CardHeader>
-        <CardContent className="flex w-full justify-between p-8 items-center">
+        <CardContent className="flex w-full justify-between pl-8 pr-8 items-center">
           <div className="flex flex-col gap-4 w-1/3">
             <div>
               Seamlessly integrate with blockchain-based real-time tracking of
@@ -246,14 +281,23 @@ function SectionForConsumers() {
     >
       <Card className="rounded-xl w-full bg-background">
         <CardHeader>
-          <CardTitle className="text-3xl font-bold">For Consumers</CardTitle>
+          <CardTitle className="text-6xl font-bold">For Consumers</CardTitle>
         </CardHeader>
-        <CardContent className="flex w-full justify-evenly p-8 items-center">
-          <div className="mockup-phone ml-0 mr-0">
+        <CardContent className="flex w-full justify-evenly pl-8 pr-8 items-center">
+          <div className="mockup-phone ml-0 mr-0" style={{ width: "300px" }}>
             <div className="camera"></div>
             <div className="display">
               <div className="artboard artboard-demo phone-1 bg-white">
-                <Image src={phoness} alt="Lumen Logo" className="pt-12" />
+                <Image
+                  src={phoness}
+                  alt="Lumen Logo"
+                  className=" ml-[-50px]"
+                  style={{
+                    maxWidth: "80%",
+                    height: "auto",
+                    objectFit: "contain",
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -279,7 +323,7 @@ function SectionForConsumers() {
             </div>
             <div className="text-2xl font-semibold">
               With LUMEN, you’re not just a consumer, you’re a{" "}
-              <span className="text-slate-600">Changemaker</span>
+              <span className="text-primary">Changemaker</span>
             </div>{" "}
             <Link href="/consumers">
               {" "}
