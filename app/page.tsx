@@ -7,7 +7,7 @@ import { Instagram, Facebook, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import lumenVerbose from "./lumen-verbose.png";
-import lumenFull from "./lumen-full.jpg";
+import lumenFull from "./lumen-full.png";
 import screenshot from "./impact-ss.png";
 import phoness from "./phone-ss.png";
 import landingVec from "./landing-vector.jpeg";
@@ -224,7 +224,7 @@ function SectionForBusiness() {
               <Link href="/login">Get Started</Link>
             </Button>
           </div>
-          <div className="mockup-window border w-1/2">
+          <div className="mockup-window border w-1/2 bg-white">
             <div className="flex justify-center">
               <Image src={screenshot} alt="Lumen Logo" className="" />
             </div>

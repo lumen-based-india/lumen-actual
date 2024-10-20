@@ -15,7 +15,7 @@ import Image from "next/image";
 import { useAccount } from "wagmi";
 import { ProvideCompany } from "@/providers/CompanyProvider";
 import CompanyHeader from "@/components/companyHeader";
-import lumenFull from "../../app/lumen-full.jpg";
+import lumenFull from "../../app/lumen-full.png";
 
 const sidebarItems = [
   { name: "Impact Overview", icon: BarChart2, href: "/impact-overview" },
