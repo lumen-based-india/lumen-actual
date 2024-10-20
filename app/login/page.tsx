@@ -14,9 +14,16 @@ import {
   getCompanyUsingWallet,
   updateCompanyWallet,
 } from "@/utils/databaseQueries/companies";
-import { contractConfig} from "@/hooks/useLumenToken";
+import { contractConfig } from "@/hooks/useLumenToken";
 import { distributeTokensAndSendEthSeparately } from "@/lib/initScriptContract";
 import { formatUnits } from "viem";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 const fetchAddressDetails = async (address: string) => {
   const company = await getCompanyUsingWallet(address);
   if (company.error) {
@@ -67,17 +74,17 @@ export default function LoginOrSignup() {
     e.preventDefault();
     const updatedCompany = await updateCompanyWallet(
       companyId,
-      address as `0x{string}`,
+      address as `0x{string}`
     );
     if (updatedCompany.error) {
       console.log(updatedCompany.error);
     }
-    const balanceInNumber:string = formatUnits(balance as bigint, 18);
+    const balanceInNumber: string = formatUnits(balance as bigint, 18);
     if (!balanceInNumber || Number(balanceInNumber) === 0) {
       await distributeTokensAndSendEthSeparately(
         address as `0x{string}`,
         "4000",
-        "0.1",
+        "0.1"
       );
     }
 
@@ -86,15 +93,15 @@ export default function LoginOrSignup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="min-h-screen flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Card className="w-[350px] bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-xl">
+        <Card className="w-[350px] rounded-xl">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center text-white">
+            <CardTitle className="text-2xl font-bold text-center ">
               {connectionFailed
                 ? addressDetails && Object.keys(addressDetails).length === 0
                   ? "Login as company"
@@ -120,38 +127,47 @@ export default function LoginOrSignup() {
                 onSubmit={handleSignUpSubmit} // Handle form submission
               >
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-white">
+                  <Label htmlFor="name" className="">
                     Name
                   </Label>
-                  <Input id="name" required />
+                  <Input id="name" required className="rounded-xl" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-white">
+                  <Label htmlFor="email" className="">
                     Email
                   </Label>
-                  <Input id="email" type="email" required />
+                  <Input
+                    id="email"
+                    type="email"
+                    required
+                    className="rounded-xl"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="company" className="text-white">
+                  <Label htmlFor="company" className="">
                     Company
                   </Label>
-                  <select
+                  <Select
                     defaultValue={companyId}
-                    value={companyId}
-                    onChange={(e) => setCompanyId(e.target.value)}
-                    className="p-2 bg-secondary text-primary rounded-lg font-medium w-full"
+                    onValueChange={(value) => setCompanyId(value)}
                   >
-                    {companies.map((company: any) => (
-                      <option
-                        key={company.company_id}
-                        value={company.company_id}
-                      >
-                        {company.company_name}
-                      </option>
-                    ))}
-                  </select>
+                    <SelectTrigger className="w-full rounded-xl">
+                      <SelectValue placeholder="Select a company" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      {companies.map((company: any) => (
+                        <SelectItem
+                          key={company.company_id}
+                          value={company.company_id}
+                          className="rounded-xl"
+                        >
+                          {company.company_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full rounded-xl">
                   Login
                 </Button>
               </motion.form>

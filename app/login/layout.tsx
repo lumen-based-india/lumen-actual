@@ -8,7 +8,7 @@ export default function RootLayout({
 }) {
   return (
     <ProvideCompany>
-      <div className="max-w-md mx-auto w-full">{children}</div>
+      <div className="w-full">{children}</div>
     </ProvideCompany>
   );
 }
