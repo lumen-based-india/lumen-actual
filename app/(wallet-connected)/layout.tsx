@@ -10,7 +10,6 @@ import {
   GitBranch,
   Truck,
   Leaf,
-  Users,
 } from "lucide-react";
 import { useAccount } from "wagmi";
 import { ProvideCompany } from "@/providers/CompanyProvider";
@@ -21,7 +20,6 @@ const sidebarItems = [
   { name: "DPP Trace", icon: GitBranch, href: "/dpp-trace" },
   { name: "Market Place", icon: Truck, href: "/marketplace" },
   { name: "Trade Carbon", icon: Leaf, href: "/trade-carbon" },
-  { name: "Consumers", icon: Users, href: "/consumers" },
 ];
 
 export default function DashboardLayout({
@@ -49,15 +47,13 @@ export default function DashboardLayout({
 
   // Avoid rendering until mounted on client
   if (!hasMounted) return null;
-
   return (
     <ProvideCompany>
       <div className="bg-background">
         <div className="flex h-screen text-secondary">
           <aside
-            className={`bg-card-foreground transition-all duration-300 ease-in-out ${
-              isSidebarOpen ? "w-64" : "w-20"
-            } flex flex-col`}
+            className={`bg-card-foreground transition-all duration-300 ease-in-out ${isSidebarOpen ? "w-64" : "w-20"
+              } flex flex-col`}
           >
             <div className="flex items-center justify-between p-4">
               <Link
@@ -84,11 +80,10 @@ export default function DashboardLayout({
                   <li key={item.name}>
                     <Link href={item.href} passHref>
                       <span
-                        className={`flex items-center space-x-2 p-2 rounded-xl hover:bg-white-200 transition-colors duration-200 ${
-                          pathname === item.href
+                        className={`flex items-center space-x-2 p-2 rounded-xl hover:bg-white-200 transition-colors duration-200 ${pathname === item.href
                             ? "bg-secondary text-primary"
                             : ""
-                        }`}
+                          }`}
                       >
                         <item.icon size={24} />
                         {isSidebarOpen && <span>{item.name}</span>}
