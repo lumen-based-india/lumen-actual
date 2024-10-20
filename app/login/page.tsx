@@ -81,13 +81,14 @@ export default function LoginOrSignup() {
     }
     const balanceInNumber: string = formatUnits(balance as bigint, 18);
     if (!balanceInNumber || Number(balanceInNumber) === 0) {
+      console.log("Balance exceeding zero", balanceInNumber);
       await distributeTokensAndSendEthSeparately(
         address as `0x{string}`,
         "4000",
       );
     }
     setAddressDetails(updatedCompany.data);
-    // push("/impact-overview");
+    push("/impact-overview");
   };
 
   return (
