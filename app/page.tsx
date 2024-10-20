@@ -174,7 +174,7 @@ function SectionMatters() {
         {matters.map((matter, index) => (
           <Card
             key={index}
-            className="rounded-xl w-96 flex flex-col bg-background h-[300px]"
+            className="rounded-xl w-96 flex flex-col bg-background h-[400px]"
           >
             <CardHeader className="h-[150px]">
               <CardTitle className="leading-normal text-center">
