@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import {
   Select,
   SelectContent,
@@ -29,9 +29,9 @@ import {
 } from "chart.js";
 import { useCompanyContext } from "@/providers/CompanyProvider";
 import { getCompany } from "@/utils/databaseQueries/companies";
-import SupplierProgram from "@/components/supplier-program";
 import { useQuery } from "@tanstack/react-query";
 import { getInsetProgramsByCompanyID } from "@/utils/databaseQueries/insetPrograms";
+import ProjectInfo from "@/components/project-info-v2";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -42,7 +42,7 @@ function generateRandomSeed(name: string): number {
   }
   hash = hash ^ (hash >>> 16); // XOR and shift for more randomness
   const normalizedSeed = Math.abs(hash % 1000) / 1000; // Modulo to get a value between 0 and 1
-  return normalizedSeed * 3; // Scale to [0, 3)
+  return (normalizedSeed * 4) - 2; // Scale to [-2, +2)
 }
 
 export default function MarketPlace() {
@@ -50,56 +50,16 @@ export default function MarketPlace() {
   const productCategoryMap = useMemo(() => {
     return supplier_data?.data?.productMap ?? {};
   }, [supplier_data]);
-  
-  const productTypes = useMemo(() => {
+
+  const productCategories = useMemo(() => {
     return Object.keys(productCategoryMap);
   }, [productCategoryMap]);
 
-  const [currentProductType, setCurrentProductType] = useState("");
-  const [currentProducts, setCurrentProducts] = useState<string[]>([]);
-  const [currentProduct, setCurrentProduct] = useState("");
+  const [currentProductCategory, setCurrentProductCategory] = useState("");
   const [supplierLoading, setSupplierLoading] = useState(false);
   const [supplierNewData, setSupplierNewData] = useState<any[]>([]);
   const [companySustainabilityMap, setCompanySustainabilityMap] = useState<any[]>([]);
   const [currentSupplier, setCurrentSupplier] = useState<string>("");
-  const [selectedProgram, setSelectedProgram] = useState<string>("");
-
-  useEffect(() => {
-    if (!currentProductType || productCategoryMap[currentProductType] === undefined) {
-      setCurrentProducts([]);
-      return;
-    }
-    const products = Object.keys(productCategoryMap[currentProductType]);
-    setCurrentProducts(products);
-  }, [currentProductType, productCategoryMap]);
-
-  useEffect(() => {
-    setCompanySustainabilityMap([]);
-    const companies = productCategoryMap[currentProductType]?.[currentProduct];
-    if (!companies) return;
-
-    // Populate the sustainability map
-    const updatedMap = companies.map((company: any) => ({
-      company_id: company.company_id,
-      company_name: company.company_name,
-      sustainability: parseFloat(
-        (parseFloat(company.sustainability.company_sustainability) + generateRandomSeed(company.company_name)).toFixed(2)
-      ),
-      money: (parseFloat(company.sustainability.company_price) + generateRandomSeed(company.company_name)).toFixed(2),
-    }));
-    setCompanySustainabilityMap(updatedMap);
-    setSupplierLoading(true);
-    setSupplierNewData([]);
-    const promises = companies.map((company: any) => getCompany(company.company_id));
-    Promise.all(promises)
-      .then((results) => {
-        setSupplierNewData(results.map((result) => result.data));
-      })
-      .finally(() => {
-        setSupplierLoading(false);
-      });
-  }, [currentProduct, currentProductType, productCategoryMap]);
-
   const programsData = useQuery({
     queryKey: ["programs", currentSupplier],
     queryFn: async () => {
@@ -121,36 +81,84 @@ export default function MarketPlace() {
     image: program.verifier_url,
     tags: program.project_search_tags.split(","),
   }));
+  const currentProgram = program?.[0] ?? null;
+  const projectInfoRef = useRef<HTMLDivElement | null>(null); // Create a ref for ProjectInfo
 
-  const selectedProgramData = program?.find(
-    (program: any) => program.id === selectedProgram
-  );
+  useEffect(() => {
+    if (currentProgram) {
+      projectInfoRef.current?.scrollIntoView({ behavior: 'smooth' }); // Scroll to ProjectInfo if it exists
+    }
+  }, [currentProgram]);
 
+  useEffect(() => {
+    if (!currentProductCategory || productCategoryMap[currentProductCategory] === undefined) {
+      setCompanySustainabilityMap([]);
+      return;
+    }
+    const companies = productCategoryMap[currentProductCategory];
+
+    // Populate the sustainability map
+    const updatedMap = companies.map((company: any) => ({
+      company_id: company.company_id,
+      company_name: company.company_name,
+      sustainability: parseFloat(
+        (parseFloat(company.sustainability.company_sustainability) + generateRandomSeed(company.company_name)).toFixed(2)
+      ),
+      money: (parseFloat(company.sustainability.company_price) + generateRandomSeed(company.company_name)).toFixed(2),
+    }));
+    setCompanySustainabilityMap(updatedMap);
+    setSupplierLoading(true);
+    setSupplierNewData([]);
+    const promises = companies.map((company: any) => getCompany(company.company_id));
+    Promise.all(promises)
+      .then((results) => {
+        setSupplierNewData(results.map((result) => result.data));
+      })
+      .finally(() => {
+        setSupplierLoading(false);
+      });
+  }, [currentProductCategory, productCategoryMap]);
+
+  // Function to generate a random bright color from a company name
+  function getBrightColor(name: string): string {
+    const hashCode = Array.from(name).reduce((hash, char) => {
+      return char.charCodeAt(0) + ((hash << 5) - hash); // Hashing function
+    }, 0);
+
+    // Generate RGB values and ensure they are bright
+    const r = (hashCode % 255 + 200) % 256; // Ensure red is high
+    const g = (hashCode * 2 % 255 + 100) % 256; // Ensure green is moderate
+    const b = (hashCode * 3 % 255 + 50) % 256; // Ensure blue is lower
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+
+  // Chart data
   const chartData = {
-    datasets: [
-      {
-        label: "Suppliers",
-        data: companySustainabilityMap.map((company) => ({
-          x: company.sustainability,
-          y: company.money,
-          label: company.company_name,
-          company_id: company.company_id,
-          company_name: company.company_name,
-        })),
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-        pointRadius: 5,
-      },
-    ],
+    datasets: companySustainabilityMap.map((company) => ({
+      label: company.company_name,
+      data: [{
+        x: company.sustainability,
+        y: company.money,
+        company_id: company.company_id,
+        company_name: company.company_name,
+      }],
+      backgroundColor: getBrightColor(company.company_name),
+      borderColor: getBrightColor(company.company_name),
+      borderWidth: 1,
+      pointRadius: 5,
+    })),
   };
 
+  // Chart options
   const chartOptions = {
     plugins: {
+      legend: {
+        display: true, // Enable legend
+      },
       tooltip: {
         callbacks: {
           label: function (context: any) {
-            const companyName = context.raw.label;
+            const companyName = context.raw.company_name;
             const price = context.raw.y;
             const sustainability = context.raw.x;
             return `${companyName}: Price $${price}, Sustainability ${sustainability}`;
@@ -164,9 +172,9 @@ export default function MarketPlace() {
           display: true,
           text: "Sustainability (ESG Rating)",
         },
+        beginAtZero: true,
         ticks: {
-          beginAtZero: true,
-          stepSize: 0.1, // Adjust step size for better granularity
+          stepSize: 1,
         },
       },
       y: {
@@ -176,7 +184,7 @@ export default function MarketPlace() {
         },
         beginAtZero: true,
         ticks: {
-          stepSize: 1, // Adjust step size for better visibility
+          stepSize: 1,
         },
       },
     },
@@ -192,46 +200,22 @@ export default function MarketPlace() {
           <CardContent className="space-y-4">
             <Select
               onValueChange={(e) => {
-                setCurrentProductType(e);
+                setCurrentProductCategory(e);
               }}
             >
               <SelectTrigger className="rounded-xl">
-                <SelectValue placeholder="Product Type" />
+                <SelectValue placeholder="Product Category" />
               </SelectTrigger>
               <SelectContent className="rounded-xl">
-                {productTypes.map((productType, index) => (
+                {productCategories.map((category, index) => (
                   <SelectItem
-                    value={productType}
+                    value={category}
                     key={index}
                     className="rounded-xl"
                   >
-                    {productType}
+                    {category}
                   </SelectItem>
                 ))}
-              </SelectContent>
-            </Select>
-            <Select onValueChange={setCurrentProduct}>
-              <SelectTrigger className="rounded-xl">
-                <SelectValue placeholder="Product" />
-              </SelectTrigger>
-              <SelectContent className="rounded-xl">
-                {currentProducts && currentProducts.length > 0 ? (
-                  currentProducts.map((product, index) => {
-                    return (
-                      <SelectItem
-                        value={product}
-                        key={index}
-                        className="rounded-xl"
-                      >
-                        {product}
-                      </SelectItem>
-                    );
-                  })
-                ) : (
-                  <SelectItem disabled value={"empty"}>
-                    No products available
-                  </SelectItem>
-                )}
               </SelectContent>
             </Select>
           </CardContent>
@@ -241,7 +225,7 @@ export default function MarketPlace() {
             <CardTitle>Available Suppliers</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-96"> {/* Fixed height for better display */}
+            <div className="h-96">
               <Scatter options={chartOptions} data={chartData} />
             </div>
           </CardContent>
@@ -275,9 +259,24 @@ export default function MarketPlace() {
                       }}
                     >
                       <TableCell>{supplier.company_name}</TableCell>
-                      <TableCell>{supplier.environmental_score}</TableCell>
-                      <TableCell>{supplier.social_score}</TableCell>
-                      <TableCell>{supplier.governance_score}</TableCell>
+                      <TableCell>
+                        {supplier.environmental_score}
+                        {supplier.environmental_score > 9.1 && (
+                          <span> ⭐</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {supplier.social_score}
+                        {supplier.social_score > 9.1 && (
+                          <span> ⭐</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {supplier.governance_score}
+                        {supplier.governance_score > 9.1 && (
+                          <span> ⭐</span>
+                        )}
+                      </TableCell>
                       <TableCell>
                         <Button
                           variant="outline"
@@ -296,24 +295,6 @@ export default function MarketPlace() {
           )}
         </CardContent>
       </Card>
-      {currentSupplier && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Inset Programs Running</CardTitle>
-          </CardHeader>
-          <CardContent className="flex overflow-x-auto gap-4">
-            {program && program?.length > 0 ? (
-              program.map((program: any) => (
-                <div key={program.program_id} className="w-1/4">
-                  <SupplierProgram program={program} />
-                </div>
-              ))
-            ) : (
-              <p>No Inset Programs found.</p>
-            )}
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }

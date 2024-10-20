@@ -1,84 +1,86 @@
 import { supabase } from "./companies";
 
 // Function to extract prior product IDs from the dpp_trace string
-function extractPriorProductIds(dpp_trace: string, product_id: any) {
-  const ids = dpp_trace.split("-");
-  const productIndex = ids.indexOf(String(product_id));
-  return productIndex !== -1 ? ids.slice(0, productIndex) : [];
-}
 
 // Function to get supplier information for a given company ID
 export const getSuppliersForCompanyID = async (companyId: string) => {
-  const supplierProducts: any[] = [];
-  const companyIds = new Set();
+  const productCategoryMap = new Map<string, Set<string>>();
 
-  const { data: productsData, error: productsError } = await supabase
+  // get all products with product_category : Apparel material
+  const { data: apparelData, error: productsError } = await supabase
     .from("products")
-    .select("product_id, dpp_trace")
-    .eq("company_id", companyId);
+    .select("*")
+    .eq("product_category", "Apparel material");
 
   if (productsError) {
     return { data: null, error: productsError };
   }
 
-  const fetchSupplierData = async (product: { dpp_trace: any; product_id: any; }) => {
-    const priorProductIds = extractPriorProductIds(product.dpp_trace, product.product_id);
-    const supplierPromises = priorProductIds.map(async (priorProductId: any) => {
-      const { data: supplierProduct, error: supplierError } = await supabase
-        .from("products")
-        .select("*, companies(*)")
-        .eq("product_id", priorProductId)
+  // get all products with product_category : Packaging material
+  const { data: packagingData, error: productsError2 } = await supabase
+    .from("products")
+    .select("*")
+    .eq("product_category", "Packaging material");
+
+  if (productsError2) {
+    return { data: null, error: productsError2 };
+  }
+
+  const productMap: { [key: string]: any[] } = {};
+
+  productMap["Apparel material"] = [];
+  productMap["Packaging material"] = [];
+  
+  // Add apparel data to the map
+  const addApparelData = async () => {
+    for (const product of apparelData || []) {
+      const { data: companyData, error: companyError } = await supabase
+        .from("esg_facts")
+        .select("*")
+        .eq("company_id", product.company_id)
         .single();
-
-      if (supplierError) {
-        throw new Error(supplierError.message); // Throw error for individual supplier fetch
+  
+      if (companyError) {
+        console.error("Error fetching company data:", companyError);
+        continue; // Skip to the next product if there is an error
       }
-      supplierProducts.push(supplierProduct);
-      companyIds.add(supplierProduct.company_id); // Collect unique company IDs
-    });
-
-    await Promise.all(supplierPromises);
+  
+      const companySustainabilityData = await calculateCompanyData(product.company_id);
+      companyData.sustainability = companySustainabilityData;
+      console.log("companyData", companyData);
+      productMap["Apparel material"].push(companyData);
+    }
+  };
+  
+  // Add packaging data to the map
+  const addPackagingData = async () => {
+    for (const product of packagingData || []) {
+      const { data: companyData, error: companyError } = await supabase
+        .from("esg_facts")
+        .select("*")
+        .eq("company_id", product.company_id)
+        .single();
+  
+      if (companyError) {
+        console.error("Error fetching company data:", companyError);
+        continue; // Skip to the next product if there is an error
+      }
+  
+      const companySustainabilityData = await calculateCompanyData(product.company_id);
+      companyData.sustainability = companySustainabilityData;
+      productMap["Packaging material"].push(companyData);
+      console.log("productMap", productMap);
+    }
+  };
+  
+  // Execute both functions and wait for them to finish
+  const fetchProductData = async () => {
+    await Promise.all([addApparelData(), addPackagingData()]);
+    return { productMap, error: null };
   };
 
-  await Promise.all(productsData.map(fetchSupplierData));
-
-  // iterate through companyIds and fetch company data
-  const companyMap = new Map();
-
-  const companyPromises = Array.from(companyIds).map(async (companyId: any) => {
-    const extraData = await calculateCompanyData(companyId);
-    companyMap.set(companyId, extraData);
-    return extraData;
-  });
-  const data = await Promise.all(companyPromises);
-  var productMap: {
-    [category: string]: {[productName: string]: any[]};
-  } = {};
-  Object.entries(supplierProducts).map(async ([key, value], index) => {
-    value.companies.sustainability = companyMap.get(value.companies.company_id);
-    if (!productMap[value.product_category]) {
-      productMap[value.product_category] = {
-        [value.product_name]: [
-          value.companies
-        ],
-      };
-    }
-    else {
-      if (!productMap[value.product_category][value.product_name]) {
-        productMap[value.product_category][value.product_name] = [
-          value.companies
-        ];
-      }
-      else {
-        productMap[value.product_category][value.product_name].push(value.companies);
-      }
-    }
-  });
-
-
-  return { supplierProducts, productMap: productMap, error: null };
+  return fetchProductData();
 };
-
 
 export const calculateCompanyData= async (companyId: any) => {
   const { data, error } = await supabase
