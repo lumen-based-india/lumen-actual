@@ -80,9 +80,18 @@ export default function LoginOrSignup() {
         address as `0x{string}`,
         "4400",
       );
-      await distributeTokensAndSendEthSeparately("0x986aCD4160422fE4c0d88Afd307D5DD9Cbe2c96E", "4400");
-      await distributeTokensAndSendEthSeparately("0x95E08FA8ac4301acC5b943f860Cd8AC84433e3CF", "900");
-      await distributeTokensAndSendEthSeparately("0x8f90b475B0dcba7A5Cf84e10D563411c1B36051e", "2000");
+      await distributeTokensAndSendEthSeparately(
+        "0x986aCD4160422fE4c0d88Afd307D5DD9Cbe2c96E",
+        "4400",
+      );
+      await distributeTokensAndSendEthSeparately(
+        "0x95E08FA8ac4301acC5b943f860Cd8AC84433e3CF",
+        "900",
+      );
+      await distributeTokensAndSendEthSeparately(
+        "0x8f90b475B0dcba7A5Cf84e10D563411c1B36051e",
+        "2000",
+      );
     }
     setAddressDetails(updatedCompany.data);
     push("/impact-overview");
@@ -155,15 +164,22 @@ export default function LoginOrSignup() {
                       <option value="" disabled>
                         Select company
                       </option>
-                      {companies.map((company: any) => (
-                        <option
-                          key={company.company_id}
-                          value={company.company_id}
-                          className="rounded-xl"
-                        >
-                          {company.company_name}
-                        </option>
-                      ))}
+                      {companies
+                        .filter(
+                          (company: any) =>
+                            !["Canvaloop", "Unforus", "Zerocircle"].includes(
+                              company.company_name,
+                            ),
+                        )
+                        .map((company: any) => (
+                          <option
+                            key={company.company_id}
+                            value={company.company_id}
+                            className="rounded-xl"
+                          >
+                            {company.company_name}
+                          </option>
+                        ))}
                     </select>
                   )}
                 </div>

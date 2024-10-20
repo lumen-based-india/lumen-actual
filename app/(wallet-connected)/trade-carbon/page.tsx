@@ -93,7 +93,7 @@ export default function TradeCarbon() {
           <TokenAvailablityGraph />
         </div>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex gap-4">
         <SupplierProjects
           projects={projects as any[]}
           selectedProject={selectedProject}

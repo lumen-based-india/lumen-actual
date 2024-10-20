@@ -51,8 +51,8 @@ const ProjectInfo = (props: Props) => {
               </div>
               <iframe
                 src={props.project.address}
-                width="525"
-                height="350"
+                width="325"
+                height="250"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"

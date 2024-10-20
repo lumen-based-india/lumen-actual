@@ -21,23 +21,18 @@ type Props = {
 };
 
 const SupplierProjects = (props: Props) => {
-  const [isOpen, setIsOpen] = useState(true);
-
   const handleRowClick = (projectId: any) => {
     props.setSelectedProject(projectId);
-    setIsOpen(false);
   };
-
   return (
     <Card className="w-full">
       <CardHeader
-        onClick={() => setIsOpen(!isOpen)}
         style={{ cursor: "pointer" }}
       >
         <CardTitle className="flex justify-between items-center w-full">
           <div className="flex gap-4 items-baseline">
             <span>On-chain Supplier Projects</span>
-            {!isOpen && props.selectedProject && (
+            {props.selectedProject && (
               <span className="text-sm text-gray-400 font-normal">
                 {
                   props?.projects?.find(
@@ -47,17 +42,10 @@ const SupplierProjects = (props: Props) => {
               </span>
             )}
           </div>
-
-          {isOpen ? (
-            <ChevronUp className="h-5 w-5" />
-          ) : (
-            <ChevronDown className="h-5 w-5" />
-          )}
         </CardTitle>
       </CardHeader>
       <motion.div
         initial={false}
-        animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
         transition={{ height: { duration: 0.3 }, opacity: { duration: 0.2 } }}
         style={{ overflow: "hidden" }}
       >
