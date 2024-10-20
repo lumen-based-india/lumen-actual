@@ -78,9 +78,30 @@ const handleSectionRedirect = (sectionName: string) => {
     .querySelector(`section[about="${sectionName}"]`)
     ?.scrollIntoView({ behavior: "smooth" });
 };
+
+const handleScroll = (e: any) => {
+  const sections = document.querySelectorAll("section");
+  const currentSection = Array.from(sections).find((section) => {
+    const rect = section.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  });
+  if (currentSection) {
+    if (e.deltaY > 0) {
+      const nextSection = currentSection.nextElementSibling;
+      nextSection?.scrollIntoView({ behavior: "smooth", block: "center" });
+    } else
+      currentSection.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+};
+
 export default function Index() {
   return (
-    <div className="w-full flex flex-col snap-y snap-mandatory overflow-y-scroll bg-white">
+    <div
+      className="w-full flex flex-col bg-white"
+      onWheel={(e) => {
+        handleScroll(e);
+      }}
+    >
       <SectionHero />
       <SectionMatters />
       <SectionWhyLumen />
@@ -95,7 +116,7 @@ function SectionHero() {
   return (
     <section
       about="main"
-      className="flex justify-center items-center h-screen relative snap-start"
+      className="flex justify-center items-center h-screen relative"
     >
       <div className="flex items-center text-justify gap-8 justify-center">
         <div className="flex flex-col gap-2  items-start">
@@ -135,7 +156,7 @@ function SectionMatters() {
   return (
     <section
       about="matters"
-      className="h-screen flex flex-col justify-center items-center gap-8 snap-start"
+      className="h-screen flex flex-col justify-center items-center gap-8"
     >
       <div className="flex items-center">
         <Image src={lumenFull} alt="Lumen Logo" className="w-36" />
@@ -175,7 +196,7 @@ function SectionWhyLumen() {
   return (
     <section
       about="why"
-      className="h-screen flex flex-col gap-8 justify-center items-center snap-start"
+      className="h-screen flex flex-col gap-8 justify-center items-center"
     >
       <div className="flex items-center">
         <div className="text-3xl font-bold mt-[8px] pr-1">Why</div>
@@ -235,7 +256,7 @@ function SectionForBusiness() {
   return (
     <section
       about="business"
-      className="flex flex-col justify-center items-center relative p-16 gap-24 h-screen snap-start"
+      className="flex flex-col justify-center items-center relative p-16 gap-24 h-screen"
     >
       <Card className="rounded-xl w-full bg-background">
         <CardHeader>
@@ -277,7 +298,7 @@ function SectionForConsumers() {
   return (
     <section
       about="consumers"
-      className="flex flex-col justify-center items-center relative p-16 gap-24 snap-start"
+      className="flex flex-col justify-center h-screen items-center relative p-16 gap-24"
     >
       <Card className="rounded-xl w-full bg-background">
         <CardHeader>
@@ -342,7 +363,7 @@ function SectionFooter() {
   return (
     <section
       about="us"
-      className="h-screen p-16 flex justify-center items-center snap-start"
+      className="h-screen p-16 flex justify-center items-center"
     >
       <Card className="rounded-xl w-full flex flex-col">
         <CardHeader>
