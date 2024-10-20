@@ -57,27 +57,6 @@ export function useLumenToken() {
     });
     return { balance, balanceError };
   };
-  const { writeContractAsync: distribute, isPending: claimIsPending } =
-    useWriteContract();
-
-  const distributeTokens = async (args: any[]) => {
-    try {
-      const { request } = await publicClient.simulateContract({
-        account,
-        address: "0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2", // Contract address
-        abi: wagmiAbi, // ABI for the contract
-        functionName: "distribute", // Specify the distribute function
-        args, // Pass any arguments needed for the distribute function
-      });
-
-      // Write the transaction to the blockchain
-      const response = await walletClient.writeContract(request);
-
-      console.log("Transaction successful:", response);
-    } catch (error) {
-      console.error("Transaction failed:", error);
-    }
-  };
 
   return {
     tokenName,

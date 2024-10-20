@@ -76,7 +76,7 @@ export default function MarketPlace() {
     if (!companies) return;
 
     // Populate the sustainability map
-    const updatedMap = companies.map((company) => ({
+    const updatedMap = companies.map((company:any) => ({
       company_id: company.company_id,
       company_name: company.company_name,
       sustainability: parseFloat(
