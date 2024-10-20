@@ -34,42 +34,45 @@ import { useQuery } from "@tanstack/react-query";
 import { getInsetProgramsByCompanyID } from "@/utils/databaseQueries/insetPrograms";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
-//fix the supplier programs
+
+function generateRandomSeed(name: string): number {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = (hash << 5) - hash + name.charCodeAt(i);
+    hash |= 0;
+  }
+  const normalizedSeed = Math.abs(hash) / (Math.abs(hash) + 1);
+  return 1 + normalizedSeed;
+}
+
 export default function MarketPlace() {
   const { supplierData: supplier_data } = useCompanyContext();
   const productCategoryMap = useMemo(() => {
     return supplier_data?.data?.productMap ?? {};
   }, [supplier_data]);
+  
   const productTypes = useMemo(() => {
     return Object.keys(productCategoryMap);
   }, [productCategoryMap]);
 
-  // State management
   const [currentProductType, setCurrentProductType] = useState("");
   const [currentProducts, setCurrentProducts] = useState<string[]>([]);
   const [currentProduct, setCurrentProduct] = useState("");
   const [supplierLoading, setSupplierLoading] = useState(false);
   const [supplierNewData, setSupplierNewData] = useState<any[]>([]);
-  const [companySustainabilityMap, setCompanySustainabilityMap] = useState<
-    any[]
-  >([]);
+  const [companySustainabilityMap, setCompanySustainabilityMap] = useState<any[]>([]);
   const [currentSupplier, setCurrentSupplier] = useState<string>("");
   const [selectedProgram, setSelectedProgram] = useState<string>("");
 
-  // Update currentProducts when currentProductType or productCategoryMap changes
   useEffect(() => {
-    if (
-      !currentProductType ||
-      productCategoryMap[currentProductType] === undefined
-    ) {
-      setCurrentProducts([]); // Reset when no product type is selected
+    if (!currentProductType || productCategoryMap[currentProductType] === undefined) {
+      setCurrentProducts([]);
       return;
     }
     const products = Object.keys(productCategoryMap[currentProductType]);
     setCurrentProducts(products);
   }, [currentProductType, productCategoryMap]);
 
-  // Fetch companies and update sustainability map when currentProduct changes
   useEffect(() => {
     setCompanySustainabilityMap([]);
     const companies = productCategoryMap[currentProductType]?.[currentProduct];
@@ -80,18 +83,14 @@ export default function MarketPlace() {
       company_id: company.company_id,
       company_name: company.company_name,
       sustainability: parseFloat(
-        company.sustainability.company_sustainability
-      ).toFixed(2),
-      money: parseFloat(company.sustainability.company_price).toFixed(2),
+        (parseFloat(company.sustainability.company_sustainability) + generateRandomSeed(currentProduct) / 1000).toFixed(2)
+      ),
+      money: (parseFloat(company.sustainability.company_price) + generateRandomSeed(currentProduct) / 1000).toFixed(2),
     }));
     setCompanySustainabilityMap(updatedMap);
-
-    // Fetch detailed supplier data
     setSupplierLoading(true);
     setSupplierNewData([]);
-    const promises = companies.map((company: any) =>
-      getCompany(company.company_id)
-    );
+    const promises = companies.map((company: any) => getCompany(company.company_id));
     Promise.all(promises)
       .then((results) => {
         setSupplierNewData(results.map((result) => result.data));
@@ -101,17 +100,15 @@ export default function MarketPlace() {
       });
   }, [currentProduct, currentProductType, productCategoryMap]);
 
-  // Fetch inset programs for the selected supplier
   const programsData = useQuery({
-    queryKey: ["programs", currentSupplier], // Add currentSupplier as part of the query key
+    queryKey: ["programs", currentSupplier],
     queryFn: async () => {
       const response = await getInsetProgramsByCompanyID(currentSupplier);
       return response;
     },
-    enabled: !!currentSupplier, // Enable only if a supplier is selected
+    enabled: !!currentSupplier,
   });
 
-  // Prepare program data for display
   const program = programsData?.data?.data?.map((program: any) => ({
     id: program.program_id,
     supplier: program.companies.company_name,
@@ -129,27 +126,25 @@ export default function MarketPlace() {
     (program: any) => program.id === selectedProgram
   );
 
-  // Chart data preparation
   const chartData = {
     datasets: [
       {
         label: "Suppliers",
         data: companySustainabilityMap.map((company) => ({
-          x: company.sustainability, // X-axis: Sustainability (ESG rating)
-          y: company.money, // Y-axis: Price (Company Price)
-          label: company.company_name, // Label for each point
+          x: company.sustainability,
+          y: company.money,
+          label: company.company_name,
           company_id: company.company_id,
           company_name: company.company_name,
         })),
-        backgroundColor: "rgba(75, 192, 192, 0.2)", // Data point fill color
-        borderColor: "rgba(75, 192, 192, 1)", // Data point border color
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
-        pointRadius: 5, // Radius of each point
+        pointRadius: 5,
       },
     ],
   };
 
-  // Chart options
   const chartOptions = {
     plugins: {
       tooltip: {
@@ -169,11 +164,19 @@ export default function MarketPlace() {
           display: true,
           text: "Sustainability (ESG Rating)",
         },
+        ticks: {
+          beginAtZero: true,
+          stepSize: 0.1, // Adjust step size for better granularity
+        },
       },
       y: {
         title: {
           display: true,
           text: "Price ($)",
+        },
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1, // Adjust step size for better visibility
         },
       },
     },
@@ -238,7 +241,9 @@ export default function MarketPlace() {
             <CardTitle>Available Suppliers</CardTitle>
           </CardHeader>
           <CardContent>
-            <Scatter options={chartOptions} data={chartData} />
+            <div className="h-96"> {/* Fixed height for better display */}
+              <Scatter options={chartOptions} data={chartData} />
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -248,10 +253,8 @@ export default function MarketPlace() {
         </CardHeader>
         <CardContent>
           {supplierLoading ? (
-            // Display loading message when suppliers are being fetched
             <p>Loading supplier data...</p>
           ) : supplierNewData.length > 0 ? (
-            // If data is found, render the table
             <>
               <Table>
                 <TableHeader>

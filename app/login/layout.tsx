@@ -6,9 +6,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <ProvideCompany>
-      <div className="w-full">{children}</div>
-    </ProvideCompany>
-  );
+  return <ProvideCompany>{children}</ProvideCompany>;
 }

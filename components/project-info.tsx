@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { useAccount, useWriteContract } from "wagmi";
 import { contractConfig } from "@/hooks/useLumenToken";
-import { formatUnits } from "viem";
+import { formatEther, formatUnits, parseUnits } from "viem";
 
 type Props = {
   project: any;
@@ -16,7 +16,7 @@ type Props = {
 const ProjectInfo = (props: Props) => {
   const { address } = useAccount();
   const [qty, setQty] = React.useState(3500);
-  const { writeContract } = useWriteContract();
+  const { writeContractAsync } = useWriteContract();
   return (
     <Card className="w-full">
       <CardHeader>
@@ -104,15 +104,15 @@ const ProjectInfo = (props: Props) => {
                   <Button
                     className="w-full h-full transition-transform transform hover:scale-95"
                     onClick={() => {
-                      console.log("Transfering...",address);
-                      writeContract({
+                      console.log("Transfering...", address);
+                      writeContractAsync({
                         abi: contractConfig.abi,
                         address: contractConfig.address,
                         functionName: "transfer",
                         chainId: 31337,
                         args: [
                           "0x986aCD4160422fE4c0d88Afd307D5DD9Cbe2c96E",
-                          formatUnits(BigInt(qty), 18),
+                          parseUnits(qty.toString(), 18),
                         ],
                       });
                     }}

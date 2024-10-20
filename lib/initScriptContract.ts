@@ -18,27 +18,16 @@ const contract = new ethers.Contract(
 export async function distributeTokensAndSendEthSeparately(
   recipient: `0x${string}`,
   tokenAmount: string,
-  ethAmount: string,
 ) {
   try {
     const tokenValue = ethers.parseUnits(tokenAmount, 18); // Assuming 18 decimals for the tokens
-    const ethValue = ethers.parseEther(ethAmount); // Convert ethAmount to wei
     console.log(`Sending ${tokenAmount} tokens to ${recipient}`);
     const distributeTx = await contract.distribute(recipient, tokenValue);
 
     const distributeReceipt = await distributeTx.wait();
     console.log("Tokens distributed successfully:", distributeReceipt);
 
-    console.log(`Sending ${ethAmount} ETH to ${recipient}`);
-    const ethTransferTx = await wallet.sendTransaction({
-      to: recipient,
-      value: ethValue,
-    });
-
-    const ethTransferReceipt = await ethTransferTx.wait();
-    console.log("ETH sent successfully:", ethTransferReceipt);
-
-    return { distributeReceipt, ethTransferReceipt };
+    return { distributeReceipt };
   } catch (error) {
     console.error("Error in sending transaction:", error);
     throw new Error("Transaction failed");
