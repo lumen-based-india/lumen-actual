@@ -80,6 +80,7 @@ const handleSectionRedirect = (sectionName: string) => {
 
 const handleScroll = (e: any) => {
   const sections = document.querySelectorAll("section");
+  console.log("scrolling" + e.deltaY);
   const currentSection = Array.from(sections).find((section) => {
     const rect = section.getBoundingClientRect();
     return rect.top < window.innerHeight && rect.bottom > 0;
