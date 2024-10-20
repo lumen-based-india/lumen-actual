@@ -1,12 +1,12 @@
-import { localhostABI } from "@/constants/localhostABI";
+import { baseSepoliaABI } from "@/constants/baseSepoliaABI";
 import { createPublicClient } from "viem";
 import { hardhat } from "viem/chains";
 import { http, useReadContract } from "wagmi";
 
 export const contractConfig = {
-  address: "0x5FbDB2315678afecb367f032d93F642f64180aa3" as `0x${string}`,
-  abi: localhostABI,
-  chainId: 31337 as 31337,
+  address: "0x8684306d84D42B35c418527D830B01Bb09C0Be01" as `0x${string}`,
+  abi: baseSepoliaABI,
+  chainId: 84532 as 84532,
 };
 export const publicClient = createPublicClient({
   chain: hardhat,
