@@ -45,7 +45,7 @@ export default function DPPTrace() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const { allProductsData } = useCompanyContext();
   const [productDetails, setProductDetails] = useState<ProductInfo | null>(
-    null,
+    null
   );
   const productList = useMemo(() => {
     if (allProductsData?.data) {
@@ -94,7 +94,7 @@ export default function DPPTrace() {
                       >
                         {productList[productKey].product_name}
                       </SelectItem>
-                    ) : null,
+                    ) : null
                   )}
               </SelectContent>
             </Select>
@@ -144,7 +144,7 @@ export default function DPPTrace() {
                           "business_sector",
                           "price",
                           "product_esg_rating",
-                        ].includes(key),
+                        ].includes(key)
                       )
                       .map(([key, value], index) => (
                         <div key={index}>
@@ -160,7 +160,7 @@ export default function DPPTrace() {
                                   .replace(/_/g, " ")
                                   .toLowerCase()
                                   .replace(/\b\w/g, (char) =>
-                                    char.toUpperCase(),
+                                    char.toUpperCase()
                                   )}
                               </span>
                               <div className="font-normal">{value}</div>

@@ -38,7 +38,7 @@ export default function LoginOrSignup() {
   const [connectionFailed, setConnectionFailed] = useState(false);
   const [addressDetails, setAddressDetails] = useState(null);
   const [companies, setCompanies] = useState([]);
-  const [companyId, setCompanyId] = useState("");
+  const [companyId, setCompanyId] = useState<string | null>(null);
   const { data: balance, isError: balanceError } = useReadContract({
     abi: contractConfig.abi,
     address: contractConfig.address,
@@ -56,7 +56,7 @@ export default function LoginOrSignup() {
         }
       });
     }
-  }, [address, push]);
+  }, [address]);
   const getCompaniesData = async () => {
     const { data, error } = await getCompanies();
     if (error) {
@@ -64,16 +64,17 @@ export default function LoginOrSignup() {
     }
     console.log(data);
     setCompanies(data as any);
-    // @ts-ignore
-    setCompanyId(data[0].company_id);
+    setCompanyId(data![0].company_id);
   };
+
   useEffect(() => {
     getCompaniesData();
   }, []);
+
   const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const updatedCompany = await updateCompanyWallet(
-      companyId,
+      companyId!,
       address as `0x{string}`
     );
     if (updatedCompany.error) {
@@ -148,25 +149,34 @@ export default function LoginOrSignup() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="company" className="">
+                  <Label>
                     Company
                   </Label>
-                  <Select value={companyId} onValueChange={setCompanyId}>
-                    <SelectTrigger className="w-full rounded-xl">
-                      <SelectValue placeholder="Select a company" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-xl">
-                      {companies.map((company: any) => (
-                        <SelectItem
-                          key={company.company_id}
-                          value={company.company_id}
-                          className="rounded-xl"
-                        >
-                          {company.company_name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {companyId && (
+                      <Select
+                      value={companyId}
+                      onValueChange={(value) => {
+                        console.log("Company ID changed:", value);
+                        setCompanyId(value);
+                      }}
+                    >
+                      <SelectTrigger className="rounded-xl ">
+                        {/* Display the selected value */}
+                        <SelectValue placeholder="Select company" />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl">
+                        {companies.map((company: any) => (
+                          <SelectItem
+                            key={company.company_id}
+                            value={company.company_id}
+                            className="rounded-xl"
+                          >
+                            {company.company_name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 </div>
                 <Button type="submit" className="w-full rounded-xl">
                   Login
