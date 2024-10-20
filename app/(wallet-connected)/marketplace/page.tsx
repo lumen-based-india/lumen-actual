@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -31,16 +30,12 @@ import {
 import { useCompanyContext } from "@/providers/CompanyProvider";
 import { getCompany } from "@/utils/databaseQueries/companies";
 import SupplierProgram from "@/components/supplier-program";
-import SupplierProjects from "@/components/supplier-projects";
-import ProjectInfo from "@/components/project-info";
 import { useQuery } from "@tanstack/react-query";
 import { getInsetProgramsByCompanyID } from "@/utils/databaseQueries/insetPrograms";
-import { SupplierPrograms } from "@/components/supplier-programs";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 //fix the supplier programs
 export default function MarketPlace() {
-  const [quantity, setQuantity] = useState("");
   const { supplierData: supplier_data } = useCompanyContext();
   const productCategoryMap = supplier_data?.data?.productMap ?? {};
   const productTypes = Object.keys(supplier_data?.data?.productMap ?? {});
@@ -53,7 +48,7 @@ export default function MarketPlace() {
     any[]
   >([]);
   const [currentSupplier, setCurrentSupplier] = useState<string>("");
-  const [selectedProject, setSelectedProject] = useState<string>("");
+  const [selectedProgram, setSelectedProgram] = useState<string>("");
   useEffect(() => {
     if (productCategoryMap[currentProductType] === undefined) {
       return;
@@ -76,7 +71,7 @@ export default function MarketPlace() {
             company_id: company.company_id,
             company_name: company.company_name,
             sustainability: parseFloat(
-              company.sustainability.company_sustainability,
+              company.sustainability.company_sustainability
             ).toFixed(2),
             money: parseFloat(company.sustainability.company_price).toFixed(2),
           },
@@ -86,7 +81,7 @@ export default function MarketPlace() {
     setSupplierLoading(true);
     setSupplierNewData([]);
     const promises = companies.map((company: any) =>
-      getCompany(company.company_id),
+      getCompany(company.company_id)
     );
     Promise.all(promises)
       .then((results) => {
@@ -104,35 +99,38 @@ export default function MarketPlace() {
   const handleProductType = (selectedType: string) => {
     setCurrentProductType(selectedType);
   };
-  const projectsData = useQuery({
-    queryKey: ["projects"],
+  const programsData = useQuery({
+    queryKey: ["programs"],
     queryFn: async () => {
       const response = await getInsetProgramsByCompanyID(currentSupplier);
       return response;
     },
   });
-  if (projectsData?.isPending) {
+  if (programsData?.isPending) {
     return <div>Loading...</div>;
   }
 
-  if (projectsData?.error) {
+  if (programsData?.error) {
     return <div>Error loading inset programs. Please try again later.</div>;
   }
-  if (!projectsData?.data) {
+  if (!programsData?.data) {
     return <div>No inset programs found.</div>;
   }
-  const projects = projectsData?.data?.data?.map((program: any) => ({
+  //seems to be some issue with the data
+  const program = programsData?.data?.data?.map((program: any) => ({
     id: program.program_id,
     supplier: program.companies.company_name,
-    project: program.program_name,
+    description: program.program_description,
+    program: program.program_name,
     address: program.google_maps_link,
     date: program.project_completion,
     lumens: program.lumens_value,
     insetTonnes: program.carbon_reduction,
     image: program.verifier_url,
+    tags: program.project_search_tags.split(","),
   }));
-  const selectedProjectData = projects?.find(
-    (project: any) => project.id === selectedProject,
+  const selectedProgramData = program?.find(
+    (program: any) => program.id === selectedProgram
   );
 
   //make chart with company sustainability and price
@@ -160,7 +158,7 @@ export default function MarketPlace() {
     plugins: {
       tooltip: {
         callbacks: {
-          label: function(context: any) {
+          label: function (context: any) {
             // Return company name and value as the tooltip label
             const companyName = context.raw.label;
             const price = context.raw.y;
@@ -293,18 +291,11 @@ export default function MarketPlace() {
           <CardTitle>Inset Programs Running</CardTitle>
         </CardHeader>
         <CardContent className="flex overflow-x-auto gap-4">
-          <div>
-            <SupplierProgram />
-          </div>
-          <div>
-            <SupplierProgram />
-          </div>
-          <div>
-            <SupplierProgram />
-          </div>
-          <div>
-            <SupplierProgram />
-          </div>
+          {program?.map((program: any) => (
+            <div key={program.program_id} className="w-1/4">
+              <SupplierProgram program={program} />
+            </div>
+          ))}
         </CardContent>
       </Card>
     </div>
