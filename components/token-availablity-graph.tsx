@@ -80,11 +80,9 @@ export default function TokenAvailabilityGraph() {
       <CardContent>
         <ChartContainer
           config={{
-            series1: { label: "Series 1", color: "#8884d8" },
-            series2: { label: "Series 2", color: "#82ca9d" },
-            series3: { label: "Series 3", color: "#ffc658" },
-            series4: { label: "Series 4", color: "#ff7300" },
-            series5: { label: "Series 5", color: "#00C49F" },
+            series1: { label: "Canvaloop", color: "#8884d8" },
+            series2: { label: "Unforus", color: "#82ca9d" },
+            series3: { label: "Zerocircle", color: "#ffc658" },
           }}
         >
           <ResponsiveContainer width="100%" height="100%">
@@ -127,20 +125,6 @@ export default function TokenAvailabilityGraph() {
                 strokeWidth={2}
                 dot={false}
                 stroke="#ffc658"
-              />
-              <Line
-                type="monotone"
-                dataKey="series4"
-                strokeWidth={2}
-                dot={false}
-                stroke="#ff7300"
-              />
-              <Line
-                type="monotone"
-                dataKey="series5"
-                strokeWidth={2}
-                dot={false}
-                stroke="#00C49F"
               />
             </LineChart>
           </ResponsiveContainer>

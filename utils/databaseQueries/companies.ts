@@ -57,7 +57,8 @@ export const getCompanyUsingWallet = async (wallet: string) => {
   const { data, error } = await supabase
     .from("companies")
     .select(`*,esg_facts(*)`)
-    .eq("wallet_address", wallet).single();
+    .eq("wallet_address", wallet)
+    .single();
   return { data, error };
 };
 
@@ -69,13 +70,26 @@ export const updateCompanyWallet = async (id: string, wallet: string) => {
   return { data, error };
 };
 
+export const updateCompanyExcessEmissions = async (
+  wallet: string,
+  id: string,
+  excessEmissions: number,
+) => {
+  const currentCompany = await getCompanyUsingWallet(wallet);
+  const newExcessEmissions = Number(currentCompany.data.excess_carbon_emissions) - excessEmissions;
+  const { data, error } = await supabase
+    .from("companies")
+    .update({ excess_carbon_emissions: String(newExcessEmissions) })
+    .eq("company_id", id);
+  return { data, error };
+};
 
 export const getProductJourney = async (id: string) => {
   const response = await fetch(`/api/product/trace/${id}`);
   const data = await response.json();
   return data;
-}
-export const  getProductTrace = async (trace: string) => {
+};
+export const getProductTrace = async (trace: string) => {
   const productIds = trace.split("-");
   const productData = [];
   for (const id of productIds) {
@@ -84,5 +98,4 @@ export const  getProductTrace = async (trace: string) => {
     productData.push(data);
   }
   return productData;
-}
-  
+};

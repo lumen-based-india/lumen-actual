@@ -1,13 +1,15 @@
 "use react";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
-import { useAccount, useWriteContract } from "wagmi";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { contractConfig } from "@/hooks/useLumenToken";
-import { formatEther, formatUnits, parseUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
+import { updateCompanyExcessEmissions } from "@/utils/databaseQueries/companies";
+import { useCompanyContext } from "@/providers/CompanyProvider";
 
 type Props = {
   project: any;
@@ -16,7 +18,22 @@ type Props = {
 const ProjectInfo = (props: Props) => {
   const { address } = useAccount();
   const [qty, setQty] = React.useState(3500);
+  const {currentCompanyID} = useCompanyContext();
   const { writeContractAsync } = useWriteContract();
+  const { data: balance, isError: balanceError } = useReadContract({
+    abi: contractConfig.abi,
+    address: contractConfig.address,
+    functionName: "getHolderBalance",
+    args: [props?.project?.wallet_address],
+    chainId: contractConfig.chainId,
+  });
+
+  const balanceInNumber = useMemo(() => {
+    if (balanceError) return 0;
+    if (!balance) return 0;
+    return formatUnits(balance as bigint, 18);
+  }, [balance]);
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -51,7 +68,7 @@ const ProjectInfo = (props: Props) => {
                         Inset Tonnes
                       </Label>
                       <div className="text-2xl font-bold">
-                        {props.project.insetTonnes}
+                        {balanceInNumber}
                         <span className="text-base font-normal text-muted-foreground pl-1">
                           tCO₂e
                         </span>
@@ -109,11 +126,14 @@ const ProjectInfo = (props: Props) => {
                         abi: contractConfig.abi,
                         address: contractConfig.address,
                         functionName: "transfer",
-                        chainId: 31337,
+                        chainId: 84532,
                         args: [
+                          address as `0x${string}`,
                           props.project.wallet_address as `0x${string}`,
                           parseUnits(qty.toString(), 18),
                         ],
+                      }).then(() => {
+                        updateCompanyExcessEmissions(address as `0x${string}`,currentCompanyID, qty);
                       });
                     }}
                   >

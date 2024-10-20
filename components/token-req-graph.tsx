@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/chart";
 
 const data = [
-  { date: "Sep 2020", Toucan: 2, Moss: 2, C3: 0 },
-  { date: "Feb 2022", Toucan: 18, Moss: 20, C3: 19 },
-  { date: "Jun 2023", Toucan: 20, Moss: 22, C3: 21 },
-  { date: "Oct 2024", Toucan: 22, Moss: 24, C3: 23 },
+  { date: "Sep 2020", Toucan: 2, Emissions: 2, C3: 0 },
+  { date: "Feb 2022", Toucan: 18, Emissions: 20, C3: 19 },
+  { date: "Jun 2023", Toucan: 20, Emissions: 22, C3: 21 },
+  { date: "Oct 2024", Toucan: 22, Emissions: 24, C3: 23 },
 ];
 
 export default function TokenRequirementGraph() {
@@ -28,9 +28,8 @@ export default function TokenRequirementGraph() {
       <CardContent>
         <ChartContainer
           config={{
-            Toucan: { label: "Toucan", color: "#6366f1" },
-            Moss: { label: "Moss", color: "#22c55e" },
-            C3: { label: "C3", color: "#eab308" },
+            Toucan: { label: "Target", color: "#6366f1" },
+            Emissions: { label: "Emissions", color: "#22c55e" },
           }}
         >
           <ResponsiveContainer width="100%" height="100%">
@@ -63,17 +62,9 @@ export default function TokenRequirementGraph() {
               />
               <Area
                 type="monotone"
-                dataKey="Moss"
+                dataKey="Emissions"
                 stroke="#22c55e"
                 fill="#22c55e"
-                fillOpacity={0.2}
-                strokeWidth={2}
-              />
-              <Area
-                type="monotone"
-                dataKey="C3"
-                stroke="#eab308"
-                fill="#eab308"
                 fillOpacity={0.2}
                 strokeWidth={2}
               />

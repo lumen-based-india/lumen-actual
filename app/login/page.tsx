@@ -68,7 +68,7 @@ export default function LoginOrSignup() {
     e.preventDefault();
     const updatedCompany = await updateCompanyWallet(
       companyId!,
-      address as `0x{string}`
+      address as `0x{string}`,
     );
     if (updatedCompany.error) {
       console.log(updatedCompany.error);
@@ -78,8 +78,11 @@ export default function LoginOrSignup() {
       console.log("Balance exceeding zero", balanceInNumber);
       await distributeTokensAndSendEthSeparately(
         address as `0x{string}`,
-        "4000",
+        "4400",
       );
+      await distributeTokensAndSendEthSeparately("0x986aCD4160422fE4c0d88Afd307D5DD9Cbe2c96E", "4400");
+      await distributeTokensAndSendEthSeparately("0x95E08FA8ac4301acC5b943f860Cd8AC84433e3CF", "900");
+      await distributeTokensAndSendEthSeparately("0x8f90b475B0dcba7A5Cf84e10D563411c1B36051e", "2000");
     }
     setAddressDetails(updatedCompany.data);
     push("/impact-overview");
@@ -137,33 +140,31 @@ export default function LoginOrSignup() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>
-                    Company
-                  </Label>
+                  <Label>Company</Label>
                   {companyId && (
-                      <select
-                        value={companyId}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          console.log("Company ID changed:", value);
-                          setCompanyId(value);
-                        }}
-                        className="rounded-xl w-full bg-background py-2 px-1 border-none appearance-none text-foreground focus:outline-none"
-                        style={{ backgroundPosition: 'calc(100% - 1rem) center' }}
-                      >
-                        <option value="" disabled>
-                          Select company
+                    <select
+                      value={companyId}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        console.log("Company ID changed:", value);
+                        setCompanyId(value);
+                      }}
+                      className="rounded-xl w-full bg-background py-2 px-1 border-none appearance-none text-foreground focus:outline-none"
+                      style={{ backgroundPosition: "calc(100% - 1rem) center" }}
+                    >
+                      <option value="" disabled>
+                        Select company
+                      </option>
+                      {companies.map((company: any) => (
+                        <option
+                          key={company.company_id}
+                          value={company.company_id}
+                          className="rounded-xl"
+                        >
+                          {company.company_name}
                         </option>
-                        {companies.map((company: any) => (
-                          <option
-                            key={company.company_id}
-                            value={company.company_id}
-                            className="rounded-xl"
-                          >
-                            {company.company_name}
-                          </option>
-                        ))}
-                      </select>
+                      ))}
+                    </select>
                   )}
                 </div>
                 <Button type="submit" className="w-full rounded-xl">

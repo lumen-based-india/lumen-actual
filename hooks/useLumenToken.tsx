@@ -1,15 +1,15 @@
 import { baseSepoliaABI } from "@/constants/baseSepoliaABI";
 import { createPublicClient } from "viem";
-import { hardhat } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 import { http, useReadContract } from "wagmi";
 
 export const contractConfig = {
-  address: "0x8684306d84D42B35c418527D830B01Bb09C0Be01" as `0x${string}`,
+  address: "0x6d1910D535cDd08b9D0c224Ed4B1eE7e6a582AD3" as `0x${string}`,
   abi: baseSepoliaABI,
   chainId: 84532 as 84532,
 };
 export const publicClient = createPublicClient({
-  chain: hardhat,
+  chain: baseSepolia,
   transport: http(),
 });
 export function useLumenToken() {

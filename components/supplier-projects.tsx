@@ -69,7 +69,6 @@ const SupplierProjects = (props: Props) => {
                 <TableHead>Project</TableHead>
                 <TableHead>Address</TableHead>
                 <TableHead>Date</TableHead>
-                <TableHead>Lumens</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -98,7 +97,6 @@ const SupplierProjects = (props: Props) => {
                     <Address address={project.wallet_address} />
                   </TableCell>
                   <TableCell>{project.date}</TableCell>
-                  <TableCell>{project.lumens}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -30,6 +30,7 @@ const getRandomBrightColor = ():any => {
 };
 
 const ProductMovementNetwork: React.FC<any> = ({ selectedProduct }: any) => {
+  console.log({ selectedProduct });
   const [graph, setGraph] = useState<any>(initialGraph);
   const [labels, setLabels] = useState<string[]>([]);
 
@@ -48,7 +49,6 @@ const ProductMovementNetwork: React.FC<any> = ({ selectedProduct }: any) => {
     console.log({ data });
     return data;
   };
-
   useEffect(() => {
     if (selectedProduct?.dpp_trace) {
       const dpp_trace = selectedProduct.dpp_trace;

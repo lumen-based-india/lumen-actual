@@ -11,11 +11,12 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { useCompanyContext } from "@/providers/CompanyProvider";
+import { IndianRupeeIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function TradeCarbon() {
   const [selectedProject, setSelectedProject] = useState(null);
-  const { insetProgramsData } = useCompanyContext();
+  const { insetProgramsData, currentCompanyData } = useCompanyContext();
   if (insetProgramsData?.isPending) {
     return <div>Loading...</div>;
   }
@@ -31,9 +32,8 @@ export default function TradeCarbon() {
     supplier: program.companies.company_name,
     project: program.program_name,
     wallet_address: program.companies.wallet_address,
-    address: program.google_maps_link, 
+    address: program.google_maps_link,
     date: program.project_completion,
-    lumens: program.lumens_value,
     insetTonnes: program.carbon_reduction,
     image: program.verifier_url,
     tags: program.project_search_tags.split(","),
@@ -41,7 +41,18 @@ export default function TradeCarbon() {
   const selectedProjectData = projects?.find(
     (project: any) => project.id === selectedProject,
   );
-
+  console.log(currentCompanyData);
+  if (!currentCompanyData) {
+    return <div>Loading...</div>;
+  }
+  if (Number(currentCompanyData?.excess_carbon_emissions) === 0) {
+    return (
+      <div className="flex items-center justify-center h-[100vh]">
+        No excess carbon emissions found,Thanks for doing good for the
+        environment :)
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-4 p-4">
       <div className="flex gap-4">
@@ -52,7 +63,9 @@ export default function TradeCarbon() {
             </CardHeader>
             <CardContent>
               <div className="flex w-full justify-end items-baseline gap-1">
-                <div className="text-2xl font-bold">3,500</div>
+                <div className="text-2xl font-bold">
+                  {currentCompanyData.excess_carbon_emissions}
+                </div>
                 <div className="text-sm text-muted-foreground">tCO₂e</div>
               </div>
             </CardContent>
@@ -64,8 +77,11 @@ export default function TradeCarbon() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex w-full justify-end items-baseline gap-1">
-                <div className="text-2xl font-bold">$180,000</div>
+              <div className="flex w-full justify-end items-center gap-1">
+                <IndianRupeeIcon />{" "}
+                <div className="text-2xl font-bold">
+                  {currentCompanyData.excess_carbon_emissions * 5000}
+                </div>
               </div>
             </CardContent>
           </Card>

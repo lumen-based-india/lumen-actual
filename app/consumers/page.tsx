@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +19,7 @@ import {
 import { Leaf, Camera } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllProducts } from "@/utils/databaseQueries/products";
+import ProductMovementNetwork from "@/components/dppNetworkGraph";
 
 const InstructionModal = ({ title, instructions }: any) => (
   <Dialog>
@@ -113,7 +114,6 @@ const RecycleSection = () => (
 const ProductSelector = () => {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [isScanning, setIsScanning] = useState(false);
-
   const {
     data: products,
     isLoading,
@@ -123,12 +123,22 @@ const ProductSelector = () => {
     queryFn: async () => {
       const { data, error } = await getAllProducts();
       if (error) {
-       console.log("Error loading products", error); 
+        console.log("Error loading products", error);
       }
-      console.log(data)
+      console.log(data);
       return data;
     },
   });
+
+  const productMap = useMemo(() => {
+    const map = new Map();
+    if (products && products?.length > 0) {
+      products?.forEach((product: any) => {
+        map.set(product.product_id, product);
+      });
+    }
+    return map;
+  }, [products]);
 
   const startScanning = () => {
     setIsScanning(true);
@@ -137,7 +147,12 @@ const ProductSelector = () => {
       setSelectedProduct("Scanned Product");
     }, 3000);
   };
-
+  const selectedProductDetails = useMemo(() => {
+    console.log("selectedProduct", selectedProduct);
+    if(!selectedProduct) return null;
+    // @ts-ignore
+    return products.find((product) => product.product_name === selectedProduct);
+  }, [selectedProduct, productMap]);
   return (
     <Card className="mb-4 shadow-lg rounded-xl">
       <CardHeader>
@@ -156,8 +171,8 @@ const ProductSelector = () => {
             <SelectContent className="rounded-xl">
               {products?.map((product) => (
                 <SelectItem
-                  key={product.id} // assuming product has an id
-                  value={product.product_name} // or any other product property you want to set
+                  key={product.id}
+                  value={product.product_name}
                   className="rounded-xl"
                 >
                   {product.product_name}
@@ -176,9 +191,10 @@ const ProductSelector = () => {
           {isScanning ? "Scanning..." : "Scan Barcode"}
         </Button>
         {selectedProduct && (
-          <div className="mt-2 text-center font-semibold">
-            Selected: {selectedProduct}
-          </div>
+          <ProductMovementNetwork
+            selectedProduct={selectedProductDetails}
+            productMap={productMap}
+          />
         )}
       </CardContent>
     </Card>
