@@ -1,3 +1,4 @@
+import { plugins } from "chart.js/dist/core";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
 module.exports = {
@@ -79,5 +80,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("daisyui")],
 };

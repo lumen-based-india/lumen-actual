@@ -45,7 +45,7 @@ export default function DPPTrace() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const { allProductsData } = useCompanyContext();
   const [productDetails, setProductDetails] = useState<ProductInfo | null>(
-    null,
+    null
   );
   const productList = useMemo(() => {
     if (allProductsData?.data) {
@@ -58,7 +58,7 @@ export default function DPPTrace() {
     const map = new Map();
     if (productList?.length > 0) {
       productList?.forEach((product: any) =>
-        map.set(product.product_id, product),
+        map.set(product.product_id, product)
       );
     }
     return map;
@@ -93,14 +93,14 @@ export default function DPPTrace() {
                       >
                         {productList[productKey].product_name}
                       </SelectItem>
-                    ) : null,
+                    ) : null
                   )}
               </SelectContent>
             </Select>
           </div>
           <div className="flex gap-2">
             <Button
-              onClick={() => { }}
+              onClick={() => {}}
               className="bg-white border border-gray-300 text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 font-bold py-2 px-4 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105"
             >
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-blue-500">
@@ -108,7 +108,7 @@ export default function DPPTrace() {
               </span>
             </Button>
             <Button
-              onClick={() => { }}
+              onClick={() => {}}
               className="bg-white border border-gray-300 text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 font-bold py-2 px-4 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105"
             >
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-blue-500">
@@ -145,24 +145,28 @@ export default function DPPTrace() {
                           "business_sector",
                           "price",
                           "product_esg_rating",
-                        ].includes(key),
+                        ].includes(key)
                       )
                       .map(([key, value], index) => (
                         <div key={index}>
-                          <div className="flex gap-2 items-center">
+                          <div className="flex gap-2 items-start">
                             {key === "product_name" && <Shirt size={24} />}
                             {key === "product_category" && <Star size={24} />}
                             {key === "business_sector" && <MapPin size={24} />}
                             {key === "price" && <DollarSign size={24} />}
                             {key === "product_esg_rating" && <Leaf size={24} />}
-                            <span className="text-lg font-semibold">
-                              {key
-                                .replace(/_/g, " ")
-                                .toLowerCase()
-                                .replace(/\b\w/g, (char) => char.toUpperCase())}
-                            </span>
+                            <div className="flex flex-col">
+                              <span className="font-semibold">
+                                {key
+                                  .replace(/_/g, " ")
+                                  .toLowerCase()
+                                  .replace(/\b\w/g, (char) =>
+                                    char.toUpperCase()
+                                  )}
+                              </span>
+                              <div className="font-normal">{value}</div>
+                            </div>
                           </div>
-                          <div className="text-lg font-normal">{value}</div>
                         </div>
                       ))}
                   </div>
