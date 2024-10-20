@@ -1,22 +1,10 @@
-"use client";
-
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useLumenToken } from "@/hooks/useLumenToken";
-import {
-  BarChart2,
-  Globe,
-  ShieldCheck,
-  Zap,
-  Lock,
-} from "lucide-react";
+import { BarChart2, Globe, ShieldCheck, Zap, Lock } from "lucide-react";
 import Link from "next/link";
 
 export default function Index() {
-  const { tokenName, nameError, nameLoading } = useLumenToken();
-
-  console.log(tokenName, nameError, nameLoading);
   return (
     <>
       <div className="min-h-screen">
@@ -89,7 +77,8 @@ export default function Index() {
                     Transparent ESG Reporting
                   </h4>
                   <p>
-                    Simplify and democratize ESG data construction and reporting.
+                    Simplify and democratize ESG data construction and
+                    reporting.
                   </p>
                 </CardContent>
               </Card>
@@ -102,8 +91,8 @@ export default function Index() {
                     Combat Greenwashing
                   </h4>
                   <p>
-                    Build trust and ensure compliance with transparent, verifiable
-                    data.
+                    Build trust and ensure compliance with transparent,
+                    verifiable data.
                   </p>
                 </CardContent>
               </Card>

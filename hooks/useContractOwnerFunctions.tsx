@@ -40,7 +40,6 @@ export const useContractWithPrivateKey = (
       walletClient: custom(walletClientInstance),
     });
 
-    console.log("Contract instance:", contractInstance);
     setContract(contractInstance);
   }, [privateKey]);
 

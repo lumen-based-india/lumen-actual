@@ -9,44 +9,63 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BlackCreateWalletButton } from "@/components/coinbase-connect";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/navigation";
-import { useContractWithPrivateKey } from "@/hooks/useContractOwnerFunctions";
-import { parseUnits } from "viem";
+import {
+  getCompanies,
+  getCompanyUsingWallet,
+  updateCompanyWallet,
+} from "@/utils/databaseQueries/companies";
 
-// Mock function to simulate fetching address details
 const fetchAddressDetails = async (address: string) => {
-  // Simulating an API call delay
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      // Mock data - Empty or filled details based on some condition
-      const mockDetails = address
-        ? {}
-        : { name: "John Doe", email: "john@example.com", role: "User" };
-      resolve(mockDetails);
-    }, 1000);
-  });
+  const company = await getCompanyUsingWallet(address);
+  if (company.error) {
+    return {};
+  }
+  return company.data;
 };
-const amount = parseUnits("1000", 18);
+
 export default function LoginOrSignup() {
-  const privateKey =
-    process.env.NEXT_PUBLIC_PRIVATE_KEY ||
-    "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-  const { callContractFunction, response, error, loading } =
-    useContractWithPrivateKey(privateKey);
   const { push } = useRouter();
   const { address } = useAccount();
   const [connectionFailed, setConnectionFailed] = useState(false);
   const [addressDetails, setAddressDetails] = useState(null);
-
+  const [companies, setCompanies] = useState([]);
+  const [companyId, setCompanyId] = useState("");
   useEffect(() => {
     if (address) {
       setConnectionFailed(true);
-      callContractFunction("distribute", address, amount);
       fetchAddressDetails(address).then((details: any) => {
         setAddressDetails(details);
-        push("/impact-overview");
+        if (details && Object.keys(details).length > 0) {
+          push("/impact-overview");
+        }
       });
     }
-  }, [address]);
+  }, [address, push]);
+  const getCompaniesData = async () => {
+    const { data, error } = await getCompanies();
+    if (error) {
+      console.log(error);
+    }
+    console.log(data);
+    setCompanies(data as any);
+  };
+  useEffect(() => {
+    getCompaniesData();
+  }, []);
+  const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log({ address, companyId });
+    const updatedCompany = await updateCompanyWallet(
+      address as `0x{string}`,
+      companyId,
+    );
+    if (updatedCompany.error) {
+      console.log(updatedCompany.error);
+    }
+    console.log(updatedCompany.data);
+    setAddressDetails(updatedCompany.data);
+    push("/impact-overview");
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
@@ -60,7 +79,7 @@ export default function LoginOrSignup() {
             <CardTitle className="text-2xl font-bold text-center text-white">
               {connectionFailed
                 ? addressDetails && Object.keys(addressDetails).length === 0
-                  ? "Sign Up"
+                  ? "Register as company"
                   : "Welcome Back"
                 : "Connect Wallet"}
             </CardTitle>
@@ -80,25 +99,48 @@ export default function LoginOrSignup() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
                 className="space-y-4"
+                onSubmit={handleSignUpSubmit} // Handle form submission
               >
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-white">Name</Label>
+                  <Label htmlFor="name" className="text-white">
+                    Name
+                  </Label>
                   <Input id="name" required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-white">Email</Label>
+                  <Label htmlFor="email" className="text-white">
+                    Email
+                  </Label>
                   <Input id="email" type="email" required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="role" className="text-white">Role</Label>
-                  <Input id="role" required />
+                  <Label htmlFor="company" className="text-white">
+                    Company
+                  </Label>
+                  <select
+                    defaultValue={companyId}
+                    value={companyId}
+                    onChange={(e) => setCompanyId(e.target.value)}
+                    className="p-2 bg-secondary text-primary rounded-lg font-medium w-full"
+                  >
+                    {companies.map((company: any) => (
+                      <option
+                        key={company.company_id}
+                        value={company.company_id}
+                      >
+                        {company.company_name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <Button type="submit" className="w-full">
-                  Sign Up
+                  Register Company
                 </Button>
               </motion.form>
             ) : (
-              <p className="text-center text-white">You are already registered!</p>
+              <p className="text-center text-white">
+                You are already registered!
+              </p>
             )}
           </CardContent>
         </Card>
