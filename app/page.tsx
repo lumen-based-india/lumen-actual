@@ -221,9 +221,11 @@ function SectionForBusiness() {
               Join us in shaping the future of sustainable commerce – where
               doing good for the planet translates directly to your bottom line.
             </div>
-            <Button size="lg" className="rounded-xl w-fit mt-4">
-              <Link href="/login">Get Started</Link>
-            </Button>
+            <Link href="/login">
+              <Button size="lg" className="rounded-xl w-fit mt-4">
+                Get Started
+              </Button>
+            </Link>
           </div>
           <div className="mockup-window border w-1/2 bg-white">
             <div className="flex justify-center">
@@ -278,10 +280,13 @@ function SectionForConsumers() {
             <div className="text-2xl font-semibold">
               With LUMEN, you’re not just a consumer, you’re a{" "}
               <span className="text-slate-600">Changemaker</span>
-            </div>
-            <Button size="lg" className="rounded-xl w-fit mt-4">
-              <Link href="/consumers">Download App</Link>
-            </Button>
+            </div>{" "}
+            <Link href="/consumers">
+              {" "}
+              <Button size="lg" className="rounded-xl w-fit mt-4">
+                Download App
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>

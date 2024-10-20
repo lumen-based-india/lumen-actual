@@ -17,13 +17,6 @@ import {
 import { contractConfig } from "@/hooks/useLumenToken";
 import { distributeTokensAndSendEthSeparately } from "@/lib/initScriptContract";
 import { formatUnits } from "viem";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 const fetchAddressDetails = async (address: string) => {
   const company = await getCompanyUsingWallet(address);
   if (company.error) {
@@ -148,29 +141,29 @@ export default function LoginOrSignup() {
                     Company
                   </Label>
                   {companyId && (
-                      <Select
-                      value={companyId}
-                      onValueChange={(value) => {
-                        console.log("Company ID changed:", value);
-                        setCompanyId(value);
-                      }}
-                    >
-                      <SelectTrigger className="rounded-xl ">
-                        {/* Display the selected value */}
-                        <SelectValue placeholder="Select company" />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-xl">
+                      <select
+                        value={companyId}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          console.log("Company ID changed:", value);
+                          setCompanyId(value);
+                        }}
+                        className="rounded-xl w-full bg-background py-2 px-1 border-none appearance-none text-foreground focus:outline-none"
+                        style={{ backgroundPosition: 'calc(100% - 1rem) center' }}
+                      >
+                        <option value="" disabled>
+                          Select company
+                        </option>
                         {companies.map((company: any) => (
-                          <SelectItem
+                          <option
                             key={company.company_id}
                             value={company.company_id}
                             className="rounded-xl"
                           >
                             {company.company_name}
-                          </SelectItem>
+                          </option>
                         ))}
-                      </SelectContent>
-                    </Select>
+                      </select>
                   )}
                 </div>
                 <Button type="submit" className="w-full rounded-xl">
