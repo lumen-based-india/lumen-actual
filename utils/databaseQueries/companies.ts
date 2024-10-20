@@ -68,3 +68,21 @@ export const updateCompanyWallet = async (id: string, wallet: string) => {
     .eq("company_id", id);
   return { data, error };
 };
+
+
+export const getProductJourney = async (id: string) => {
+  const response = await fetch(`/api/product/trace/${id}`);
+  const data = await response.json();
+  return data;
+}
+export const  getProductTrace = async (trace: string) => {
+  const productIds = trace.split("-");
+  const productData = [];
+  for (const id of productIds) {
+    const response = await fetch(`/api/product/${id}`);
+    const data = await response.json();
+    productData.push(data);
+  }
+  return productData;
+}
+  

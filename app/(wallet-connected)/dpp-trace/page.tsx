@@ -12,9 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar, DollarSign, Leaf, MapPin, Shirt, Star } from "lucide-react";
+import { DollarSign, Leaf, MapPin, Shirt, Star } from "lucide-react";
 import { useCompanyContext } from "@/providers/CompanyProvider";
-// @ishaan change accordingly
+import { get } from "http";
 interface ProductInfo {
   id: number;         
   business_sector: string;
@@ -61,7 +61,6 @@ export default function DPPTrace() {
     if (selectedProduct !== null) {
       setCurrentProduct(productMap.get(selectedProduct))
       setProductDetails(productMap.get(selectedProduct));
-      console.log(productMap.get(selectedProduct))
     }
   }, [selectedProduct]);
 
@@ -159,10 +158,13 @@ export default function DPPTrace() {
         </Card>
       )}
 
-      <div className="flex gap-4">
-        <ProductMovementNetwork />\
+      {productDetails && (
+        <div className="flex gap-4">
+        <ProductMovementNetwork selectedProduct={productDetails} productMap={productMap} />\
         <EsgTrace />
       </div>
+      )}
+      
     </div>
   );
 }
