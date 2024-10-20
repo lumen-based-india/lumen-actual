@@ -38,11 +38,11 @@ ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 function generateRandomSeed(name: string): number {
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
-    hash = (hash << 5) - hash + name.charCodeAt(i);
-    hash |= 0;
+    hash = Math.imul(31, hash) + name.charCodeAt(i);
   }
-  const normalizedSeed = Math.abs(hash) / (Math.abs(hash) + 1);
-  return 1 + normalizedSeed;
+  hash = hash ^ (hash >>> 16); // XOR and shift for more randomness
+  const normalizedSeed = Math.abs(hash % 1000) / 1000; // Modulo to get a value between 0 and 1
+  return normalizedSeed * 3; // Scale to [0, 3)
 }
 
 export default function MarketPlace() {
@@ -83,9 +83,9 @@ export default function MarketPlace() {
       company_id: company.company_id,
       company_name: company.company_name,
       sustainability: parseFloat(
-        (parseFloat(company.sustainability.company_sustainability) + generateRandomSeed(currentProduct) / 1000).toFixed(2)
+        (parseFloat(company.sustainability.company_sustainability) + generateRandomSeed(company.company_name)).toFixed(2)
       ),
-      money: (parseFloat(company.sustainability.company_price) + generateRandomSeed(currentProduct) / 1000).toFixed(2),
+      money: (parseFloat(company.sustainability.company_price) + generateRandomSeed(company.company_name)).toFixed(2),
     }));
     setCompanySustainabilityMap(updatedMap);
     setSupplierLoading(true);
