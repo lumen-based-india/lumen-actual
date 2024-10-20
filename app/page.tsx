@@ -44,7 +44,6 @@ const whyLumen = [
     content: [
       "79% of Indian consumers predicate decisions to buy based on sustainability",
       "75% of Consumers do not trust accuracy on food labels (certification standards, conformity in supply chain)",
-      "73% want more traceability for better purchasing decisions",
     ],
     sources: [
       {
@@ -101,6 +100,9 @@ export default function Index() {
       onWheel={(e) => {
         handleScroll(e);
       }}
+      onScroll={(e) => {
+        handleScroll(e);
+      }}
     >
       <SectionHero />
       <SectionMatters />
@@ -118,13 +120,17 @@ function SectionHero() {
       about="main"
       className="flex justify-center items-center h-screen relative"
     >
-      <div className="flex items-center text-justify gap-8 justify-center">
+      <div className="flex items-center text-justify gap-8 justify-center ml-24">
         <div className="flex flex-col gap-2  items-start">
           <div className="">
             {" "}
-            <Image src={lumenVerbose} alt="Lumen Verbose" className="w-48" />
+            <Image
+              src={lumenVerbose}
+              alt="Lumen Verbose"
+              className="w-96 mt-[-8rem]"
+            />
           </div>
-          <div className="text-xl mt-[-3rem]">
+          <div className="text-xl mt-[-4rem]">
             Illuminating Sustainable Commerce
           </div>
           <div className="flex gap-4 pt-4">
@@ -168,9 +174,9 @@ function SectionMatters() {
         {matters.map((matter, index) => (
           <Card
             key={index}
-            className="rounded-xl w-96 flex flex-col justify-between bg-background"
+            className="rounded-xl w-96 flex flex-col bg-background h-[300px]"
           >
-            <CardHeader>
+            <CardHeader className="h-[150px]">
               <CardTitle className="leading-normal text-center">
                 {matter.title}
               </CardTitle>
@@ -210,14 +216,14 @@ function SectionWhyLumen() {
         {whyLumen.map((item, index) => (
           <Card
             key={index}
-            className="rounded-xl w-96 flex flex-col justify-between h-96 bg-background"
+            className="rounded-xl w-96 flex flex-col bg-background h-[400px]"
           >
-            <CardHeader>
+            <CardHeader className="h-[250px]">
               <CardTitle className="leading-normal text-center">
                 {item.title}
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col justify-between">
+            <CardContent className="flex flex-col justify-between h-full">
               <ul className="list-disc pl-5 flex flex-col gap-4">
                 {item.content.map((point, idx) => (
                   <li key={idx}>{point}</li>
