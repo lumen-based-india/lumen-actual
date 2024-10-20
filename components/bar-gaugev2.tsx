@@ -1,25 +1,29 @@
 "use client";
 
-import { CompanyData } from "@/providers/CompanyProvider";
-
 interface BarGaugeProps {
-  companyData: CompanyData | null | undefined;
+  companyData: any | null | undefined;
 }
 
 export default function BarGauge({ companyData = null }: BarGaugeProps) {
   const width = 60;
   const height = 350;
   const markerWidth = 5;
-  const esg_rating = (companyData?.intensity_company ?? 0);
-  const market_average = (companyData?.market_average ?? 0);
-  const regulation_target = (companyData?.intensity_target ?? 0);
-  const best_performer = (companyData?.intensity_best ?? 0);
+  const esg_rating = companyData?.intensity_company ?? 0;
+  const market_average = companyData?.market_average ?? 0;
+  const regulation_target = companyData?.intensity_target ?? 0;
+  const best_performer = companyData?.intensity_best ?? 0;
 
-  console.log("ZAZA", esg_rating, market_average, regulation_target, best_performer);
+  console.log(
+    "ZAZA",
+    esg_rating,
+    market_average,
+    regulation_target,
+    best_performer,
+  );
 
   const getMarkerPosition = (value: number) => {
     const minValue = 0;
-    const maxValue = 40;
+    const maxValue = 50;
     const adjustedValue = (value - minValue) / (maxValue - minValue);
     return (1 - adjustedValue) * height;
   };
@@ -45,7 +49,15 @@ export default function BarGauge({ companyData = null }: BarGaugeProps) {
             <stop offset="100%" stopColor="#2ecc71" />
           </linearGradient>
         </defs>
-        <rect x={0} y={0} width={width} height={height} fill="url(#barGradient)" rx={10} ry={10}/>
+        <rect
+          x={0}
+          y={0}
+          width={width}
+          height={height}
+          fill="url(#barGradient)"
+          rx={10}
+          ry={10}
+        />
 
         {/* Company Rating Marker */}
         <polygon
@@ -112,7 +124,7 @@ export default function BarGauge({ companyData = null }: BarGaugeProps) {
         </text>
 
         {/* Axis Labels */}
-        {["40", "0"].map((label, index) => {
+        {["50", "0"].map((label, index) => {
           const y = index === 0 ? 0 : height;
           return (
             <text
@@ -131,7 +143,9 @@ export default function BarGauge({ companyData = null }: BarGaugeProps) {
 
       <div className="text-center mt-2">
         <p className="text-lg font-bold">Emission Intensity Benchmarks</p>
-        <p className="text-sm">(in kgCO<sub>2</sub>e/kg)</p>
+        <p className="text-sm">
+          (in kgCO<sub>2</sub>e/kg)
+        </p>
       </div>
     </div>
   );

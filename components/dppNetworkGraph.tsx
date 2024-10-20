@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Graph from "react-graph-vis";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { v4 as uuidv4 } from "uuid";
 
 const initialGraph = {
   nodes: [],
@@ -18,7 +17,7 @@ const ProductMovementNetwork: React.FC<any> = ({ selectedProduct }: any) => {
       const graphData = {
         nodes: suppliers.map((id: string, index: number) => ({
           id: index,
-          label: id,
+          label: id, 
           color: "#D3D3D3",
         })),
         edges: suppliers
@@ -58,7 +57,7 @@ const ProductMovementNetwork: React.FC<any> = ({ selectedProduct }: any) => {
       </CardHeader>
       <CardContent>
         {graph?.nodes?.length ? (
-          <Graph graph={graph} options={options} />
+          <Graph key={Date.now()} graph={graph} options={options} />
         ) : (
           <p>Loading graph data...</p>
         )}

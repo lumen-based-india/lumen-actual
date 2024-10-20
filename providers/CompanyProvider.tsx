@@ -3,18 +3,18 @@ import {
   createContext,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import {
-  fetchCompanyById,
   fetchProductsByCompanyID,
   FetchSuppliersByID,
   GetAllCompanies,
+  GetAllProducts,
+  getCompanyUsingWallet,
 } from "@/utils/databaseQueries/companies";
 import { getAllInsetPrograms } from "@/utils/databaseQueries/insetPrograms";
-
+import { useAccount } from "wagmi";
 
 export type CompanyData = {
   best_performer: number;
@@ -37,19 +37,21 @@ export type CompanyData = {
 };
 
 interface ICompanyContext {
-  currentCompanyData: CompanyData | null;
+  currentCompanyData: any | null;
   supplierData: UseQueryResult<any | null, Error>;
   productsData: UseQueryResult<any[] | null, Error>;
   allCompaniesData: UseQueryResult<any[] | null, Error>;
   currentCompanyID: string;
   setCurrentCompanyID: (id: string) => void;
   insetProgramsData: UseQueryResult<any | null, Error>;
+  allProductsData: UseQueryResult<any | null, Error>;
 }
 
 const CompanyContext = createContext<ICompanyContext | null>(null);
 
 const useCompany = () => {
-  const [currentCompanyID, setCurrentCompanyID] = useState("10001");
+  const { address } = useAccount();
+  const [currentCompanyID, setCurrentCompanyID] = useState("");
   const [currentCompanyData, setCurrentCompanyData] =
     useState<CompanyData | null>(null);
 
@@ -60,19 +62,12 @@ const useCompany = () => {
       return response;
     },
   });
-  const currentCompany = useQuery({
-    queryKey: ["company", currentCompanyID],
-    queryFn: async () => {
-      const data = await fetchCompanyById(currentCompanyID);
-      console.log(data);
-      return data;
-    },
-    enabled: !!currentCompanyID,
-  });
+
   const supplierData = useQuery({
     queryKey: ["suppliers", currentCompanyID],
     queryFn: async () => {
       const data = await FetchSuppliersByID(currentCompanyID);
+      console.log({ data });
       return data;
     },
     enabled: !!currentCompanyID,
@@ -99,12 +94,30 @@ const useCompany = () => {
     },
   });
 
-  useEffect(() => {
-    if (currentCompany.data) {
-      setCurrentCompanyData(currentCompany.data);
-    }
-  }, [currentCompany.data]);
+  const companyByWallet = useQuery({
+    queryKey: ["companyByWallet", address],
+    queryFn: async () => {
+      const data = await getCompanyUsingWallet(address as `0x{string}`);
+      return data;
+    },
+  });
 
+  const allProductsData = useQuery({
+    queryKey: ["products", currentCompanyID],
+    queryFn: async () => {
+      const { data, error } = await GetAllProducts(currentCompanyID);
+      console.log({ data, error });
+      return { data, error };
+    },
+  });
+
+  useEffect(() => {
+    if (companyByWallet.data) {
+      console.log(companyByWallet.data.data);
+      setCurrentCompanyID(companyByWallet.data.data.company_id);
+      setCurrentCompanyData(companyByWallet.data.data);
+    }
+  }, [companyByWallet]);
   return {
     currentCompanyID,
     setCurrentCompanyID,
@@ -113,6 +126,7 @@ const useCompany = () => {
     supplierData,
     productsData,
     insetProgramsData,
+    allProductsData,
   };
 };
 

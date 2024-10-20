@@ -3,9 +3,7 @@
 import { useState } from "react";
 import BarGauge from "@/components/bar-gaugev2";
 import ESG from "@/components/ui/esg";
-import { Button } from "@/components/ui/button"; // Assuming there's a Button component
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useCompanyContext } from "@/providers/CompanyProvider";
 import CSRComponent from "@/components/csr-component";
 import ComplianceComponent from "@/components/complaince-component";
 import {
@@ -15,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useCompanyContext } from "@/providers/CompanyProvider";
 
 const dataCompletenessMap = [
   {
@@ -72,6 +71,8 @@ const dataCompletenessMap = [
 export default function ImpactOverview() {
   const [region, setRegion] = useState("India");
   const { currentCompanyData } = useCompanyContext();
+
+  if(!currentCompanyData) return null;
   return (
     <div className="p-4 flex flex-col w-full gap-4">
       <div className="flex gap-4">
@@ -83,7 +84,7 @@ export default function ImpactOverview() {
             <CardContent
               style={{ display: "flex", alignItems: "center" }}
             >
-              <ESG companyData={currentCompanyData} />
+              <ESG companyData={currentCompanyData.esg_facts} />
             </CardContent>
           </Card>
           <Card className="rounded-xl flex-1">
@@ -113,7 +114,7 @@ export default function ImpactOverview() {
           </CardHeader>
           <CardContent>
             <div className="flex justify-center">
-              <BarGauge companyData={currentCompanyData} />
+              <BarGauge companyData={currentCompanyData.esg_facts} />
             </div>
           </CardContent>
         </Card>

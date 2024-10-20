@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -37,8 +37,14 @@ ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 //fix the supplier programs
 export default function MarketPlace() {
   const { supplierData: supplier_data } = useCompanyContext();
-  const productCategoryMap = supplier_data?.data?.productMap ?? {};
-  const productTypes = Object.keys(supplier_data?.data?.productMap ?? {});
+  const productCategoryMap = useMemo(() => {
+    return supplier_data?.data?.productMap ?? {};
+  }, [supplier_data]);
+  const productTypes = useMemo(() => {
+    return Object.keys(productCategoryMap);
+  }, [productCategoryMap]);
+
+  // State management
   const [currentProductType, setCurrentProductType] = useState("");
   const [currentProducts, setCurrentProducts] = useState<string[]>([]);
   const [currentProduct, setCurrentProduct] = useState("");
@@ -49,74 +55,63 @@ export default function MarketPlace() {
   >([]);
   const [currentSupplier, setCurrentSupplier] = useState<string>("");
   const [selectedProgram, setSelectedProgram] = useState<string>("");
+
+  // Update currentProducts when currentProductType or productCategoryMap changes
   useEffect(() => {
-    if (productCategoryMap[currentProductType] === undefined) {
+    if (
+      !currentProductType ||
+      productCategoryMap[currentProductType] === undefined
+    ) {
+      setCurrentProducts([]); // Reset when no product type is selected
       return;
     }
     const products = Object.keys(productCategoryMap[currentProductType]);
     setCurrentProducts(products);
-  }, [currentProductType]);
+  }, [currentProductType, productCategoryMap]);
 
+  // Fetch companies and update sustainability map when currentProduct changes
   useEffect(() => {
     setCompanySustainabilityMap([]);
     const companies = productCategoryMap[currentProductType]?.[currentProduct];
-    if (!companies) {
-      return;
-    }
-    for (let company of companies) {
-      setCompanySustainabilityMap((prevData) => {
-        return [
-          ...prevData,
-          {
-            company_id: company.company_id,
-            company_name: company.company_name,
-            sustainability: parseFloat(
-              company.sustainability.company_sustainability
-            ).toFixed(2),
-            money: parseFloat(company.sustainability.company_price).toFixed(2),
-          },
-        ];
-      });
-    }
+    if (!companies) return;
+
+    // Populate the sustainability map
+    const updatedMap = companies.map((company) => ({
+      company_id: company.company_id,
+      company_name: company.company_name,
+      sustainability: parseFloat(
+        company.sustainability.company_sustainability,
+      ).toFixed(2),
+      money: parseFloat(company.sustainability.company_price).toFixed(2),
+    }));
+    setCompanySustainabilityMap(updatedMap);
+
+    // Fetch detailed supplier data
     setSupplierLoading(true);
     setSupplierNewData([]);
     const promises = companies.map((company: any) =>
-      getCompany(company.company_id)
+      getCompany(company.company_id),
     );
     Promise.all(promises)
       .then((results) => {
-        companies.forEach((data: any) => {
-          getCompany(data.company_id).then((result) => {
-            setSupplierNewData((prevData) => [...prevData, result.data]);
-          });
-        });
+        setSupplierNewData(results.map((result) => result.data));
       })
       .finally(() => {
         setSupplierLoading(false);
       });
-  }, [currentProduct]);
+  }, [currentProduct, currentProductType, productCategoryMap]);
 
-  const handleProductType = (selectedType: string) => {
-    setCurrentProductType(selectedType);
-  };
+  // Fetch inset programs for the selected supplier
   const programsData = useQuery({
-    queryKey: ["programs"],
+    queryKey: ["programs", currentSupplier], // Add currentSupplier as part of the query key
     queryFn: async () => {
       const response = await getInsetProgramsByCompanyID(currentSupplier);
       return response;
     },
+    enabled: !!currentSupplier, // Enable only if a supplier is selected
   });
-  if (programsData?.isPending) {
-    return <div>Loading...</div>;
-  }
 
-  if (programsData?.error) {
-    return <div>Error loading inset programs. Please try again later.</div>;
-  }
-  if (!programsData?.data) {
-    return <div>No inset programs found.</div>;
-  }
-  //seems to be some issue with the data
+  // Prepare program data for display
   const program = programsData?.data?.data?.map((program: any) => ({
     id: program.program_id,
     supplier: program.companies.company_name,
@@ -129,11 +124,12 @@ export default function MarketPlace() {
     image: program.verifier_url,
     tags: program.project_search_tags.split(","),
   }));
+
   const selectedProgramData = program?.find(
-    (program: any) => program.id === selectedProgram
+    (program: any) => program.id === selectedProgram,
   );
 
-  //make chart with company sustainability and price
+  // Chart data preparation
   const chartData = {
     datasets: [
       {
@@ -153,13 +149,12 @@ export default function MarketPlace() {
     ],
   };
 
-  // Options to display tooltips and labels
+  // Chart options
   const chartOptions = {
     plugins: {
       tooltip: {
         callbacks: {
-          label: function (context: any) {
-            // Return company name and value as the tooltip label
+          label: function(context: any) {
             const companyName = context.raw.label;
             const price = context.raw.y;
             const sustainability = context.raw.x;
@@ -192,7 +187,11 @@ export default function MarketPlace() {
             <CardTitle>Enter Supply Requirements</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Select onValueChange={handleProductType}>
+            <Select
+              onValueChange={(e) => {
+                setCurrentProductType(e);
+              }}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Product Type" />
               </SelectTrigger>

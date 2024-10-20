@@ -56,8 +56,8 @@ export const GetAllProductsAPI = async (company_id: string) => {
 export const getCompanyUsingWallet = async (wallet: string) => {
   const { data, error } = await supabase
     .from("companies")
-    .select(`*`)
-    .eq("wallet_address", wallet);
+    .select(`*,esg_facts(*)`)
+    .eq("wallet_address", wallet).single();
   return { data, error };
 };
 

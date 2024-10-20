@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import EsgTrace from "@/components/esgTrace";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,55 +14,62 @@ import {
 } from "@/components/ui/select";
 import { DollarSign, Leaf, MapPin, Shirt, Star } from "lucide-react";
 import { useCompanyContext } from "@/providers/CompanyProvider";
-import { get } from "http";
 interface ProductInfo {
-  id: number;         
+  id: number;
   business_sector: string;
-  companies: {               
-    role: string;     
+  companies: {
+    role: string;
     market: string;
     company_id: number;
     company_name: string;
     inset_programs: string | null;
   };
-  company_id: number;             
-  disposal_instructions: string | null; 
-  dpp_trace: string;             
-  ingredients: string | null;    
-  lumen_per_unit: number;         
-  lumens: number;            
-  price: number;        
+  company_id: number;
+  disposal_instructions: string | null;
+  dpp_trace: string;
+  ingredients: string | null;
+  lumen_per_unit: number;
+  lumens: number;
+  price: number;
   product_category: string;
   product_esg_rating: number;
-  product_id: number;       
+  product_id: number;
   product_name: string;
   recycling_value: number;
-  role: string;                  
-  sku_id: string;               
-  total_lumens: number | null;   
-  units: number;                 
+  role: string;
+  sku_id: string;
+  total_lumens: number | null;
+  units: number;
 }
 export default function DPPTrace() {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  const {allProductsData} = useCompanyContext();
-  const productList = allProductsData.data
-  const productMap = new Map();
-  if (productList){
-    productList.map((product: any) => {
-      productMap.set(product.product_id, product)
-    })
-  }
-  const [currentProduct, setCurrentProduct] = useState<any>({});
+  const { allProductsData } = useCompanyContext();
   const [productDetails, setProductDetails] = useState<ProductInfo | null>(
-    null
+    null,
   );
-
-  React.useEffect(() => {
-    if (selectedProduct !== null) {
-      setCurrentProduct(productMap.get(selectedProduct))
-      setProductDetails(productMap.get(selectedProduct));
+  const productList = useMemo(() => {
+    if (allProductsData?.data) {
+      return allProductsData.data;
     }
-  }, [selectedProduct]);
+    return [];
+  }, [allProductsData]);
+
+  const productMap = useMemo(() => {
+    const map = new Map();
+    if (productList?.length > 0) {
+      productList?.forEach((product: any) =>
+        map.set(product.product_id, product),
+      );
+    }
+    return map;
+  }, [productList]);
+
+  useEffect(() => {
+    if (selectedProduct) {
+      const product = productMap.get(selectedProduct);
+      setProductDetails(product || null);
+    }
+  }, [selectedProduct, productMap]);
 
   return (
     <div className="p-8 flex flex-col gap-4">
@@ -77,19 +84,23 @@ export default function DPPTrace() {
                 <SelectValue placeholder="Select a Product" />
               </SelectTrigger>
               <SelectContent>
-              {productList  && Object.keys(productList).map((productKey) => (
-                productList[productKey] ? (  // Null check for each product
-                  <SelectItem key={productList[productKey].product_id} value={productList[productKey].product_id}>
-                    {productList[productKey].product_name}
-                  </SelectItem>
-                ) : null
-              ))}
+                {productList &&
+                  Object.keys(productList)?.map((productKey) =>
+                    productList[productKey] ? ( // Null check for each product
+                      <SelectItem
+                        key={productList[productKey].product_id}
+                        value={productList[productKey].product_id}
+                      >
+                        {productList[productKey].product_name}
+                      </SelectItem>
+                    ) : null,
+                  )}
               </SelectContent>
             </Select>
           </div>
           <div className="flex gap-2">
             <Button
-              onClick={() => {}}
+              onClick={() => { }}
               className="bg-white border border-gray-300 text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 font-bold py-2 px-4 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105"
             >
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-blue-500">
@@ -97,7 +108,7 @@ export default function DPPTrace() {
               </span>
             </Button>
             <Button
-              onClick={() => {}}
+              onClick={() => { }}
               className="bg-white border border-gray-300 text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 font-bold py-2 px-4 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105"
             >
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-500 to-blue-500">
@@ -127,8 +138,14 @@ export default function DPPTrace() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-grow">
                     {Object.entries(productDetails)
-                      .filter(([key]) => 
-                        ["product_name", "product_category", "business_sector", "price", "product_esg_rating"].includes(key)
+                      .filter(([key]) =>
+                        [
+                          "product_name",
+                          "product_category",
+                          "business_sector",
+                          "price",
+                          "product_esg_rating",
+                        ].includes(key),
                       )
                       .map(([key, value], index) => (
                         <div key={index}>
@@ -139,14 +156,12 @@ export default function DPPTrace() {
                             {key === "price" && <DollarSign size={24} />}
                             {key === "product_esg_rating" && <Leaf size={24} />}
                             <span className="text-lg font-semibold">
-                            {key
-                              .replace(/_/g, " ")                 
-                              .toLowerCase()                      
-                              .replace(/\b\w/g, (char) => char.toUpperCase())
-                            }
+                              {key
+                                .replace(/_/g, " ")
+                                .toLowerCase()
+                                .replace(/\b\w/g, (char) => char.toUpperCase())}
                             </span>
                           </div>
-                          {/* Render value with normal font weight */}
                           <div className="text-lg font-normal">{value}</div>
                         </div>
                       ))}
@@ -157,14 +172,15 @@ export default function DPPTrace() {
           </CardContent>
         </Card>
       )}
-
       {productDetails && (
         <div className="flex gap-4">
-        <ProductMovementNetwork selectedProduct={productDetails} productMap={productMap} />\
-        <EsgTrace />
-      </div>
+          <ProductMovementNetwork
+            selectedProduct={productDetails}
+            productMap={productMap}
+          />
+          <EsgTrace />
+        </div>
       )}
-      
     </div>
   );
 }

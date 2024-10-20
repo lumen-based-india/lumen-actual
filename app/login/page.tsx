@@ -48,13 +48,14 @@ export default function LoginOrSignup() {
     }
     console.log(data);
     setCompanies(data as any);
+    // @ts-ignore
+    setCompanyId(data[0].company_id);
   };
   useEffect(() => {
     getCompaniesData();
   }, []);
   const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log({ address, companyId });
     const updatedCompany = await updateCompanyWallet(
       companyId,
       address as `0x{string}`,
@@ -62,7 +63,6 @@ export default function LoginOrSignup() {
     if (updatedCompany.error) {
       console.log(updatedCompany.error);
     }
-    console.log(updatedCompany.data);
     setAddressDetails(updatedCompany.data);
     push("/impact-overview");
   };
