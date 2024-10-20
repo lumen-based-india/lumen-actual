@@ -31,7 +31,6 @@ import { useCompanyContext } from "@/providers/CompanyProvider";
 import { getCompany } from "@/utils/databaseQueries/companies";
 import { useQuery } from "@tanstack/react-query";
 import { getInsetProgramsByCompanyID } from "@/utils/databaseQueries/insetPrograms";
-import ProjectInfo from "@/components/project-info-v2";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -161,7 +160,7 @@ export default function MarketPlace() {
             const companyName = context.raw.company_name;
             const price = context.raw.y;
             const sustainability = context.raw.x;
-            return `${companyName}: Price $${price}, Sustainability ${sustainability}`;
+            return `${companyName}: Price Rs.${price}, Sustainability ${sustainability}`;
           },
         },
       },
