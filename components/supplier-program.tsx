@@ -27,16 +27,14 @@ const SupplierProgram = (props: Props) => {
                 <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
               </div>
       <div className="flex flex-wrap gap-2">
-        {["Brazil", "BioChar", "2023","10 SDGs"].map(
-          (chip, index) => (
-            <span
-              key={index}
-              className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
-            >
-              {chip}
-            </span>
-          )
-        )}
+        {["Brazil", "BioChar", "2023", "10 SDGs"].map((chip, index) => (
+          <span
+            key={index}
+            className="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-xl"
+          >
+            {chip}
+          </span>
+        ))}
       </div>
       </CardContent>
     </Card>

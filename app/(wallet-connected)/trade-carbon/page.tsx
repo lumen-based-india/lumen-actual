@@ -35,6 +35,7 @@ export default function TradeCarbon() {
     lumens: program.lumens_value,
     insetTonnes: program.carbon_reduction,
     image: program.verifier_url,
+    tags: program.project_search_tags.split(","),
   }));
   const selectedProjectData = projects?.find(
     (project: any) => project.id === selectedProject,

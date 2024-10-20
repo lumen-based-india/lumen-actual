@@ -38,7 +38,7 @@ import { getInsetProgramsByCompanyID } from "@/utils/databaseQueries/insetProgra
 import { SupplierPrograms } from "@/components/supplier-programs";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
-
+//fix the supplier programs
 export default function MarketPlace() {
   const [quantity, setQuantity] = useState("");
   const { supplierData: supplier_data } = useCompanyContext();
