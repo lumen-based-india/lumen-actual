@@ -12,6 +12,7 @@ import {
 } from "./ui/table";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { motion } from "framer-motion";
+import { Address } from "./Address/Address";
 
 type Props = {
   projects: any[];
@@ -40,7 +41,7 @@ const SupplierProjects = (props: Props) => {
               <span className="text-sm text-gray-400 font-normal">
                 {
                   props?.projects?.find(
-                    (project) => project.id === props.selectedProject
+                    (project) => project.id === props.selectedProject,
                   )?.project
                 }
               </span>
@@ -81,7 +82,8 @@ const SupplierProjects = (props: Props) => {
                       props.selectedProject === project.id
                         ? "#f0f0f0"
                         : "transparent",
-                    transition: "background-color 0.3s ease, transform 0.3s ease",
+                    transition:
+                      "background-color 0.3s ease, transform 0.3s ease",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "scale(1.02)";
@@ -92,7 +94,9 @@ const SupplierProjects = (props: Props) => {
                 >
                   <TableCell>{project.supplier}</TableCell>
                   <TableCell>{project.project}</TableCell>
-                  <TableCell>{project.address}</TableCell>
+                  <TableCell>
+                    <Address address={project.wallet_address} />
+                  </TableCell>
                   <TableCell>{project.date}</TableCell>
                   <TableCell>{project.lumens}</TableCell>
                 </TableRow>

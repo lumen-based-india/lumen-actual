@@ -79,7 +79,7 @@ export default function LoginOrSignup() {
             <CardTitle className="text-2xl font-bold text-center text-white">
               {connectionFailed
                 ? addressDetails && Object.keys(addressDetails).length === 0
-                  ? "Register as company"
+                  ? "Login as company"
                   : "Welcome Back"
                 : "Connect Wallet"}
             </CardTitle>
@@ -134,7 +134,7 @@ export default function LoginOrSignup() {
                   </select>
                 </div>
                 <Button type="submit" className="w-full">
-                  Register Company
+                  Login
                 </Button>
               </motion.form>
             ) : (

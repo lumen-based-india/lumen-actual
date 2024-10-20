@@ -1,7 +1,7 @@
 import { localhostABI } from "@/constants/localhostABI";
 import { createPublicClient } from "viem";
 import { hardhat } from "viem/chains";
-import { http, useReadContract, useWriteContract } from "wagmi";
+import { http, useReadContract } from "wagmi";
 
 export const contractConfig = {
   address: "0x5FbDB2315678afecb367f032d93F642f64180aa3" as `0x${string}`,

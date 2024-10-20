@@ -11,6 +11,7 @@ type Props = {
 };
 
 const ProjectInfo = (props: Props) => {
+  console.log(props.project)
   const [qty, setQty] = React.useState(3500);
   return (
     <Card className="w-full">
