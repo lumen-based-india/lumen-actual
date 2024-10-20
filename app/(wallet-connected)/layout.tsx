@@ -67,7 +67,7 @@ export default function DashboardLayout({
                 <Image
                   src={lumenFull}
                   alt="Lumen logo"
-                  className="w-24 mb-[-2rem] mt-[-2rem]"
+                  className="w-36 mb-[-3rem] mt-[-3rem]"
                 />
               </Link>
               <button
