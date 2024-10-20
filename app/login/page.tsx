@@ -9,6 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BlackCreateWalletButton } from "@/components/coinbase-connect";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/navigation";
+import { useContractWithPrivateKey } from "@/hooks/useContractOwnerFunctions";
+import { parseUnits } from "viem";
 
 // Mock function to simulate fetching address details
 const fetchAddressDetails = async (address: string) => {
@@ -23,8 +25,13 @@ const fetchAddressDetails = async (address: string) => {
     }, 1000);
   });
 };
-
+const amount = parseUnits("1000", 18);
 export default function LoginOrSignup() {
+  const privateKey =
+    process.env.NEXT_PUBLIC_PRIVATE_KEY ||
+    "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+  const { callContractFunction, response, error, loading } =
+    useContractWithPrivateKey(privateKey);
   const { push } = useRouter();
   const { address } = useAccount();
   const [connectionFailed, setConnectionFailed] = useState(false);
@@ -33,6 +40,7 @@ export default function LoginOrSignup() {
   useEffect(() => {
     if (address) {
       setConnectionFailed(true);
+      callContractFunction("distribute", address, amount);
       fetchAddressDetails(address).then((details: any) => {
         setAddressDetails(details);
         push("/impact-overview");
