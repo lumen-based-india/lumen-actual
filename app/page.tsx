@@ -382,10 +382,10 @@ function SectionFooter() {
             </div>
             <div>
               <Link
-                href="mailto:lumen@based.com"
+                href="mailto:hello@ilumen.earth"
                 className="text-blue-500 hover:underline"
               >
-                lumen@based.com
+                hello@ilumen.earth
               </Link>
             </div>
           </div>
