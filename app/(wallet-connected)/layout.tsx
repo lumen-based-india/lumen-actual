@@ -12,10 +12,10 @@ import {
   Leaf,
 } from "lucide-react";
 import Image from "next/image";
-import { useAccount } from "wagmi";
 import { ProvideCompany } from "@/providers/CompanyProvider";
 import CompanyHeader from "@/components/companyHeader";
 import lumenFull from "../../app/lumen-full.png";
+import { usePrivy } from "@privy-io/react-auth";
 
 const sidebarItems = [
   { name: "Impact Overview", icon: BarChart2, href: "/impact-overview" },
@@ -30,7 +30,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const { push } = useRouter();
-  const { address } = useAccount();
+  const { ready, authenticated, login, user } = usePrivy();
+  const address = user?.wallet?.address || user?.smartWallet?.address;
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const pathname = usePathname();
 
@@ -54,9 +56,8 @@ export default function DashboardLayout({
       <div className="bg-background">
         <div className="flex h-screen">
           <aside
-            className={`bg-card transition-all duration-300 ease-in-out ${
-              isSidebarOpen ? "w-64" : "w-20"
-            } flex flex-col`}
+            className={`bg-card transition-all duration-300 ease-in-out ${isSidebarOpen ? "w-64" : "w-20"
+              } flex flex-col`}
           >
             <div className="flex items-center justify-between p-4">
               <Link
@@ -87,11 +88,10 @@ export default function DashboardLayout({
                   <li key={item.name}>
                     <Link href={item.href} passHref>
                       <span
-                        className={`flex items-center space-x-2 p-2 rounded-xl hover:bg-white-200 transition-colors duration-200 ${
-                          pathname === item.href
+                        className={`flex items-center space-x-2 p-2 rounded-xl hover:bg-white-200 transition-colors duration-200 ${pathname === item.href
                             ? "bg-primary text-background"
                             : ""
-                        }`}
+                          }`}
                       >
                         <item.icon size={24} />
                         {isSidebarOpen && <span>{item.name}</span>}
