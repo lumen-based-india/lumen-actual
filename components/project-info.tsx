@@ -5,20 +5,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { useReadContract, useWriteContract } from "wagmi";
 import { contractConfig } from "@/hooks/useLumenToken";
 import { formatUnits, parseUnits } from "viem";
 import { updateCompanyExcessEmissions } from "@/utils/databaseQueries/companies";
 import { useCompanyContext } from "@/providers/CompanyProvider";
+import { usePrivy } from "@privy-io/react-auth";
 
 type Props = {
   project: any;
 };
 
 const ProjectInfo = (props: Props) => {
-  const { address } = useAccount();
+  const { ready, authenticated, login, user } = usePrivy();
+  const address = ready ? user?.wallet?.address || user?.smartWallet?.address : "";
+  
   const [qty, setQty] = React.useState(3500);
-  const {currentCompanyID} = useCompanyContext();
+  const { currentCompanyID } = useCompanyContext();
   const { writeContractAsync } = useWriteContract();
   const { data: balance, isError: balanceError } = useReadContract({
     abi: contractConfig.abi,
@@ -133,7 +136,11 @@ const ProjectInfo = (props: Props) => {
                           parseUnits(qty.toString(), 18),
                         ],
                       }).then(() => {
-                        updateCompanyExcessEmissions(address as `0x${string}`,currentCompanyID, qty);
+                        updateCompanyExcessEmissions(
+                          address as `0x${string}`,
+                          currentCompanyID,
+                          qty,
+                        );
                       });
                     }}
                   >
