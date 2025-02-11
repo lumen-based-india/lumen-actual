@@ -2,14 +2,16 @@ import { useCompanyContext } from "@/providers/CompanyProvider";
 import { Button } from "./ui/button";
 import { updateCompanyWallet } from "@/utils/databaseQueries/companies";
 import { useRouter } from "next/navigation";
-import { useAccount, useReadContract } from "wagmi";
+import { useReadContract } from "wagmi";
 import { contractConfig } from "@/hooks/useLumenToken";
 import { formatUnits } from "viem";
 import { useMemo } from "react";
+import { usePrivy } from "@privy-io/react-auth";
 
 export default function CompanyHeader() {
   const { push } = useRouter();
-  const { address } = useAccount();
+  const { user } = usePrivy();
+  const address = user?.wallet?.address || user?.smartWallet?.address;
   const { currentCompanyData, currentCompanyID } = useCompanyContext();
   const handleLogout = async () => {
     const updateCompany = await updateCompanyWallet(currentCompanyID, "");
@@ -34,8 +36,8 @@ export default function CompanyHeader() {
   return (
     <div className="flex items-center justify-between p-4 bg-primary text-background">
       <span className="font-bold text-xl">
-        {currentCompanyData?.company_name || "Loading..."} {balanceInNumber}{" "}
-        LMN Credits
+        {currentCompanyData?.company_name || "Loading..."} {balanceInNumber} LMN
+        Credits
       </span>
       <Button
         className="rounded-xl"

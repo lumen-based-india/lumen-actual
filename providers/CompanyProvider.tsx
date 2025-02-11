@@ -14,7 +14,7 @@ import {
   getCompanyUsingWallet,
 } from "@/utils/databaseQueries/companies";
 import { getAllInsetPrograms } from "@/utils/databaseQueries/insetPrograms";
-import { useAccount } from "wagmi";
+import { usePrivy } from "@privy-io/react-auth";
 
 export type CompanyData = {
   best_performer: number;
@@ -50,7 +50,9 @@ interface ICompanyContext {
 const CompanyContext = createContext<ICompanyContext | null>(null);
 
 const useCompany = () => {
-  const { address } = useAccount();
+  const { user } = usePrivy();
+  const address = user?.wallet?.address || user?.smartWallet?.address;
+
   const [currentCompanyID, setCurrentCompanyID] = useState("");
   const [currentCompanyData, setCurrentCompanyData] =
     useState<CompanyData | null>(null);

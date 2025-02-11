@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BlackCreateWalletButton } from "@/components/coinbase-connect";
-import { useAccount, useReadContract } from "wagmi";
+import { useReadContract } from "wagmi";
 import { useRouter } from "next/navigation";
 import {
   getCompanies,
@@ -17,6 +17,7 @@ import {
 import { contractConfig } from "@/hooks/useLumenToken";
 import { distributeTokensAndSendEthSeparately } from "@/lib/initScriptContract";
 import { formatUnits } from "viem";
+import { usePrivy } from "@privy-io/react-auth";
 const fetchAddressDetails = async (address: string) => {
   const company = await getCompanyUsingWallet(address);
   if (company.error) {
@@ -26,8 +27,11 @@ const fetchAddressDetails = async (address: string) => {
 };
 
 export default function LoginOrSignup() {
+  const { ready, authenticated, login,connectOrCreateWallet, user } = usePrivy();
+  const address = user?.wallet?.address || user?.smartWallet?.address;
+  console.log("Address:", address);
   const { push } = useRouter();
-  const { address } = useAccount();
+  const [loading, setLoading] = useState(false);
   const [connectionFailed, setConnectionFailed] = useState(false);
   const [addressDetails, setAddressDetails] = useState(null);
   const [companies, setCompanies] = useState([]);
@@ -73,6 +77,7 @@ export default function LoginOrSignup() {
     if (updatedCompany.error) {
       console.log(updatedCompany.error);
     }
+    setLoading(true);
     const balanceInNumber: string = formatUnits(balance as bigint, 18);
     if (!balanceInNumber || Number(balanceInNumber) === 0) {
       console.log("Balance exceeding zero", balanceInNumber);
@@ -93,10 +98,11 @@ export default function LoginOrSignup() {
         "2000",
       );
     }
+    setLoading(false);
     setAddressDetails(updatedCompany.data);
     push("/impact-overview");
   };
-
+  if(loading) return <div>Loading...</div>
   return (
     <div className="min-h-screen flex items-center justify-center">
       <motion.div
@@ -111,7 +117,7 @@ export default function LoginOrSignup() {
                 ? addressDetails && Object.keys(addressDetails).length === 0
                   ? "Login as company"
                   : "Welcome Back"
-                : "Connect Wallet"}
+                : "Login"}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -121,7 +127,13 @@ export default function LoginOrSignup() {
                 whileTap={{ scale: 0.95 }}
                 className="flex justify-center"
               >
-                <BlackCreateWalletButton />
+                <Button
+                  onClick={() => connectOrCreateWallet()}
+                  className="w-full rounded-xl"
+                  disabled={balanceError}
+                >
+                  Connect Wallet
+                </Button>
               </motion.div>
             ) : addressDetails && Object.keys(addressDetails).length === 0 ? (
               <motion.form
